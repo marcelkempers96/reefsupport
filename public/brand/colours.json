@@ -1,0 +1,83 @@
+{
+  "source": "DESIGN.md",
+  "core": {
+    "ink": {
+      "hex": "#0A1F33",
+      "use": "Text, primary buttons, footer, dark sections"
+    },
+    "white": {
+      "hex": "#FFFFFF",
+      "use": "Page background and cards"
+    },
+    "mist": {
+      "hex": "#EAF2FA",
+      "use": "Light blue panels: statements, side panels, key facts"
+    },
+    "line": {
+      "hex": "#D3E0EC",
+      "use": "1 px rules and card borders"
+    },
+    "line-soft": {
+      "hex": "#E6EEF6",
+      "use": "Table row dividers"
+    },
+    "mute": {
+      "hex": "#55697D",
+      "use": "Secondary text on white"
+    },
+    "mute-dark": {
+      "hex": "#34495E",
+      "use": "Body text on mist"
+    },
+    "on-dark": {
+      "hex": "#FFFFFF",
+      "use": "Text on ink and on the hero"
+    },
+    "on-dark-mute": {
+      "hex": "#BFD3E6",
+      "use": "Secondary text on ink"
+    },
+    "placeholder": {
+      "hex": "#DCE8F3",
+      "use": "Photo placeholders"
+    },
+    "hero-bg": {
+      "hex": "#05213D",
+      "use": "Hero fallback behind the video"
+    },
+    "hero-shade": {
+      "value": "rgba(5, 24, 46, .42)",
+      "use": "Flat overlay on the hero video"
+    }
+  },
+  "practice": {
+    "royal": {
+      "hex": "#1458B8",
+      "no": "01",
+      "area": "Coral reef intelligence",
+      "textOn": "#FFFFFF"
+    },
+    "navy": {
+      "hex": "#0B3A6E",
+      "no": "02",
+      "area": "Mangroves and blue carbon",
+      "textOn": "#FFFFFF"
+    },
+    "teal": {
+      "hex": "#0A7EA4",
+      "no": "03",
+      "area": "Coastal water and earth observation",
+      "textOn": "#FFFFFF"
+    },
+    "sky": {
+      "hex": "#9CCBF2",
+      "no": "04",
+      "area": "Field programmes and open innovation",
+      "textOn": "#0A1F33"
+    }
+  },
+  "type": {
+    "sans": "Poppins (400, 500, 600, 700, 800); headlines 600",
+    "mono": "IBM Plex Mono (400, 500); dates, credits and metadata only"
+  }
+}

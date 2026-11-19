@@ -1,8 +1,37 @@
 ---
+// Cookies and browser storage. True of the code as of this version: no cookies set by the site,
+// no localStorage/sessionStorage/IndexedDB use in src/ or in the Pagefind search UI, no analytics,
+// fonts self-hosted (src/components/Fonts.astro). Re-check before adding any script or embed.
 import Legal from '../layouts/Legal.astro';
+import ToConfirm from '../components/ToConfirm.astro';
+const toc = [
+  { id: 'cookies', label: 'Cookies and trackers' },
+  { id: 'storage', label: 'Browser storage' },
+  { id: 'third-party', label: 'Third-party requests' },
+  { id: 'browser', label: 'Your browser settings' },
+  { id: 'future', label: 'If this changes' },
+];
 ---
-<Legal title="Cookies" description="Reef Support's website sets no cookies and uses no analytics or advertising trackers. This page explains what the site does load and when that would change.">
-  <p>This website does not set cookies and does not use analytics or advertising trackers.</p>
-  <p>Pages load fonts from Google Fonts and, where a page links to them, content from partner sites only when you follow the link. If we add analytics in future, this page will be updated first.</p>
-  <p>See the <a href="/privacy">privacy policy</a> for how we handle messages sent through the contact form.</p>
+<Legal title="Cookies" description="reef.support sets no cookies, keeps nothing in browser storage and runs no analytics or advertising trackers. This page explains what the site does load and when a consent banner would be needed." toc={toc}>
+  <p>This page explains what reef.support stores on your device and what it loads when you visit. In short, the site sets no cookies, keeps nothing in your browser's storage and runs no analytics or advertising trackers, which is why it shows no cookie banner. <ToConfirm note="legal review" /></p>
+
+  <h2 id="cookies">Cookies and trackers</h2>
+  <p>The website does not set any cookies, first-party or third-party. It uses no analytics tools, advertising networks, tracking pixels, fingerprinting or social media plug-ins, and it does not embed videos, maps or other content from other services.</p>
+
+  <h2 id="storage">Browser storage</h2>
+  <p>The site does not use your browser's local storage, session storage or IndexedDB to remember anything about you. The small scripts it runs, for the mobile menu, navigation, the home page animation pause control, the project filter, site search and form sending, work only while the page is open. Your browser may keep copies of pages, fonts and images in its normal cache so later pages load faster, and you can clear that cache at any time.</p>
+
+  <h2 id="third-party">Third-party requests</h2>
+  <p>Every page, font, image and script is served from reef.support itself, through our hosting provider, Vercel. The fonts, Poppins and IBM Plex Mono, are hosted on our own domain, so your browser does not contact any external font service. Vercel records basic technical data about each request in server logs, as described in the <a href="/privacy#data">privacy policy</a>.</p>
+  <p>Two things can send data elsewhere, and both happen only when you act:</p>
+  <ul>
+    <li>When you send the contact form or sign up for the newsletter, your entry goes to the form or newsletter service we use. <ToConfirm note="name the form and newsletter providers, and confirm neither sets cookies on reef.support" /></li>
+    <li>When you follow a link to another site, such as LinkedIn, GitHub, Hugging Face or a partner organisation, that site may set its own cookies under its own policy.</li>
+  </ul>
+
+  <h2 id="browser">Your browser settings</h2>
+  <p>You can block or delete cookies and site data in your browser settings at any time. Because reef.support does not depend on cookies or stored data, blocking them does not change how the site works for you.</p>
+
+  <h2 id="future">If this changes</h2>
+  <p>Under the Dutch Telecommunications Act (Telecommunicatiewet, Article 11.7a) and the GDPR, a website needs your prior consent before it stores or reads information on your device, unless that is strictly necessary for a service you asked for. If we ever add analytics, embedded media or anything else that sets cookies or uses browser storage and is not strictly necessary, we will ask for your consent first, with a choice that is as easy to refuse as to accept, and we will update this page and the <a href="/privacy">privacy policy</a> before the change goes live. <ToConfirm note="legal review, including whether privacy-friendly analytics would be exempt" /></p>
 </Legal>

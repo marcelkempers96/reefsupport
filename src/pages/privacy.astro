@@ -1,20 +1,127 @@
 ---
+// Privacy notice (GDPR, Articles 13 and 14). Every statement must stay true of the code:
+// fonts are self-hosted (src/components/Fonts.astro), the site sets no cookies and keeps nothing
+// in browser storage, there is no analytics, and the forms post to PUBLIC_CONTACT_ENDPOINT and
+// PUBLIC_NEWSLETTER_ENDPOINT (providers not chosen yet). Re-check this page when any of that changes.
 import Legal from '../layouts/Legal.astro';
 import ToConfirm from '../components/ToConfirm.astro';
 import company from '../data/company.json';
+import { hasConfirm, showValue } from '../lib/confirm';
+
+const tel = company.phone.replace(/\s/g, '');
+const email = showValue(company.email) && !hasConfirm(company.email) ? company.email : undefined;
+const toc = [
+  { id: 'controller', label: 'Who is responsible' },
+  { id: 'summary', label: 'Summary' },
+  { id: 'data', label: 'What we collect and why' },
+  { id: 'not', label: 'What we do not do' },
+  { id: 'recipients', label: 'Who receives your data' },
+  { id: 'transfers', label: 'Transfers outside the EEA' },
+  { id: 'retention', label: 'How long we keep it' },
+  { id: 'security', label: 'Security' },
+  { id: 'rights', label: 'Your rights' },
+  { id: 'complaints', label: 'Complaints' },
+  { id: 'links', label: 'Links to other sites' },
+  { id: 'changes', label: 'Changes to this notice' },
+];
 ---
-<Legal title="Privacy policy" description="How Reef Support B.V. handles personal data sent through reef.support, such as contact form messages and newsletter sign-ups, and the rights you have over it.">
-  <h2>Who we are</h2>
-  <p>This website is run by {company.legalName}, registered with the Netherlands Chamber of Commerce (KvK) under number {company.kvk}, {company.registeredAddress}. We are the controller for personal data sent to us through this website.</p>
-  <h2>What we collect</h2>
-  <p>When you use the contact form we receive your name, organisation, email address and message, and the country and ecosystem if you give them. If you sign up for field notes we receive your email address.</p>
-  <h2>Why we use it</h2>
-  <p>We use contact form details only to reply to you, on the basis of your consent, which you give with the checkbox on the form. We use newsletter sign-ups only to send field notes, and every message includes a way to unsubscribe.</p>
-  <h2>Who processes it</h2>
-  <p>Form messages are delivered to us through a form service, and the site is hosted on Vercel. <ToConfirm note="name the form and newsletter providers and their data locations" /></p>
-  <p>This site loads its fonts from Google Fonts, which means your browser connects to Google servers when a page loads.</p>
-  <h2>How long we keep it</h2>
-  <p><ToConfirm note="retention period for contact messages and newsletter addresses" /></p>
-  <h2>Your rights</h2>
-  <p>You can ask us to see, correct or delete the personal data we hold about you, or withdraw your consent, by contacting us through the <a href="/contact">contact page</a>. You can also complain to the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).</p>
+<Legal title="Privacy policy" description="How Reef Support B.V. handles personal data sent through reef.support: contact form messages, newsletter sign-ups and hosting logs, the legal bases, and your rights under the GDPR." toc={toc}>
+  <p>This notice explains which personal data reef.support collects, why, who receives it and what rights you have under the General Data Protection Regulation (GDPR). It covers this website only; data we handle in projects with partners is covered by our data protection policy, listed on the <a href="/about/policies">policies page</a>. <ToConfirm note="legal review of this whole notice" /></p>
+
+  <h2 id="controller">Who is responsible</h2>
+  <p>The controller for personal data collected through this website is {company.legalName}, registered with the Netherlands Chamber of Commerce (KvK) under number {company.kvk}, with its registered address at {company.registeredAddress}. Our working base is in {company.workingBase.replace(', Netherlands', '')}.</p>
+  <p>You can reach us about privacy through the <a href="/contact">contact form</a>, by phone on <a href={`tel:${tel}`}>{company.phone}</a>{email && <>, by email at <a href={`mailto:${email}`}>{email}</a></>} or by post to the registered address. <ToConfirm note="privacy contact email: hello@reef.support or info@reef.support" /></p>
+
+  <h2 id="summary">Summary</h2>
+  <ul>
+    <li>We collect personal data only when you send it to us, through the contact form or the newsletter sign-up, and the technical data any web server receives when a page is requested.</li>
+    <li>We use what you send only to reply to you or to send the newsletter you asked for, on the basis of your consent, which you can withdraw at any time.</li>
+    <li>The site sets no cookies, keeps nothing in your browser's storage, runs no analytics or advertising trackers, and serves its fonts from our own domain, so loading a page does not contact Google or any other third party.</li>
+  </ul>
+
+  <h2 id="data">What we collect and why</h2>
+
+  <h3>Contact form</h3>
+  <dl>
+    <div><dt>Data</dt><dd>The reason for writing that you select (for example restoration organisation, research consortium, coastal authority, student, press or other), your name, organisation, email address and message, and, if you give them, your country and ecosystem. If you reach the form from a case study, the title of that project is added so we know what you are asking about. The form also has a hidden field that people leave empty, which helps filter out automated spam.</dd></div>
+    <div><dt>Purpose</dt><dd>To read your message, reply to it and continue the conversation you started.</dd></div>
+    <div><dt>Legal basis</dt><dd>Your consent (GDPR Article 6(1)(a)), given with the checkbox on the form. <ToConfirm note="legal review: consent or legitimate interest for replying to enquiries" /></dd></div>
+  </dl>
+
+  <h3>Newsletter sign-up</h3>
+  <dl>
+    <div><dt>Data</dt><dd>Your email address. Until the mailing list opens the sign-up form is not shown, and we point to LinkedIn instead.</dd></div>
+    <div><dt>Purpose</dt><dd>To send field notes, about once a month. Every message includes a link to unsubscribe.</dd></div>
+    <div><dt>Legal basis</dt><dd>Your consent (GDPR Article 6(1)(a)), given when you subscribe. <ToConfirm note="newsletter provider, whether double opt-in is used, and whether opens or clicks are tracked" /></dd></div>
+  </dl>
+
+  <h3>Email and phone</h3>
+  <dl>
+    <div><dt>Data</dt><dd>Whatever you include when you write to us or call us, such as your name, contact details and the content of your message.</dd></div>
+    <div><dt>Purpose</dt><dd>To reply to you.</dd></div>
+    <div><dt>Legal basis</dt><dd>Our legitimate interest in answering the people who contact us (GDPR Article 6(1)(f)). <ToConfirm note="legal review" /></dd></div>
+  </dl>
+
+  <h3>Visiting the website</h3>
+  <dl>
+    <div><dt>Data</dt><dd>The technical data your browser sends with every page request, such as your IP address, the page requested, the date and time, and your browser and device type, which our hosting provider records in server logs. <ToConfirm note="exact log fields recorded by Vercel" /></dd></div>
+    <div><dt>Purpose</dt><dd>To deliver the website, keep it secure and find faults.</dd></div>
+    <div><dt>Legal basis</dt><dd>Our legitimate interest in running a secure, working website (GDPR Article 6(1)(f)). <ToConfirm note="legal review" /></dd></div>
+  </dl>
+  <p>Site search runs in your browser, using an index published with the site, and does not send the words you type to us or to a search provider. If you open a search link that carries search words in the page address, that address is logged like any other page request.</p>
+
+  <h2 id="not">What we do not do</h2>
+  <ul>
+    <li>We do not set cookies or keep anything in your browser's local or session storage. See the <a href="/cookies">cookies page</a>.</li>
+    <li>We do not use analytics, advertising, social media plug-ins or other tracking scripts.</li>
+    <li>We do not load fonts, scripts or other files from third-party servers when you open a page.</li>
+    <li>We do not use your data for automated decision-making or profiling.</li>
+    <li>We do not ask for special categories of personal data, such as health data, and ask you not to include them in messages.</li>
+  </ul>
+
+  <h2 id="recipients">Who receives your data</h2>
+  <p>Inside Reef Support, messages are read only by the people who need to answer them. Outside the company, the following service providers process personal data on our behalf as processors. GDPR Article 28 requires a data processing agreement with each of them.</p>
+  <ul>
+    <li><strong>Vercel</strong> hosts this website and processes the server log data described above. <ToConfirm note="Vercel entity, data processing agreement and data location" /></li>
+    <li><strong>Form service</strong> delivers contact form messages to us. <ToConfirm note="name of the form provider (Formspree or a Vercel serverless function), its data processing agreement and data location" /></li>
+    <li><strong>Newsletter service</strong> stores subscriber addresses and sends the newsletter, once the mailing list opens. <ToConfirm note="name of the newsletter provider, its data processing agreement and data location" /></li>
+    <li><strong>Email provider</strong> holds the mailbox where messages arrive and our replies are kept. <ToConfirm note="name of the email provider and data location" /></li>
+  </ul>
+  <p>Apart from these processors, we do not sell or pass on personal data unless the law requires us to.</p>
+
+  <h2 id="transfers">Transfers outside the EEA</h2>
+  <p>Under GDPR Chapter V, personal data may only be transferred outside the European Economic Area to a country with an adequacy decision from the European Commission, to a recipient certified under the EU-US Data Privacy Framework, or with appropriate safeguards such as the European Commission's standard contractual clauses. <ToConfirm note="for each provider above: whether data leaves the EEA and which safeguard applies; legal review" /></p>
+
+  <h2 id="retention">How long we keep it</h2>
+  <p>We keep personal data only as long as we need it for the purpose it was collected for, and then delete it.</p>
+  <ul>
+    <li>Contact form messages and email: <ToConfirm note="retention period, for example a fixed period after the last exchange" /></li>
+    <li>Newsletter addresses: until you unsubscribe or withdraw consent. <ToConfirm note="retention after unsubscribing, if a suppression list is kept" /></li>
+    <li>Hosting server logs: <ToConfirm note="Vercel log retention period on our plan" /></li>
+  </ul>
+
+  <h2 id="security">Security</h2>
+  <p>The website is served only over an encrypted HTTPS connection, and forms send your data over that connection. <ToConfirm note="organisational measures: who has mailbox and provider access, two-factor authentication" /></p>
+
+  <h2 id="rights">Your rights</h2>
+  <p>Under the GDPR you have the right to:</p>
+  <ul>
+    <li>ask which personal data we hold about you and receive a copy (access);</li>
+    <li>have incorrect data corrected (rectification);</li>
+    <li>have your data deleted (erasure);</li>
+    <li>have the use of your data limited while a question about it is resolved (restriction);</li>
+    <li>receive data you gave us on the basis of consent in a common, machine-readable format (portability);</li>
+    <li>object to processing based on our legitimate interest (objection);</li>
+    <li>withdraw your consent at any time, which does not affect processing that took place before you withdrew it.</li>
+  </ul>
+  <p>To use any of these rights, contact us through the <a href="/contact">contact form</a>, by phone or by post, using the details under <a href="#controller">Who is responsible</a>. We may ask you to confirm your identity before acting on a request. We answer within one month of receiving it, and if a request is complex we may extend that by up to two more months, in which case we tell you within the first month. To stop receiving the newsletter, use the unsubscribe link in any message.</p>
+
+  <h2 id="complaints">Complaints</h2>
+  <p>If you think we handle your personal data incorrectly, please tell us first so we can try to resolve it. You also have the right to lodge a complaint with the Dutch Data Protection Authority, the <a href="https://autoriteitpersoonsgegevens.nl/" rel="noopener">Autoriteit Persoonsgegevens</a>, or with the supervisory authority in the EU country where you live or work.</p>
+
+  <h2 id="links">Links to other sites</h2>
+  <p>Some pages link to other websites, such as our profiles on LinkedIn, GitHub, Hugging Face and Instagram, the Coral AI browser demo on Hugging Face, partner organisations and press articles. Those sites are only contacted when you follow a link, and their own privacy notices apply once you are there.</p>
+
+  <h2 id="changes">Changes to this notice</h2>
+  <p>We update this notice when the way the website handles personal data changes, for example when we choose a form or newsletter provider, and change the date at the top of the page when we do.</p>
 </Legal>
