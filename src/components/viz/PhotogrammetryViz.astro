@@ -1,0 +1,52 @@
+---
+// 3D photogrammetry: camera positions around a reef patch produce a wireframe mesh.
+import VizFrame from './VizFrame.astro';
+
+const COLS = 9, ROWS = 5;
+const r1 = (n: number) => Math.round(n * 10) / 10;
+const pt = (i: number, j: number) => {
+  const h = 14 + 12 * Math.sin(i * 0.9 + j * 1.3) + 7 * Math.cos(i * 1.7 - j * 0.6);
+  return [r1(56 + i * 40 + j * 16), r1(244 - j * 20 - h)];
+};
+const P = Array.from({ length: ROWS }, (_, j) => Array.from({ length: COLS }, (_, i) => pt(i, j)));
+const line = (pts: number[][]) => 'M' + pts.map((p) => p.join(' ')).join('L');
+const rows = P.map((row) => line(row));
+const cols = Array.from({ length: COLS }, (_, i) => line(P.map((row) => row[i])));
+const diag: string[] = [];
+for (let j = 0; j < ROWS - 1; j++) diag.push(line(Array.from({ length: COLS }, (_, i) => (i % 2 ? P[j + 1][i] : P[j][i]))));
+
+// Cameras on an arc above the patch, each looking at a stretch of the mesh.
+const cams = [[78, 70], [158, 42], [240, 32], [322, 42], [402, 70]].map(([x, y], k) => {
+  const a = P[2][Math.max(0, k * 2 - 1)], b = P[2][Math.min(COLS - 1, k * 2 + 1)];
+  return { x, y, rays: [a, b] };
+});
+---
+<VizFrame
+  caption="Overlapping photos taken from many camera positions are combined into a 3D model of the reef patch, which is used to measure rugosity and growth over time."
+  legend={[
+    { label: 'Camera position', c: 'var(--ink)' },
+    { label: 'Field of view', c: 'var(--mute)', outline: true },
+    { label: '3D mesh', c: 'var(--royal)', outline: true },
+  ]}
+>
+  <svg viewBox="0 0 480 280" role="img" aria-labelledby="viz-pg-t">
+    <title id="viz-pg-t">Schematic: camera positions above a reef patch and the 3D mesh built from their photos</title>
+    <rect width="480" height="280" fill="var(--white)" />
+    <g fill="none" stroke="var(--mute)" stroke-opacity=".55" stroke-dasharray="3 4">
+      {cams.map((c, k) => c.rays.map((r) => <line class="va" style={`--i:${k + 6}`} x1={c.x + 11} y1={c.y + 14} x2={r[0]} y2={r[1]} />))}
+    </g>
+    <g fill="none" stroke="var(--royal)" stroke-width="1.2" stroke-linejoin="miter">
+      {rows.map((d, k) => <path class="vd" pathLength="1" style={`--i:${k + 10}`} d={d} />)}
+      {cols.map((d, k) => <path class="vd" pathLength="1" style={`--i:${k + 12}`} d={d} />)}
+      {diag.map((d, k) => <path class="vd" pathLength="1" stroke-opacity=".5" style={`--i:${k + 16}`} d={d} />)}
+    </g>
+    {cams.map((c, k) => (
+      <g class="va" style={`--i:${k}`}>
+        <rect x={c.x} y={c.y} width="22" height="14" fill="var(--ink)" />
+        <rect x={c.x + 7} y={c.y + 14} width="8" height="4" fill="var(--ink)" />
+      </g>
+    ))}
+    <text x="16" y="24" class="va" style="--i:5">Camera positions</text>
+    <text x="16" y="270" class="va" style="--i:20">3D mesh of the reef patch</text>
+  </svg>
+</VizFrame>

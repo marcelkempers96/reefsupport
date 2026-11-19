@@ -1,0 +1,26 @@
+---
+// Small definition list of technical terms, placed near the end of a page.
+import type { Term } from './terms';
+interface Props { items: Term[]; heading?: string; id?: string }
+const { items, heading = 'Terms used on this page', id = 'terms-h' } = Astro.props;
+---
+<section class="glossary" aria-labelledby={id}>
+  <h2 id={id}>{heading}</h2>
+  <dl>
+    {items.map((t) => (
+      <div id={`term-${t.id}`}>
+        <dt>{t.term}</dt>
+        <dd>{t.def}</dd>
+      </div>
+    ))}
+  </dl>
+</section>
+<style>
+  .glossary h2 { margin-bottom: var(--s-3); }
+  dl { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 var(--gutter); border-top: 2px solid var(--ink); }
+  dl > div { padding: var(--s-2) 0; border-bottom: 1px solid var(--line); }
+  dt { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+  dd { margin: 0; color: var(--mute-dark); font-size: var(--fs-small); line-height: 1.6; max-width: 60ch; }
+  dl > div:target { background: var(--mist); }
+  @media (max-width: 760px) { dl { grid-template-columns: minmax(0, 1fr); } }
+</style>

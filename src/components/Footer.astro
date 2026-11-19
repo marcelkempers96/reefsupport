@@ -4,6 +4,7 @@ import nav from '../data/nav.json';
 import company from '../data/company.json';
 
 const year = new Date().getFullYear();
+const tel = company.phone.replace(/\s+/g, '');
 ---
 <footer class="site-footer">
   <div class="container">
@@ -11,6 +12,15 @@ const year = new Date().getFullYear();
       <div class="brand">
         <Logo variant="light" />
         <p>{company.shortDescription}</p>
+        <div class="contact">
+          <h2 class="col-h">Contact</h2>
+          <p class="contact__lead">Tell us where you work and what you need to measure; we reply within five working days.</p>
+          <ul class="contact__list">
+            <li><span class="contact__label meta">Phone</span> <a href={`tel:${tel}`}>{company.phone}</a></li>
+            <li><span class="contact__label meta">Write</span> <a href="/contact">Contact form</a></li>
+            <li><span class="contact__label meta">Address</span> <span>{company.registeredAddressShort}</span></li>
+          </ul>
+        </div>
       </div>
       <div class="cols">
         {nav.footer.map((col) => (
@@ -47,7 +57,13 @@ const year = new Date().getFullYear();
   .top { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-5) var(--gutter); }
   .brand { grid-column: span 5; }
   .brand p { color: var(--on-dark-mute); font-size: var(--fs-small); line-height: 1.5; margin-top: var(--s-3); max-width: 440px; }
-  .cols { grid-column: 7 / span 6; display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--gutter); }
+  .cols { grid-column: 6 / span 7; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--s-4) var(--gutter); align-content: start; }
+  .contact { margin-top: var(--s-4); padding-top: var(--s-3); border-top: 1px solid rgba(255, 255, 255, .18); max-width: 440px; }
+  .brand .contact__lead { margin: 0 0 var(--s-2); }
+  .contact__list { gap: 8px; }
+  .contact__list li { display: flex; align-items: baseline; gap: var(--s-2); font-size: var(--fs-small); line-height: 1.4; }
+  .contact__label { flex: none; width: 56px; color: var(--on-dark-mute); text-transform: uppercase; font-size: 11px; }
+  .contact__list a { text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .4); text-underline-offset: 3px; }
   .col-h {
     font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase;
     color: var(--sky); margin: 0 0 var(--s-2);
@@ -64,11 +80,10 @@ const year = new Date().getFullYear();
   .legal a { font-size: inherit; color: var(--on-dark-mute); }
   .legal a:hover { color: var(--on-dark); }
 
-  @media (max-width: 960px) {
+  @media (max-width: 1080px) {
     .brand, .cols { grid-column: 1 / -1; }
   }
-  @media (max-width: 600px) {
+  @media (max-width: 760px) {
     .cols { grid-template-columns: 1fr 1fr; }
-    .cols > :first-child { grid-column: 1 / -1; }
   }
 </style>

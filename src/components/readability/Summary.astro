@@ -1,0 +1,15 @@
+---
+// "In brief" panel: a one-paragraph summary at the top of a page, for quick scanning.
+interface Props { label?: string; id?: string }
+const { label = 'In brief', id = 'brief-h' } = Astro.props;
+---
+<section class="brief" aria-labelledby={id}>
+  <h2 id={id} class="brief__h">{label}</h2>
+  <div class="brief__body"><slot /></div>
+</section>
+<style>
+  .brief { border-left: var(--bar) solid var(--royal); padding: var(--s-1) 0 var(--s-1) var(--s-3); max-width: 820px; }
+  .brief__h { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); margin: 0 0 var(--s-1); }
+  .brief__body :global(p) { margin: 0; font-size: var(--fs-lead); line-height: 1.55; color: var(--ink); }
+  .brief__body :global(p + p) { margin-top: var(--s-2); }
+</style>

@@ -4,6 +4,7 @@ import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
 import CoralAI from '../../components/CoralAI.astro';
 import ListRows from '../../components/ListRows.astro';
+import Summary from '../../components/readability/Summary.astro';
 import subnav from '../../data/subnav.json';
 import research from '../../data/research.json';
 import { liveUrl } from '../../lib/data';
@@ -17,9 +18,16 @@ const cards = [
   { title: 'Methods', text: 'The chain from field data to a report a funder can check, and who is responsible for each step.', href: '/research/methods' },
 ];
 ---
-<Base title="Research" description={`Open models, publications and challenges. ${lead}`}>
+<Base title="Research" description="Open models, publications and AI challenges from Reef Support, including Coral AI on Hugging Face, so others can test, reuse and improve our coral reef work.">
   <PageHeader kicker={['Research']} title="Open models, publications and challenges" lead={lead} display />
   <SubNav label="Research" links={subnav.research} />
+  <section class="section section--tight">
+    <div class="container">
+      <Summary id="sum-h" label="Summary">
+        <p>Our research output is an open coral segmentation model on Hugging Face, papers and theses from our team and students, six open AI challenges since 2021, and a documented seven-step method that shows who is responsible for each part of a monitoring programme.</p>
+      </Summary>
+    </div>
+  </section>
 
   <section class="section">
     <div class="container"><CoralAI /></div>

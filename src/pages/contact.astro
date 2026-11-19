@@ -7,13 +7,33 @@ import ToConfirm from '../components/ToConfirm.astro';
 import Txt from '../components/Txt.astro';
 import company from '../data/company.json';
 import { showValue, hasConfirm } from '../lib/confirm';
+import { getProjects } from '../lib/data';
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
 if (import.meta.env.PROD && !endpoint) console.warn('[contact] PUBLIC_CONTACT_ENDPOINT is not set: the contact form cannot send messages.');
 const lead = 'We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days.';
 const ecosystems = ['Coral reef', 'Mangrove', 'Seagrass', 'Coastal water', 'Other'];
 const tel = company.phone.replace(/\s/g, '');
+
+// Audience routing: visitors say why they are writing; the choice is sent as "topic".
+// Links such as /contact?topic=proposal&project=coral-ai preselect the topic and note the project.
+const topics = [
+  { value: 'restoration', label: 'Restoration organisation', hint: 'Tell us which sites you work on, what you plant or restore, and what you need to report and to whom.' },
+  { value: 'proposal', label: 'Research consortium or proposal', hint: 'Name the funding call and its deadline, the consortium partners, and the role you have in mind for us: monitoring design, data integration, AI analysis or reporting.' },
+  { value: 'authority', label: 'Coastal authority', hint: 'Tell us which coastline or water body you are responsible for and which indicators you need to track over time.' },
+  { value: 'student', label: 'Student or thesis', hint: 'Check the opportunities page first, then tell us your programme, university, the period you are available and the topic you would like to work on.', link: { href: '/about/opportunities', label: 'Opportunities for students' } },
+  { value: 'press', label: 'Press', hint: 'Tell us your outlet, your deadline and what the piece is about. Earlier coverage and awards are listed on the media page.', link: { href: '/about/media', label: 'Awards and media' } },
+  { value: 'other', label: 'Other', hint: 'Tell us briefly who you are and how we can help.' },
+];
+const projectTitles = Object.fromEntries((await getProjects()).filter((x) => x.data.publish).map((x) => [x.id, x.data.title]));
+const include = [
+  'The sites or region you work in, with the country',
+  'The ecosystem: coral reef, mangrove, seagrass or coastal water',
+  'What you need to measure or report, and for whom',
+  'Your timeline, including any field season',
+  'The funding call and deadline, if you are writing a proposal',
+];
 ---
-<Base title="Contact" description={lead}>
+<Base title="Contact" description="Tell Reef Support about your coral reef, mangrove or coastal water sites and what you need to measure, and we will reply within five working days.">
   <PageHeader kicker={['Contact']} title="Tell us about your sites" lead={lead} display />
   <section class="section">
     <div class="container split">
@@ -26,10 +46,36 @@ const tel = company.phone.replace(/\s/g, '');
           <div><dt>Registered address</dt><dd>{company.legalName}<br />Herengracht 551<br />1017 BW Amsterdam<br />Netherlands</dd></div>
           <div><dt>Working base</dt><dd>{company.workingBase}</dd></div>
         </dl>
+        <div class="include">
+          <h2 id="include-h">What to include</h2>
+          <p>A first message with these details lets us reply with something useful rather than more questions.</p>
+          <ul aria-labelledby="include-h">{include.map((i) => <li>{i}</li>)}</ul>
+        </div>
       </div>
       <div class="split__main form-col">
-        <form method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. Your message has reached the team." class="form" novalidate={false}>
+        <form method="post" action={endpoint ?? '#'} data-async-form data-contact data-projects={JSON.stringify(projectTitles)} data-success="Thanks. Your message has reached the team." class="form" novalidate={false}>
           {!endpoint && <ToConfirm note="form endpoint (PUBLIC_CONTACT_ENDPOINT, Formspree or serverless)" />}
+          <fieldset class="topics" aria-describedby="topic-req">
+            <legend>What are you writing about? <span aria-hidden="true">*</span></legend>
+            <div class="topics__grid">
+              {topics.map((t, i) => (
+                <label class="topic">
+                  <input type="radio" name="topic" value={t.label} data-topic={t.value} required={i === 0} aria-describedby={`hint-${t.value}`} />
+                  <span>{t.label}</span>
+                </label>
+              ))}
+            </div>
+            <div class="hints">
+              {topics.map((t) => (
+                <p class="hint" id={`hint-${t.value}`} data-hint={t.value}>
+                  {t.hint}{t.link && <> <a href={t.link.href}>{t.link.label}</a></>}
+                </p>
+              ))}
+            </div>
+            <p class="visually-hidden" id="topic-req">Required. Your choice is sent with the message.</p>
+          </fieldset>
+          <input type="hidden" name="project" value="" data-project-field />
+          <p class="regarding" data-regarding hidden></p>
           <div class="grid2">
             <div class="field"><label for="c-name">Name <span aria-hidden="true">*</span></label><input id="c-name" name="name" required autocomplete="name" /></div>
             <div class="field"><label for="c-org">Organisation <span aria-hidden="true">*</span></label><input id="c-org" name="organisation" required autocomplete="organization" /></div>
@@ -43,7 +89,7 @@ const tel = company.phone.replace(/\s/g, '');
               {ecosystems.map((e) => <option>{e}</option>)}
             </select>
           </div>
-          <div class="field"><label for="c-msg">Message <span aria-hidden="true">*</span></label><textarea id="c-msg" name="message" rows="7" required></textarea></div>
+          <div class="field"><label for="c-msg">Message <span aria-hidden="true">*</span></label><textarea id="c-msg" name="message" rows="7" required aria-describedby="c-msg-help"></textarea><p class="help" id="c-msg-help">Where you work, what you need to measure and by when.</p></div>
           <div class="check">
             <input id="c-consent" name="consent" type="checkbox" required value="yes" />
             <label for="c-consent">I agree that Reef Support stores this message to reply to me, as described in the <a href="/privacy">privacy policy</a>.</label>
@@ -57,6 +103,29 @@ const tel = company.phone.replace(/\s/g, '');
     </div>
   </section>
 </Base>
+<script>
+  // Preselect the topic and note the project when the visitor arrives from a call to action.
+  const form = document.querySelector<HTMLFormElement>('form[data-contact]');
+  if (form) {
+    const params = new URLSearchParams(location.search);
+    const topic = params.get('topic');
+    if (topic) {
+      const radio = form.querySelector<HTMLInputElement>(`input[data-topic="${CSS.escape(topic)}"]`);
+      if (radio) radio.checked = true;
+    }
+    const slug = params.get('project');
+    let titles: Record<string, string> = {};
+    try { titles = JSON.parse(form.dataset.projects ?? '{}'); } catch { /* ignore */ }
+    const title = slug ? titles[slug] : undefined;
+    const field = form.querySelector<HTMLInputElement>('[data-project-field]');
+    const note = form.querySelector<HTMLElement>('[data-regarding]');
+    if (title && field && note) {
+      field.value = title;
+      note.textContent = `Regarding the case study: ${title}`;
+      note.hidden = false;
+    }
+  }
+</script>
 <style>
   .details { grid-column: 1 / span 4; grid-row: 1; }
   .form-col { grid-column: 6 / span 7; }
@@ -66,6 +135,35 @@ const tel = company.phone.replace(/\s/g, '');
   dd { margin: 0; font-weight: 500; user-select: text; }
   dd a { text-decoration: underline; text-underline-offset: 3px; }
   .form { display: grid; gap: var(--s-3); }
+  .include { margin-top: var(--s-5); border-top: 2px solid var(--ink); padding-top: var(--s-3); }
+  .include h2 { font-size: var(--fs-h3); line-height: 1.3; letter-spacing: -0.01em; margin-bottom: var(--s-1); }
+  .include p { color: var(--mute); font-size: var(--fs-small); line-height: 1.5; margin: 0 0 var(--s-2); }
+  .include ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0; }
+  .include li { padding: 10px 0 10px 20px; border-bottom: 1px solid var(--line-soft); position: relative; font-size: var(--fs-small); line-height: 1.5; }
+  .include li::before { content: ''; position: absolute; left: 0; top: 17px; width: 8px; height: 8px; background: var(--royal); }
+  .topics { border: 0; margin: 0; padding: 0; min-width: 0; }
+  .topics legend { font-weight: 600; font-size: 15px; padding: 0; margin-bottom: var(--s-1); }
+  .topics__grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-1); }
+  @media (max-width: 600px) { .topics__grid { grid-template-columns: 1fr; } }
+  .topic { position: relative; display: flex; cursor: pointer; }
+  .topic input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .topic span { flex: 1; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 14px; border: 1px solid var(--line); font: 500 15px/1.3 var(--sans); background: var(--white); transition: background-color 150ms, color 150ms, border-color 150ms; }
+  .topic span::before { content: ''; flex: none; width: 14px; height: 14px; border: 1px solid var(--mute); background: var(--white); }
+  .topic:hover span { border-color: var(--ink); }
+  .topic input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .topic input:checked + span::before { background: var(--sky); border-color: var(--sky); }
+  .topic input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .hints { margin-top: var(--s-1); }
+  .hint { display: none; margin: 0; padding: var(--s-2); background: var(--mist); color: var(--mute-dark); font-size: var(--fs-small); line-height: 1.5; border-left: 3px solid var(--ink); }
+  .hint a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  .topics:has(input[data-topic='restoration']:checked) [data-hint='restoration'],
+  .topics:has(input[data-topic='proposal']:checked) [data-hint='proposal'],
+  .topics:has(input[data-topic='authority']:checked) [data-hint='authority'],
+  .topics:has(input[data-topic='student']:checked) [data-hint='student'],
+  .topics:has(input[data-topic='press']:checked) [data-hint='press'],
+  .topics:has(input[data-topic='other']:checked) [data-hint='other'] { display: block; }
+  .regarding { margin: 0; padding: 10px 14px; border: 1px solid var(--line); font-size: var(--fs-small); font-weight: 500; }
+  .help { margin: 0; color: var(--mute); font-size: var(--fs-small); }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3) var(--gutter); }
   @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
   .field { display: grid; gap: 6px; }

@@ -1,0 +1,60 @@
+---
+// Mangrove monitoring: GPS-tagged plot records and survival and growth summaries per round.
+import VizFrame from './VizFrame.astro';
+
+const plots = [[54, 150], [92, 118], [128, 168], [150, 108], [186, 146], [206, 196], [86, 206]];
+// Bar heights are shapes only, with no values or axis scale.
+const rounds = [
+  { r: 'Round 1', s: 96, g: 30 },
+  { r: 'Round 2', s: 84, g: 58 },
+  { r: 'Round 3', s: 80, g: 86 },
+];
+const base = 230;
+---
+<VizFrame
+  caption="Community teams record planting, survival and growth as GPS-tagged plot records, working offline and in their own language. The records are summarised by monitoring round; the bars here are shapes only and carry no real values."
+  legend={[
+    { label: 'GPS-tagged plot', c: 'var(--navy)' },
+    { label: 'Survival', c: 'var(--navy)' },
+    { label: 'Growth', c: 'var(--sky)' },
+  ]}
+>
+  <svg viewBox="0 0 480 280" role="img" aria-labelledby="viz-mg-t">
+    <title id="viz-mg-t">Schematic: GPS-tagged mangrove plots on a coastal map, and survival and growth bars for three monitoring rounds</title>
+    <rect width="480" height="280" fill="var(--white)" />
+    <rect x="16" y="40" width="224" height="224" fill="var(--mist)" />
+    <path d="M16 40H240V92C200 104 176 76 140 86S82 70 16 84Z" fill="var(--placeholder)" />
+    <path class="vd" pathLength="1" d="M240 92C200 104 176 76 140 86S82 70 16 84" fill="none" stroke="var(--ink)" stroke-width="1.5" />
+    <g stroke="var(--line)" stroke-width="1">
+      {[72, 128, 184].map((x) => <line x1={x} y1="40" x2={x} y2="264" />)}
+      {[96, 152, 208].map((y) => <line x1="16" y1={y} x2="240" y2={y} />)}
+    </g>
+    <text x="24" y="62" class="m">SEA</text>
+    {plots.map(([x, y], k) => (
+      <g class="va" style={`--i:${k + 2}`}>
+        <rect x={x - 6} y={y - 6} width="12" height="12" fill="var(--navy)" />
+        <rect x={x - 10} y={y - 10} width="20" height="20" fill="none" stroke="var(--navy)" stroke-opacity=".35" />
+      </g>
+    ))}
+    <g class="va" style="--i:10">
+      <line x1="150" y1="98" x2="168" y2="60" stroke="var(--ink)" />
+      <rect x="124" y="44" width="110" height="18" fill="var(--ink)" />
+      <text x="130" y="57" class="m" style="fill: var(--white)">GPS RECORD</text>
+    </g>
+    <text x="16" y="24">Field plots</text>
+
+    <text x="268" y="24">Survival and growth</text>
+    <line x1="268" y1={base} x2="464" y2={base} stroke="var(--ink)" />
+    {rounds.map((d, k) => {
+      const x = 280 + k * 64;
+      return (
+        <g>
+          <rect class="va" style={`--i:${12 + k * 2}`} x={x} y={base - d.s * 1.5} width="20" height={d.s * 1.5} fill="var(--navy)" />
+          <rect class="va" style={`--i:${13 + k * 2}`} x={x + 22} y={base - d.g * 1.5} width="20" height={d.g * 1.5} fill="var(--sky)" />
+          <text x={x} y={base + 20} class="m">{`R${k + 1}`}</text>
+        </g>
+      );
+    })}
+    <text x="268" y="270" class="m">BY MONITORING ROUND</text>
+  </svg>
+</VizFrame>

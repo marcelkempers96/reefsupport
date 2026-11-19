@@ -24,7 +24,9 @@ const items = Astro.props.items
     display: flex; align-items: center; justify-content: flex-start; min-height: 112px; height: 100%;
     padding: var(--s-3); text-decoration: none; color: var(--ink);
   }
+  a { transition: background-color 150ms, color 150ms; }
   a:hover { background: var(--mist); color: var(--ink); }
+  a:focus-visible { outline-offset: -2px; }
   .name { font: 600 15px/1.35 var(--sans); display: flex; flex-direction: column; gap: 4px; }
   .note { font: 400 12px/1.4 var(--mono); letter-spacing: .04em; color: var(--mute); }
   img { max-height: 48px; width: auto; filter: grayscale(1); opacity: .6; transition: filter 150ms, opacity 150ms; }

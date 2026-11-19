@@ -2,20 +2,77 @@
 import Base from '../../layouts/Base.astro';
 import SubNav from '../../components/SubNav.astro';
 import CoralAI from '../../components/CoralAI.astro';
+import ToConfirm from '../../components/ToConfirm.astro';
+import Summary from '../../components/readability/Summary.astro';
+import Glossary from '../../components/readability/Glossary.astro';
+import { pick } from '../../components/readability/terms';
 import subnav from '../../data/subnav.json';
 ---
-<Base title="Open source" description="Coral AI: an open YOLOv8 segmentation model for reef survey photos, MIT licence, on Hugging Face.">
+<Base title="Open source" description="Coral AI: an open YOLOv8 segmentation model that labels reef photos by coral type, algae, rubble and sand. MIT licence, model on Hugging Face, code on GitHub.">
   <section class="section">
     <div class="container"><a class="back-link" href="/research"><span aria-hidden="true">←</span> Research</a><CoralAI headingLevel="h1" /></div>
   </section>
   <SubNav label="Research" links={subnav.research} />
-  <section class="section">
-    <div class="container prose">
-      <h2>Using the model</h2>
-      <p>The model is published on Hugging Face under an MIT licence, with a public browser demo, and the code is on GitHub.</p>
-      <p>Coral AI supports research and monitoring with human review. It is not validated for regulatory reporting on its own. If you want to use it in a monitoring programme, <a href="/contact">contact us</a>.</p>
-      <h2>How it was built</h2>
-      <p>The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023). ML6 contributed a segmentation approach built on the Seaview dataset, and Yohan Runhaar's research with University of Amsterdam support explored superpixel methods. See the <a href="/projects/coral-ai">Coral AI project page</a> for partners and outputs.</p>
+
+  <section class="section section--tight">
+    <div class="container">
+      <Summary id="sum-h" label="Summary">
+        <p>Coral AI is a free, open model that looks at a reef survey photo and marks which parts show coral, algae, rubble or sand, so the cover of each can be estimated without classifying every image by hand. Anyone can download it under an MIT licence, and its output should be checked by a person before it is used in monitoring.</p>
+      </Summary>
     </div>
   </section>
+
+  <section class="section" aria-label="About Coral AI">
+    <div class="container cols">
+      <div class="col">
+        <h2 id="does-h">What it does</h2>
+        <p>Reef surveys produce thousands of photos that divers and scientists still classify by hand, which slows reporting and limits how many sites can be monitored. Coral AI segments each photo into coral types, algae, rubble and sand, so cover estimates for a transect come straight from the survey images.</p>
+      </div>
+      <div class="col">
+        <h2 id="for-h">Who it is for</h2>
+        <p>It is meant for researchers, restoration organisations and monitoring teams who survey reefs with photos and want a first pass at cover estimates, and students who want an open model to test and improve. The model grew out of open challenges since 2021, and its code is public so others can build on it.</p>
+      </div>
+      <div class="col col--limits">
+        <h2 id="lim-h">What it does not do</h2>
+        <ul>
+          <li>It supports research and monitoring with human review, and is not validated for regulatory reporting on its own.</li>
+          <li>The only documented accuracy figure, about 86% across six functional groups, belongs to the earlier GoogleNet classifier from the IndabaX South Africa 2023 challenge, not to the current segmentation model.<ToConfirm note="documented accuracy for the YOLOv8 model, if any" /></li>
+          <li>It does not forecast reef condition or issue alerts; it labels the photos it is given.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="use-h">
+    <div class="container"><div class="prose">
+      <h2 id="use-h">Using the model</h2>
+      <dl class="uses">
+        <div><dt>Model</dt><dd><a href="https://huggingface.co/reefsupport/coral-ai" rel="noopener">Coral AI on Hugging Face</a>, MIT licence</dd></div>
+        <div><dt>Demo</dt><dd><a href="https://reefsupport-coral-ai-demo.hf.space" rel="noopener">Public browser demo</a>, where you can try your own image</dd></div>
+        <div><dt>Code</dt><dd><a href="https://github.com/reefsupport" rel="noopener">Reef Support on GitHub</a></dd></div>
+        <div><dt>In a programme</dt><dd>To use Coral AI as part of a monitoring programme, with review and reporting, <a href="/contact">contact us</a>.</dd></div>
+      </dl>
+
+      <h2>How it was built</h2>
+      <p>The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023). ML6 contributed a segmentation approach built on the Seaview dataset, and Yohan Runhaar's research with University of Amsterdam support explored superpixel methods. The <a href="/projects/coral-ai">Coral AI project page</a> lists partners and outputs, and the <a href="/research/hackathons">hackathons page</a> lists each challenge.</p>
+    </div></div>
+  </section>
+
+  <section class="section rule-top">
+    <div class="container"><Glossary items={pick('segmentation', 'transect')} /></div>
+  </section>
 </Base>
+<style>
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+  .col { border-top: var(--bar) solid var(--sky); padding-top: var(--s-3); }
+  .col--limits { border-top-color: var(--navy); }
+  .col h2 { font-size: var(--fs-h3); margin-bottom: var(--s-2); }
+  .col ul { margin: 0; padding-left: 1.2em; }
+  .col li + li { margin-top: var(--s-1); }
+  .uses { margin: 0 0 var(--s-2); border-top: 1px solid var(--line); }
+  .uses > div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: var(--s-1) var(--s-3); padding: var(--s-2) 0; border-bottom: 1px solid var(--line); }
+  .uses dt { font: 600 12px/1.6 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); }
+  .uses dd { margin: 0; }
+  @media (max-width: 960px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 520px) { .uses > div { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+</style>

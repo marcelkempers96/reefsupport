@@ -7,15 +7,23 @@ import CardGrid from '../../components/CardGrid.astro';
 import PhotoPlaceholder from '../../components/PhotoPlaceholder.astro';
 import Txt from '../../components/Txt.astro';
 import ToConfirm from '../../components/ToConfirm.astro';
+import Summary from '../../components/readability/Summary.astro';
 import subnav from '../../data/subnav.json';
 import data from '../../data/team.json';
 import { isDev, stripConfirm } from '../../lib/confirm';
 const lead = "Three people lead Reef Support's work, with partners and students across each project.";
 const alumni = data.alumni.filter((a) => a.consent);
 ---
-<Base title="Team" description={lead}>
+<Base title="Team" description="Reef Support's team: co-founders Marcel Kempers (Director) and Yohan Runhaar (Technical Lead), and Nikole Gualdron Chaparro, Director of Marine Science.">
   <PageHeader kicker={['About', 'Team']} title="Team" lead={lead} />
   <SubNav label="About" links={subnav.about} />
+  <section class="section section--tight">
+    <div class="container">
+      <Summary id="sum-h" label="Who leads what">
+        <p>Marcel Kempers, co-founder and Director, leads partnerships, funding and projects. Yohan Runhaar, co-founder and Technical Lead, leads the AI models, data engineering and software. Nikole Gualdron Chaparro, Director of Marine Science, leads monitoring design and ecological indicators and reviews every marine science claim before it is published or submitted.</p>
+      </Summary>
+    </div>
+  </section>
   <section class="section">
     <div class="container">
       <h2 class="visually-hidden">Team members</h2>

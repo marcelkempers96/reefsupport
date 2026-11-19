@@ -2,31 +2,64 @@
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
+import Summary from '../../components/readability/Summary.astro';
+import Glossary from '../../components/readability/Glossary.astro';
+import { pick } from '../../components/readability/terms';
 import subnav from '../../data/subnav.json';
 import research from '../../data/research.json';
 const lead = 'Every monitoring programme we run follows the same chain, and each step names who is responsible for it. Reef Support does not generate satellite products or carry out physical sampling; where a step needs those, a partner delivers it.';
+// Group the seven steps into four stages so the chain reads as a process.
+const stages: Record<string, string> = { '1': 'Plan', '2': 'Collect', '3': 'Collect', '4': 'Process', '5': 'Process', '6': 'Check and report', '7': 'Check and report' };
+const steps = research.methods.map((m) => {
+  const [n, ...rest] = m.step.split(' ');
+  const num = n.replace('.', '');
+  return { num, name: rest.join(' '), what: m.what, who: m.who, ours: m.who.startsWith('Reef Support'), stage: stages[num] };
+});
 ---
 <Base title="Methods" description="From field data to a report a funder can check: the seven steps of every Reef Support monitoring programme and who is responsible for each.">
   <PageHeader kicker={['Research', 'Methods']} title="From field data to a report a funder can check" lead={lead} />
   <SubNav label="Research" links={subnav.research} />
-  <section class="section">
+
+  <section class="section section--tight">
     <div class="container">
-      <ol class="steps">
-        {research.methods.map((m) => {
-          const [n, ...rest] = m.step.split(' ');
-          const ours = m.who.startsWith('Reef Support');
-          return (
-            <li class:list={{ ours }}>
-              <span class="n">{n.replace('.', '')}</span>
-              <h2>{rest.join(' ')}</h2>
-              <p class="what">{m.what}</p>
-              <p class="who"><span class="lbl">Responsible</span>{m.who}</p>
-            </li>
-          );
-        })}
-      </ol>
-      <p class="legend"><span class="sw" aria-hidden="true"></span> Steps Reef Support is responsible for</p>
+      <Summary id="sum-h" label="Summary">
+        <p>A programme moves through seven steps in four stages: plan, collect, process, then check and report. Reef Support is responsible for four of the seven steps, and shares the first of them, design, with the project's scientific lead. Field partners collect the data on site, Water Insight B.V. supplies the satellite products, and nothing is released before scientific review.</p>
+      </Summary>
     </div>
+  </section>
+
+  <section class="section" aria-labelledby="steps-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="steps-h">The seven steps</h2>
+        <p class="legend"><span class="sw" aria-hidden="true"></span> Steps Reef Support is responsible for</p>
+      </div>
+      <ol class="steps">
+        {steps.map((s, i) => (
+          <li class:list={{ ours: s.ours, 'new-stage': i === 0 || steps[i - 1].stage !== s.stage }}>
+            <span class="n" aria-hidden="true">{s.num}</span>
+            <div class="head">
+              {(i === 0 || steps[i - 1].stage !== s.stage) && <p class="stage">Stage: {s.stage}</p>}
+              <h3><span class="visually-hidden">Step {s.num}: </span>{s.name}</h3>
+            </div>
+            <p class="what"><span class="lbl">What happens</span>{s.what}</p>
+            <p class="who"><span class="lbl">Responsible</span>{s.who}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="why-h">
+    <div class="container"><div class="prose">
+      <h2 id="why-h">Why the steps are split this way</h2>
+      <p>Naming one responsible party per step lets a funder or authority trace every number in a report back to the organisation that produced it. Satellite water quality products come from Water Insight B.V., and autonomous vessels and in-situ collection from RanMarine Technology B.V., because those partners hold the measurement assets for that work.</p>
+      <p>Reef Support's part is the design, the integration and checks, the AI analysis and the reporting. For coastal water, those reports are structured for Nature Restoration Regulation and Water Framework Directive reporting and delivered with accredited partners.</p>
+    </div></div>
+  </section>
+
+  <section class="section rule-top">
+    <div class="container"><Glossary items={pick('inSitu', 'satellite', 'segmentation', 'transect', 'nrr', 'wfd')} /></div>
   </section>
 </Base>
 <style>
@@ -35,14 +68,16 @@ const lead = 'Every monitoring programme we run follows the same chain, and each
     display: grid; grid-template-columns: 64px minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr); gap: var(--s-1) var(--s-3);
     align-items: baseline; padding: var(--s-3) 0; border-bottom: 1px solid var(--line);
   }
+  .steps li.new-stage:not(:first-child) { border-top: 2px solid var(--line); }
   .n { font: 700 32px/1 var(--sans); letter-spacing: -0.03em; color: var(--mute); }
   .ours .n { color: var(--royal); }
-  h2 { font-size: var(--fs-h3); font-weight: 600; }
+  .stage { margin: 0 0 4px; font: 500 12px/1.4 var(--mono); letter-spacing: .04em; color: var(--mute-dark); }
+  h3 { font-size: var(--fs-h3); font-weight: 600; margin: 0; }
   .what { margin: 0; }
   .who { margin: 0; font-weight: 500; }
-  .lbl { display: block; font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 2px; }
-  .legend { display: flex; align-items: center; gap: 8px; margin-top: var(--s-3); font-size: var(--fs-small); color: var(--mute); }
-  .sw { width: 12px; height: 12px; background: var(--royal); }
+  .lbl { display: block; font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); margin-bottom: 2px; }
+  .legend { display: flex; align-items: center; gap: 8px; margin: 0; font-size: var(--fs-small); color: var(--mute-dark); }
+  .sw { width: 12px; height: 12px; background: var(--royal); flex: none; }
   @media (max-width: 860px) {
     .steps li { grid-template-columns: 48px minmax(0, 1fr); }
     .what, .who { grid-column: 2; }

@@ -7,6 +7,9 @@ import Timeline from '../../components/Timeline.astro';
 import ListRows from '../../components/ListRows.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import Txt from '../../components/Txt.astro';
+import Summary from '../../components/readability/Summary.astro';
+import Glossary from '../../components/readability/Glossary.astro';
+import { pick } from '../../components/readability/terms';
 import subnav from '../../data/subnav.json';
 import about from '../../data/about.json';
 import company from '../../data/company.json';
@@ -15,16 +18,34 @@ import media from '../../data/media.json';
 import { organizationLd } from '../../lib/org';
 import { showValue } from '../../lib/confirm';
 const title = 'Marine technology built with the people who protect coasts';
+const brief = [
+  { k: 'Who', v: 'Reef Support B.V., a Dutch marine technology company founded by TU Delft graduates Marcel Kempers and Yohan Runhaar, with Nikole Gualdron Chaparro as Director of Marine Science.' },
+  { k: 'Since', v: '2020, the year it also won the ESA Copernicus Masters Overall Prize. From 2021 to 2023 it was incubated at ESA BIC Noordwijk.' },
+  { k: 'Where', v: 'Based in Delft, registered in Amsterdam, with project work in Indonesia, Colombia and the Netherlands.' },
+  { k: 'What', v: 'Open AI models for coral reef images, mangrove and blue carbon monitoring methods, and earth observation workflows for coastal water quality, run inside partner projects.' },
+  { k: 'With whom', v: 'Indonesia Biru Foundation, Corales de Paz, Water Insight, RanMarine Technology and TU Delft for delivery; WWF Netherlands and Sustainable Ocean Alliance among funders; FruitPunch AI, OceanHub Africa and Zindi for open challenges.' },
+];
 ---
-<Base title="About" description={company.shortDescription}>
+<Base title="About" description="Reef Support B.V. is a Dutch marine technology company, founded in Delft in 2020, building AI models and monitoring workflows for reefs, mangroves and coasts.">
   <JsonLd slot="head" data={organizationLd(Astro.site!)} />
   <PageHeader kicker={['About']} title={title} display />
   <SubNav label="About" links={subnav.about} />
 
   <section class="section">
+    <div class="container">
+      <Summary id="sum-h" label="Summary">
+        <p>Reef Support B.V. is a Dutch marine technology company that turns reef photos, field records and satellite data into measurements and reports that funders and authorities can check. It builds the models and runs the analysis, while partners on the ground lead the fieldwork and specialist providers supply satellite and vessel data.</p>
+      </Summary>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="brief-h">
     <div class="container split">
       <div class="split__main">
-        <p class="lead">{about.longDescription}</p>
+        <h2 id="brief-h" class="mb-s">Reef Support in brief</h2>
+        <dl class="brief-list">
+          {brief.map((b) => <div><dt>{b.k}</dt><dd>{b.v}</dd></div>)}
+        </dl>
       </div>
       <div class="split__side">
         <div class="side-panel">
@@ -43,12 +64,23 @@ const title = 'Marine technology built with the people who protect coasts';
   </section>
 
   <section class="section rule-top" aria-labelledby="how-h">
-    <div class="container"><HowWeWork /></div>
+    <div class="container">
+      <p class="kicker-line">Who does what</p>
+      <HowWeWork />
+      <p class="note">Each project splits the work this way, so a funder can see which organisation is accountable for each part: Reef Support does not produce satellite products or carry out physical sampling, and scientific review before release sits with our Director of Marine Science, plus an independent party where required. The Akar Biru Lombok mangrove programme is led by Indonesia Biru Foundation, with Reef Support as technical partner. The full chain is set out step by step on the <a href="/research/methods">methods page</a>.</p>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="story-h">
+    <div class="container"><div class="prose">
+      <h2 id="story-h">Background</h2>
+      <p>{about.longDescription}</p>
+    </div></div>
   </section>
 
   <section class="section rule-top" aria-labelledby="tl-h">
     <div class="container">
-      <h2 id="tl-h" class="mb">Timeline</h2>
+      <h2 id="tl-h" class="mb">Timeline, 2020 to now</h2>
       <Timeline items={timeline} />
     </div>
   </section>
@@ -57,6 +89,7 @@ const title = 'Marine technology built with the people who protect coasts';
     <div class="container">
       <div class="side-panel dev">
         <h2 id="dev-h">In development with partners</h2>
+        <p class="dev__note">Proposals and research being prepared or reviewed with partners, listed without amounts or outcomes while they are in progress.</p>
         <ul>{about.inDevelopment.map((t) => <li>{t}</li>)}</ul>
       </div>
     </div>
@@ -68,10 +101,25 @@ const title = 'Marine technology built with the people who protect coasts';
       <ListRows rows={media.awards.slice(0, 4).map((a) => ({ type: 'Award', colour: 'royal', title: a.title, source: `${a.by} · ${a.to}`, year: a.year }))} />
     </div>
   </section>
+
+  <section class="section rule-top">
+    <div class="container"><Glossary items={pick('blueCarbon', 'inSitu', 'satellite')} /></div>
+  </section>
 </Base>
 <style>
   .mb { margin-bottom: var(--s-4); }
-  .split__main .lead { max-width: 720px; }
+  .mb-s { margin-bottom: var(--s-3); }
+  .brief-list { margin: 0; border-top: 2px solid var(--ink); }
+  .brief-list > div { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: var(--s-1) var(--s-3); padding: var(--s-2) 0; border-bottom: 1px solid var(--line); }
+  .brief-list dt { font: 600 12px/1.6 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); }
+  .brief-list dd { margin: 0; color: var(--ink); }
+  .note { margin-top: var(--s-3); }
+  .kicker-line { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--royal); margin-bottom: var(--s-1); }
+  .note a { text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
   .dev ul { margin: 0; padding-left: 1.2em; color: var(--ink); }
   .dev li + li { margin-top: var(--s-1); }
+  .dev__note { font-size: var(--fs-small); }
+  @media (max-width: 760px) {
+    .brief-list > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  }
 </style>

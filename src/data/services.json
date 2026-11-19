@@ -1,0 +1,202 @@
+{
+  "services": [
+    {
+      "id": "monitoring-design",
+      "title": "Monitoring design",
+      "colour": "ink",
+      "summary": "Before any data is collected, we agree the indicators, sites, sampling frequency and reporting format with you and your project's scientific lead, so the data you collect answers the questions your funder or authority will ask.",
+      "audiences": ["restoration", "consortia", "authorities"],
+      "deliverables": [
+        "An agreed set of indicators, sites and sampling frequency",
+        "A field survey protocol your teams can follow, such as the Mangrove AI growth protocol or the camera rig protocol from Colombia",
+        "A reporting format fixed at the start, matched to your funder or authority"
+      ],
+      "weDo": "Monitoring design with the project's scientific lead; our Director of Marine Science sets the scientific basis for every indicator we propose.",
+      "partnersDo": "You and your field partners bring knowledge of the sites, the people on the ground and the questions the project has to answer.",
+      "proof": [
+        { "label": "Methods: the seven-step chain", "href": "/research/methods" },
+        { "label": "Mangrove AI field protocol", "href": "/projects/mangrove-ai" },
+        { "label": "Akar Biru Lombok monitoring design", "href": "/projects/akar-biru-lombok" }
+      ]
+    },
+    {
+      "id": "data-integration",
+      "title": "Data integration of satellite, sensor and field data",
+      "colour": "teal",
+      "summary": "We bring satellite products from specialist providers, sensor and vessel data and field observations into one dataset, harmonised by site and reporting period, with outliers and gaps flagged before analysis.",
+      "audiences": ["authorities", "consortia"],
+      "deliverables": [
+        "One dataset per site and reporting period, combining partner sources",
+        "Flags for outliers and gaps, so you know what the data can and cannot support",
+        "Satellite products credited to their source"
+      ],
+      "weDo": "Integration, harmonisation and data checks.",
+      "partnersDo": "Water Insight B.V. supplies satellite water quality products from Copernicus data; RanMarine Technology B.V. runs autonomous vessels and in-situ collection. Reef Support does not generate satellite products or carry out physical sampling.",
+      "proof": [
+        { "label": "Coastal water and earth observation", "href": "/work/coastal-water" },
+        { "label": "Algae Tracker R&D", "href": "/projects/algae-tracker" },
+        { "label": "Plastic Tracker case studies", "href": "/projects/plastic-tracker" }
+      ]
+    },
+    {
+      "id": "coral-ai",
+      "title": "AI image analysis with Coral AI",
+      "colour": "royal",
+      "summary": "Coral AI labels reef survey photos by coral type, algae, rubble and sand, so cover estimates for transects come straight from the images instead of being classified by hand.",
+      "audiences": ["restoration", "consortia"],
+      "deliverables": [
+        "Segmented survey images with cover estimates per transect",
+        "Results checked by people, as the model is built for research and monitoring support with human review",
+        "An open model you can inspect: YOLOv8 segmentation under an MIT licence on Hugging Face, with a public browser demo"
+      ],
+      "weDo": "Model development, image analysis and indicator calculation; Coral AI is not validated for regulatory reporting on its own, so results go through scientific review.",
+      "partnersDo": "Field partners and divers capture the survey photos on transects.",
+      "proof": [
+        { "label": "Coral AI project", "href": "/projects/coral-ai" },
+        { "label": "Try the model and the demo", "href": "/research/open-source" },
+        { "label": "Coral reef intelligence", "href": "/work/coral-reefs" }
+      ]
+    },
+    {
+      "id": "photogrammetry",
+      "title": "3D photogrammetry for restoration sites",
+      "colour": "royal",
+      "summary": "Diver-captured image sets become 3D reef models for rugosity, growth and restoration tracking, so restoration sites can be measured before and after work in the format partners and funders need.",
+      "audiences": ["restoration", "funders"],
+      "deliverables": [
+        "Camera rig design and survey protocol",
+        "3D models of restoration sites",
+        "Before-and-after measurements of rugosity and growth"
+      ],
+      "weDo": "Survey protocol, 3D reconstruction methods and restoration reporting.",
+      "partnersDo": "Local restoration teams dive and capture the images; in Colombia, Ángela Alegría of Corales de Paz built a twin-camera rig that captures about 1,500 photos per dive.",
+      "proof": [
+        { "label": "3D photogrammetry in Colombia, funded by WWF Netherlands INNO-fonds", "href": "/projects/photogrammetry-colombia" },
+        { "label": "Coral reef intelligence", "href": "/work/coral-reefs" }
+      ]
+    },
+    {
+      "id": "mangrove-monitoring",
+      "title": "Mangrove survival, growth and carbon monitoring",
+      "colour": "navy",
+      "summary": "Restoration projects need to show how many seedlings survive, how they grow and how much carbon they store, not only how many were planted. We provide the monitoring layer, from field records to reporting, alongside the local partners who lead the work.",
+      "audiences": ["restoration", "funders"],
+      "deliverables": [
+        "GPS-tagged records of planting, survival and growth, collected by community teams in their own language and working offline",
+        "Growth and carbon estimates from those records, presented as estimates while the models are calibrated with partner field data",
+        "Monitoring outputs shaped for ecosystem-based adaptation funders and blue carbon feasibility work"
+      ],
+      "weDo": "Monitoring design, the field data workflow, growth and carbon models, and reporting.",
+      "partnersDo": "Local partners lead the programme and its community work; in Lombok, Akar Biru Lombok is led by Indonesia Biru Foundation, with Reef Support as technical partner, and field records are collected in Bahasa Indonesia.",
+      "proof": [
+        { "label": "Mangrove AI", "href": "/projects/mangrove-ai" },
+        { "label": "Akar Biru Lombok", "href": "/projects/akar-biru-lombok" },
+        { "label": "Mangroves and blue carbon", "href": "/work/mangroves-blue-carbon" }
+      ]
+    },
+    {
+      "id": "reporting",
+      "title": "Reporting for funders and regulatory obligations",
+      "colour": "teal",
+      "summary": "We turn checked data into dashboards, reports and exports in the funder's or authority's format, including indicators structured for EU Nature Restoration Regulation and Water Framework Directive reporting.",
+      "audiences": ["authorities", "funders", "restoration"],
+      "deliverables": [
+        "Dashboards, reports and exports in the format your funder or authority uses",
+        "Indicators structured for Nature Restoration Regulation and Water Framework Directive reporting",
+        "Scientific review before release, with an independent party where required"
+      ],
+      "weDo": "Indicator calculation, reporting, and scientific review by our Director of Marine Science.",
+      "partnersDo": "Reporting for regulatory obligations is delivered with accredited partners, and an independent reviewer joins where the obligation requires one.",
+      "proof": [
+        { "label": "Methods: review and reporting steps", "href": "/research/methods" },
+        { "label": "Coastal water and earth observation", "href": "/work/coastal-water" }
+      ]
+    },
+    {
+      "id": "proposals",
+      "title": "Data and AI partner on research proposals",
+      "colour": "ink",
+      "summary": "Research consortia and restoration organisations bring us in as the data and AI partner. If you are building a proposal and need monitoring design, data integration or reporting, write to us with the call, deadline and your role.",
+      "audiences": ["consortia", "restoration"],
+      "deliverables": [
+        "A defined work package for monitoring design, data integration, AI analysis or reporting",
+        "A plain division of roles between Reef Support and your field and data partners",
+        "Open outputs where the project allows: models, datasets and documented methods"
+      ],
+      "weDo": "Our share of the work plan, written around the roles we hold: monitoring design, data integration, AI analysis and reporting.",
+      "partnersDo": "The consortium lead, field partners and data providers hold their own roles, such as local leadership, sampling or satellite products.",
+      "proof": [
+        { "label": "Partnering on proposals", "href": "/about/opportunities" },
+        { "label": "Partners and funders", "href": "/about/partners" },
+        { "label": "Research and open models", "href": "/research" }
+      ]
+    },
+    {
+      "id": "open-innovation",
+      "title": "Open AI challenges and student research",
+      "colour": "sky",
+      "summary": "We run open AI challenges and host student research that produce something others can use: an open model, a dataset or a documented method. Six challenges since 2021 ran with FruitPunch AI, Sustainable Ocean Alliance, OceanHub Africa, Zindi and others.",
+      "audiences": ["consortia", "students"],
+      "deliverables": [
+        "Challenge design around a real monitoring problem and dataset",
+        "MSc and minor projects with TU Delft and the University of Amsterdam",
+        "Open methods and models that feed back into partner projects, as the challenges did for Coral AI"
+      ],
+      "weDo": "We act as challenge owner, bring the monitoring problem, host student projects and build the results into usable models and methods.",
+      "partnersDo": "Challenge platforms such as FruitPunch AI and Zindi bring participants, and universities such as TU Delft and the University of Amsterdam bring students and academic supervision.",
+      "proof": [
+        { "label": "Hackathons and challenges", "href": "/research/hackathons" },
+        { "label": "Internships and thesis topics", "href": "/about/opportunities" },
+        { "label": "Coral Lab, Lombok", "href": "/projects/coral-lab-lombok" }
+      ]
+    }
+  ],
+  "audiences": [
+    {
+      "id": "restoration",
+      "label": "For restoration organisations",
+      "text": "Show funders and communities what your restoration achieves, with survival, growth, cover and structure measured from your own field data.",
+      "links": [
+        { "label": "Coral Lab, Lombok", "href": "/projects/coral-lab-lombok" },
+        { "label": "Akar Biru Lombok", "href": "/projects/akar-biru-lombok" },
+        { "label": "3D photogrammetry in Colombia", "href": "/projects/photogrammetry-colombia" }
+      ]
+    },
+    {
+      "id": "consortia",
+      "label": "For research consortia",
+      "text": "Bring in a data and AI partner for monitoring design, data integration, AI analysis and reporting, with open models and a clear division of roles.",
+      "links": [
+        { "label": "Partnering on proposals", "href": "/about/opportunities" },
+        { "label": "Open models and challenges", "href": "/research" }
+      ]
+    },
+    {
+      "id": "authorities",
+      "label": "For coastal authorities",
+      "text": "Combine satellite water quality products, sensor data and field observations into indicators and reports for Nature Restoration Regulation and Water Framework Directive obligations.",
+      "links": [
+        { "label": "Coastal water and earth observation", "href": "/work/coastal-water" },
+        { "label": "Methods", "href": "/research/methods" }
+      ]
+    },
+    {
+      "id": "funders",
+      "label": "For funders",
+      "text": "Receive reports in your format, built on a documented chain from field data to a scientifically reviewed result, with each step naming who is responsible.",
+      "links": [
+        { "label": "Methods", "href": "/research/methods" },
+        { "label": "All projects", "href": "/projects" }
+      ]
+    },
+    {
+      "id": "students",
+      "label": "For students and researchers",
+      "text": "Join an open AI challenge or an MSc or minor project that produces an open model, a dataset or a documented method.",
+      "links": [
+        { "label": "Internships and thesis topics", "href": "/about/opportunities" },
+        { "label": "Hackathons and challenges", "href": "/research/hackathons" }
+      ]
+    }
+  ]
+}

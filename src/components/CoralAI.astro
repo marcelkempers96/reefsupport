@@ -1,5 +1,8 @@
 ---
 // Coral AI block for Research index and Open source pages.
+// The figure is an animated, schematic segmentation demo: a scan line passes over a drawn reef
+// scene, class masks appear region by region, then an "illustrative output" readout fills in.
+// Without JS or under prefers-reduced-motion the final frame is shown as a static image.
 interface Props { headingLevel?: 'h1' | 'h2' }
 const { headingLevel = 'h2' } = Astro.props;
 const H = headingLevel;
@@ -8,6 +11,26 @@ const legend = [
   { label: 'Soft coral', c: 'var(--sky)' },
   { label: 'Algae', c: 'var(--navy)' },
   { label: 'Sand and rubble', c: 'var(--line)' },
+];
+
+// Mask regions in a 400 x 300 scene. `at` is the animation tick (400 ms each) at which the
+// scan line has passed the region; labels sit on a 72% ink chip like photo credits.
+const regions = [
+  { at: 4, cls: 'Sand and rubble', fill: 'var(--line)', d: 'M0 210 C60 190 120 230 190 205 S320 180 400 200 V300 H0Z', lx: 14, ly: 268 },
+  { at: 5, cls: 'Hard coral', fill: 'var(--royal)', d: 'M30 120 C40 70 110 60 140 95 C170 130 150 190 95 195 C50 198 25 160 30 120Z', lx: 44, ly: 126 },
+  { at: 8, cls: 'Soft coral', fill: 'var(--sky)', d: 'M160 40 C175 30 200 35 200 55 C200 72 180 80 165 72 C152 64 150 48 160 40Z', lx: 120, ly: 14 },
+  { at: 9, cls: 'Algae', fill: 'var(--navy)', d: 'M150 210 C170 180 230 175 250 200 C265 220 245 245 210 248 C175 250 140 235 150 210Z', lx: 166, ly: 206 },
+  { at: 12, cls: 'Soft coral', fill: 'var(--sky)', d: 'M220 60 C260 40 320 60 330 100 C340 140 300 165 260 160 C215 155 195 95 220 60Z', lx: 236, ly: 98 },
+  { at: 14, cls: 'Hard coral', fill: 'var(--royal)', d: 'M300 190 C320 175 365 180 370 205 C374 228 340 240 315 232 C295 225 290 202 300 190Z', lx: 300, ly: 244 },
+];
+const chipW = (s: string) => Math.round(s.length * 6.1 + 12);
+
+// Example values only, chosen to sum to 100. Not survey results.
+const readout = [
+  { label: 'Hard coral', v: 34, c: 'var(--royal)', at: 18 },
+  { label: 'Soft coral', v: 18, c: 'var(--sky)', at: 19 },
+  { label: 'Algae', v: 22, c: 'var(--navy)', at: 20 },
+  { label: 'Sand and rubble', v: 26, c: 'var(--line)', at: 21 },
 ];
 ---
 <div class="coral split">
@@ -22,25 +45,94 @@ const legend = [
     </div>
     <p class="note meta">MIT licence · Research and monitoring support with human review; not validated for regulatory reporting on its own.</p>
   </div>
-  <figure class="split__side preview">
-    <svg viewBox="0 0 400 300" role="img" aria-labelledby="seg-t">
-      <title id="seg-t">Schematic segmentation preview: a reef photo divided into hard coral, soft coral, algae, and sand and rubble regions</title>
-      <rect width="400" height="300" fill="var(--placeholder)" />
-      <path d="M0 210 C60 190 120 230 190 205 S320 180 400 200 V300 H0Z" fill="var(--line)" />
-      <path d="M30 120 C40 70 110 60 140 95 C170 130 150 190 95 195 C50 198 25 160 30 120Z" fill="var(--royal)" />
-      <path d="M220 60 C260 40 320 60 330 100 C340 140 300 165 260 160 C215 155 195 95 220 60Z" fill="var(--sky)" />
-      <path d="M150 210 C170 180 230 175 250 200 C265 220 245 245 210 248 C175 250 140 235 150 210Z" fill="var(--navy)" />
-      <path d="M300 190 C320 175 365 180 370 205 C374 228 340 240 315 232 C295 225 290 202 300 190Z" fill="var(--royal)" />
-      <path d="M160 40 C175 30 200 35 200 55 C200 72 180 80 165 72 C152 64 150 48 160 40Z" fill="var(--sky)" />
-    </svg>
+  <figure class="split__side preview" data-coral>
+    <div class="stage">
+      <svg viewBox="0 0 400 300" role="img" aria-labelledby="seg-t seg-d">
+        <title id="seg-t">Schematic Coral AI segmentation demo</title>
+        <desc id="seg-d">A drawn reef scene is scanned from left to right and divided into hard coral, soft coral, algae, and sand and rubble regions, each with a label.</desc>
+        <defs>
+          <pattern id="coral-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="var(--line)" stroke-width="1" />
+          </pattern>
+        </defs>
+        <rect width="400" height="300" fill="var(--placeholder)" />
+        <rect width="400" height="300" fill="url(#coral-hatch)" />
+        <g class="outline" fill="none" stroke="var(--mute)" stroke-opacity=".45" stroke-dasharray="3 3">
+          {regions.map((r) => <path d={r.d} />)}
+        </g>
+        {regions.map((r) => (
+          <g class="seg" data-at={r.at}>
+            <path d={r.d} fill={r.fill} fill-opacity=".9" stroke="var(--white)" stroke-width="1.5" />
+            <g class="chip" transform={`translate(${r.lx} ${r.ly})`}>
+              <rect width={chipW(r.cls)} height="18" fill="var(--ink)" fill-opacity=".8" />
+              <text x="6" y="13" fill="var(--white)">{r.cls}</text>
+            </g>
+          </g>
+        ))}
+        <g class="scan" aria-hidden="true">
+          <rect x="-1" y="0" width="2" height="300" fill="var(--ink)" />
+          <rect x="-1" y="0" width="40" height="16" fill="var(--ink)" />
+          <text x="5" y="12" class="scan__t" fill="var(--white)">SCAN</text>
+        </g>
+      </svg>
+    </div>
     <figcaption>
       <ul class="legend">
         {legend.map((l) => <li><span style={`background: ${l.c}`} aria-hidden="true"></span>{l.label}</li>)}
       </ul>
-      <p class="meta cap">Schematic illustration. <a href="https://reefsupport-coral-ai-demo.hf.space" rel="noopener">Try the public demo</a> with your own image.</p>
+      <div class="readout">
+        <div class="readout__top">
+          <p class="readout__h"><strong>Cover by class</strong> <span class="meta">Illustrative output · example values, not survey results</span></p>
+          <button class="toggle" type="button" data-coral-toggle hidden>Pause animation</button>
+        </div>
+        <ul>
+          {readout.map((r) => (
+            <li>
+              <span class="readout__l">{r.label}</span>
+              <span class="track" aria-hidden="true"><span class="fill" data-at={r.at} style={`width: ${r.v}%; background: ${r.c}`}></span></span>
+              <span class="meta readout__v" data-at={r.at}>{r.v}%</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <p class="meta cap">Schematic illustration, not a model output. <a href="https://reefsupport-coral-ai-demo.hf.space" rel="noopener">Try the public demo</a> with your own image.</p>
     </figcaption>
   </figure>
 </div>
+
+<script>
+  // One timeline per figure: ticks of 400 ms, 38 ticks per loop (about 15 s).
+  // Paused by the button, when the figure is off-screen, and never started under reduced motion.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('[data-coral]').forEach((root) => {
+    const items = [...root.querySelectorAll<HTMLElement | SVGElement>('[data-at]')];
+    const btn = root.querySelector<HTMLButtonElement>('[data-coral-toggle]');
+    let t = 0, timer = 0, userPaused = false, visible = false;
+    const step = () => {
+      const live = t > 0 && t < 34;
+      root.classList.toggle('go', live);
+      for (const el of items) el.classList.toggle('on', live && t >= Number(el.dataset.at));
+      t = (t + 1) % 38;
+    };
+    const sync = () => {
+      const anim = !reduce.matches;
+      const running = anim && visible && !userPaused;
+      root.classList.toggle('is-anim', anim);
+      root.classList.toggle('is-paused', !running);
+      if (btn) {
+        btn.hidden = !anim;
+        btn.textContent = userPaused ? 'Play animation' : 'Pause animation';
+      }
+      clearInterval(timer);
+      if (running) timer = window.setInterval(step, 400);
+    };
+    btn?.addEventListener('click', () => { userPaused = !userPaused; sync(); });
+    reduce.addEventListener('change', sync);
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; sync(); }, { threshold: 0.2 }).observe(root);
+    sync();
+  });
+</script>
+
 <style>
   .sq { width: 12px; height: 12px; background: var(--royal); }
   .title { font-size: var(--fs-h1); margin-bottom: var(--s-3); }
@@ -49,11 +141,48 @@ const legend = [
   .btn-row { margin: var(--s-4) 0 var(--s-3); }
   .note { color: var(--mute); }
   .preview { margin: 0; border: 1px solid var(--line); }
-  .preview svg { width: 100%; height: auto; }
+  .stage { position: relative; }
+  .preview svg { display: block; width: 100%; height: auto; }
+  .preview text { font: 600 11px/1 var(--sans); }
+  .preview .scan__t { font: 500 10px/1 var(--mono); letter-spacing: .08em; }
   figcaption { padding: var(--s-2); border-top: 1px solid var(--line); }
-  .legend { list-style: none; margin: 0 0 var(--s-1); padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--fs-small); }
+  .legend { list-style: none; margin: 0 0 var(--s-2); padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--fs-small); }
   .legend li { display: inline-flex; align-items: center; gap: 8px; }
   .legend span { width: 12px; height: 12px; border: 1px solid rgba(10,31,51,.15); }
   .cap { margin: 0; color: var(--mute); }
+
+  .readout__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-1) var(--s-2); margin-bottom: var(--s-1); }
+  .toggle {
+    flex: none; padding: 6px 10px; min-height: 32px;
+    background: var(--white); color: var(--ink); border: 1px solid var(--ink);
+    font: 600 12px/1 var(--sans); cursor: pointer;
+  }
+  .toggle:hover { background: var(--ink); color: var(--white); }
+
+  .readout { border-top: 1px solid var(--line-soft); padding-top: var(--s-2); margin-bottom: var(--s-2); }
+  .readout__h { margin: 0; font-size: var(--fs-small); display: flex; flex-wrap: wrap; gap: 2px 8px; align-items: baseline; }
+  .readout__h .meta { color: var(--mute); }
+  .readout ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .readout li { display: grid; grid-template-columns: 8.5em 1fr 3.2em; gap: 8px; align-items: center; font-size: var(--fs-small); }
+  .track { height: 10px; background: var(--white); outline: 1px solid var(--line-soft); }
+  .fill { display: block; height: 100%; transform-origin: left; border-right: 1px solid rgba(10,31,51,.15); }
+  .readout__v { text-align: right; }
+
+  /* Animated state: only applied by the script, so no-JS and reduced motion keep the final frame. */
+  .scan { opacity: 0; }
+  .is-anim .seg, .is-anim .fill, .is-anim .readout__v { transition: opacity .6s ease, transform .9s ease; }
+  .is-anim .seg:not(.on), .is-anim .readout__v:not(.on) { opacity: 0; }
+  .is-anim .fill:not(.on) { transform: scaleX(0); }
+  .is-anim.go .scan { animation: coral-scan 6s linear forwards; }
+  .is-paused .scan { animation-play-state: paused; }
+  @keyframes coral-scan {
+    0% { opacity: 1; transform: translateX(0); }
+    96% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(400px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scan { display: none; }
+    .toggle { display: none; }
+  }
   @media (min-width: 961px) { .split__side { grid-column: 8 / span 5; } }
 </style>

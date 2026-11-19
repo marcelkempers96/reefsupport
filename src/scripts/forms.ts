@@ -11,16 +11,29 @@ document.querySelectorAll<HTMLFormElement>('form[data-async-form]').forEach((for
     }
     e.preventDefault();
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const label = btn?.textContent ?? '';
     btn?.setAttribute('disabled', '');
+    form.setAttribute('aria-busy', 'true');
+    if (btn) btn.textContent = 'Sending';
+    if (status) status.textContent = '';
     try {
       const res = await fetch(action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
-      const done = form.dataset.success ?? 'Thanks.';
-      form.replaceChildren(Object.assign(document.createElement('p'), { className: 'form-done', textContent: done, role: 'status' }));
+      const done = Object.assign(document.createElement('p'), {
+        className: 'form-done',
+        textContent: form.dataset.success ?? 'Thanks.',
+        tabIndex: -1,
+      });
+      done.setAttribute('role', 'status');
+      form.replaceChildren(done);
+      form.removeAttribute('aria-busy');
+      done.focus({ preventScroll: true });
+      done.scrollIntoView({ block: 'nearest' });
     } catch {
-      if (status) status.textContent = 'Sorry, the message could not be sent. Please try again or email us directly.';
-      btn?.removeAttribute('disabled');
+      if (status) status.textContent = 'Sorry, the message could not be sent. Your text is still in the form, so please try again in a moment.';
+      form.removeAttribute('aria-busy');
+      if (btn) { btn.textContent = label; btn.removeAttribute('disabled'); }
     }
   });
 });

@@ -1,0 +1,62 @@
+---
+// Field programmes: Coral Lab tanks in Lombok, and the open challenge network behind Coral AI.
+import VizFrame from './VizFrame.astro';
+
+const tanks = [
+  { x: 16, label: 'FRAGMENTS' },
+  { x: 92, label: 'WARMER' },
+  { x: 168, label: 'NURSERY' },
+];
+const frags = [12, 27, 42, 57];
+const nodes = [
+  { x: 270, y: 60, t: 'FruitPunch AI' },
+  { x: 270, y: 110, t: 'Zindi' },
+  { x: 270, y: 160, t: 'OceanHub Africa' },
+  { x: 270, y: 210, t: 'SOA' },
+];
+const hub = { x: 400, y: 112 };
+---
+<VizFrame
+  caption="Tanks at the land-based Coral Lab in Kecinan Bay, Lombok, run by Indonesia Biru Foundation, test micro-fragmentation and the exposure of young corals to higher temperatures. Six open AI challenges since 2021, with partners including FruitPunch AI, Zindi, OceanHub Africa and Sustainable Ocean Alliance (SOA), fed the work behind Coral AI."
+  legend={[
+    { label: 'Lab tank', c: 'var(--sky)' },
+    { label: 'Coral fragment', c: 'var(--royal)' },
+    { label: 'Challenge partner', c: 'var(--ink)', outline: true },
+  ]}
+>
+  <svg viewBox="0 0 480 280" role="img" aria-labelledby="viz-fp-t">
+    <title id="viz-fp-t">Schematic: three Coral Lab tanks with coral fragments, and open challenge partners linked to Coral AI</title>
+    <rect width="480" height="280" fill="var(--white)" />
+    <text x="16" y="24">Coral Lab, Lombok</text>
+    {tanks.map((tk, k) => (
+      <g class="va" style={`--i:${k * 2}`}>
+        <rect x={tk.x} y="96" width="70" height="120" fill="var(--white)" stroke="var(--ink)" stroke-width="1.5" />
+        <rect x={tk.x + 1} y="120" width="68" height="95" fill="var(--sky)" />
+        <line x1={tk.x + 1} y1="120" x2={tk.x + 69} y2="120" stroke="var(--ink)" stroke-opacity=".4" />
+        {frags.map((f, n) => (
+          <g>
+            <rect x={tk.x + f - 2} y="196" width="8" height="18" fill="var(--ink)" fill-opacity=".25" />
+            <rect class="va" style={`--i:${k * 2 + n + 1}`} x={tk.x + f - 4} y={k === 2 ? 178 - n * 3 : 184} width="12" height={k === 2 ? 18 + n * 3 : 12} fill="var(--royal)" />
+          </g>
+        ))}
+        <text x={tk.x + 35} y="240" class="m" text-anchor="middle">{tk.label}</text>
+      </g>
+    ))}
+
+    <text x="270" y="24">Open challenges</text>
+    <g fill="none" stroke="var(--ink)" stroke-opacity=".5">
+      {nodes.map((nd, k) => <path class="vd" pathLength="1" style={`--i:${k + 10}`} d={`M${nd.x + 14} ${nd.y}H${nd.x + 120}L${hub.x} ${hub.y + 10}`} />)}
+    </g>
+    {nodes.map((nd, k) => (
+      <g class="va" style={`--i:${k + 8}`}>
+        <rect x={nd.x} y={nd.y - 7} width="14" height="14" fill="var(--white)" stroke="var(--ink)" stroke-width="2" />
+        <text x={nd.x} y={nd.y - 14} class="m">{nd.t}</text>
+      </g>
+    ))}
+    <g class="va" style="--i:15">
+      <rect x={hub.x} y={hub.y} width="64" height="40" fill="var(--royal)" />
+      <text x={hub.x + 8} y={hub.y + 25} style="fill: var(--white); font-size: 13px">Coral AI</text>
+    </g>
+    <text x="270" y="270" class="m">SIX CHALLENGES SINCE 2021</text>
+  </svg>
+</VizFrame>

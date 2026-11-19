@@ -10,14 +10,15 @@ const hacks = await Promise.all(research.hackathons.map(async (h) => ({ ...h, ur
 const rows = hacks.map((h) => ({ type: 'Challenge', colour: 'sky', title: h.title, source: h.partners, year: h.date, url: h.url }));
 const lead = 'Six open AI challenges since 2021 on coral reef image classification, segmentation and bleaching, run with FruitPunch AI, Sustainable Ocean Alliance, OceanHub Africa, Zindi and others.';
 ---
-<Base title="Hackathons" description={lead}>
+<Base title="Hackathons" description="Six AI challenges since 2021 on coral classification, segmentation and bleaching, with FruitPunch AI, Sustainable Ocean Alliance, OceanHub Africa and others.">
   <PageHeader kicker={['Research', 'Hackathons']} title="Open AI challenges and hackathons" lead={lead} />
   <SubNav label="Research" links={subnav.research} />
   <section class="section">
     <div class="container">
+      <p class="intro">In an open AI challenge, data scientists and students work in public on a coral reef image problem, such as classifying, segmenting or detecting bleaching in survey photos, and share what they build. The approaches tested in these challenges fed into Coral AI, from the earlier GoogleNet classifier to the current segmentation model.</p>
       <ListRows rows={rows} />
       <p class="note">To propose a challenge with us, <a href="/contact">get in touch</a>.</p>
     </div>
   </section>
 </Base>
-<style>.note { margin-top: var(--s-4); color: var(--mute); } .note a { color: var(--ink); font-weight: 600; }</style>
+<style>.intro { margin-bottom: var(--s-4); } .note { margin-top: var(--s-4); color: var(--mute); } .note a { color: var(--ink); font-weight: 600; }</style>

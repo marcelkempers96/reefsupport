@@ -1,0 +1,42 @@
+---
+// Panel that points to the open Coral AI model and its public demo (CONTENT.md, section 6).
+// Used on case studies in or linked to the coral reef practice area.
+interface Props { variant?: 'full' | 'compact'; headingLevel?: 'h2' | 'h3' }
+const { variant = 'compact', headingLevel = 'h2' } = Astro.props;
+const H = headingLevel;
+const demo = 'https://reefsupport-coral-ai-demo.hf.space';
+const model = 'https://huggingface.co/reefsupport/coral-ai';
+const code = 'https://github.com/reefsupport';
+---
+<aside class:list={['coral-cta', `coral-cta--${variant}`]} aria-label="Try Coral AI">
+  <p class="coral-cta__kicker"><i aria-hidden="true"></i>Open model · MIT licence</p>
+  <H class="coral-cta__h">{variant === 'full' ? 'Try Coral AI on your own reef photo' : 'Try Coral AI'}</H>
+  {variant === 'full' ? (
+    <p>The public demo runs in your browser on Hugging Face: upload a reef photo and see it segmented into coral types, algae, rubble and sand. The model is published under an MIT licence and the code is on GitHub.</p>
+  ) : (
+    <p>Our open segmentation model labels reef photos by coral type, algae, rubble and sand, so cover estimates for transects come straight from survey images.</p>
+  )}
+  <div class="coral-cta__actions">
+    <a class="btn" href={demo} rel="noopener" target="_blank">Open the public demo<span class="visually-hidden"> (opens in a new tab)</span></a>
+    {variant === 'full' ? (
+      <a class="btn btn--secondary" href={model} rel="noopener" target="_blank">Model on Hugging Face<span class="visually-hidden"> (opens in a new tab)</span></a>
+    ) : (
+      <a class="coral-cta__link" href="/projects/coral-ai">About the Coral AI project</a>
+    )}
+  </div>
+  {variant === 'full' && (
+    <p class="coral-cta__links"><a href={code} rel="noopener" target="_blank">Code on GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+  )}
+  <p class="coral-cta__note">Research and monitoring support with human review; not validated for regulatory reporting on its own.</p>
+</aside>
+<style>
+  .coral-cta { background: var(--mist); border-top: 4px solid var(--royal); padding: var(--s-4) var(--s-3); }
+  .coral-cta__kicker { display: flex; align-items: center; gap: 8px; font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); margin: 0 0 var(--s-1); }
+  .coral-cta__kicker i { width: 12px; height: 12px; background: var(--royal); flex: none; }
+  .coral-cta__h { font-size: var(--fs-h3); line-height: 1.3; letter-spacing: -0.01em; margin-bottom: var(--s-1); }
+  .coral-cta p { color: var(--mute-dark); font-size: var(--fs-small); line-height: 1.5; }
+  .coral-cta__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2); margin-top: var(--s-2); }
+  .coral-cta__link, .coral-cta__links a { font-weight: 600; font-size: var(--fs-small); text-decoration: underline; text-underline-offset: 3px; }
+  .coral-cta__links { margin: var(--s-2) 0 0; }
+  .coral-cta .coral-cta__note { margin: var(--s-2) 0 0; font-family: var(--mono); font-size: 12px; letter-spacing: .02em; }
+</style>

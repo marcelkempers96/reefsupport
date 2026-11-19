@@ -3,7 +3,14 @@ interface Props { class?: string }
 ---
 <div class:list={['cards', Astro.props.class]}><slot /></div>
 <style>
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); align-items: stretch; }
   @media (max-width: 860px) { .cards { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+  /* A wrapper around a project card (used by the projects filter) passes the six card rows
+     through, so cards still line up. Hidden wrappers keep display: none. */
+  @supports (grid-template-rows: subgrid) {
+    .cards > :global(:not(article):not([hidden]):has(> article.card)) {
+      display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0;
+    }
+  }
 </style>

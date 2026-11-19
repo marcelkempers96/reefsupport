@@ -1,6 +1,9 @@
 ---
 // Full-bleed video hero (DESIGN.md). Video sources are optional: until the footage exists
-// (open item) the hero shows the flat --hero-bg fallback and no pause control.
+// (open item) the hero shows the --hero-bg fallback with a slow, low-contrast animated
+// background of drifting contour lines and a scan line (CSS and inline SVG only). Both the
+// video and the background pause with the button, when the hero is off-screen, and under
+// prefers-reduced-motion.
 import ToConfirm from './ToConfirm.astro';
 import Kicker from './Kicker.astro';
 
@@ -14,11 +17,32 @@ interface Props {
   video?: { mp4: string; webm?: string; poster: string; credit: string };
 }
 const { kicker, title, lead, primary, secondary, featured, video } = Astro.props;
+
+// Periodic wave paths 2400 units wide that repeat every 1200 units, so translating a layer by
+// half its width loops without a seam. Quadratic segments keep the markup small.
+const wave = (y: number, amp: number, period: number, phase = 0) => {
+  const h = period / 2;
+  let d = `M${-phase} ${y}Q${-phase + h / 2} ${y - amp * 2} ${-phase + h} ${y}`;
+  for (let x = -phase + period; x <= 2400 + period; x += h) d += `T${x} ${y}`;
+  return d;
+};
+const layerA = [90, 180, 260, 350, 430, 520, 610, 700].map((y, i) => wave(y, 10 + (i % 3) * 6, [300, 400, 600][i % 3], (i * 70) % 300));
+const layerB = [130, 300, 470, 650].map((y, i) => wave(y, 18 + i * 4, [600, 400][i % 2], (i * 110) % 400));
 ---
 <section class="hero" aria-labelledby="hero-title" data-hero>
-  {video && (
+  {video ? (
     <video class="hero__video" muted loop playsinline preload="none" poster={video.poster} aria-hidden="true"
            data-hero-video data-webm={video.webm} data-mp4={video.mp4}></video>
+  ) : (
+    <div class="hero__bg" aria-hidden="true">
+      <svg class="hero__layer hero__layer--a" viewBox="0 0 2400 800" preserveAspectRatio="none" focusable="false">
+        {layerA.map((d) => <path d={d} />)}
+      </svg>
+      <svg class="hero__layer hero__layer--b" viewBox="0 0 2400 800" preserveAspectRatio="none" focusable="false">
+        {layerB.map((d) => <path d={d} />)}
+      </svg>
+      <div class="hero__scan"></div>
+    </div>
   )}
   <div class="hero__shade" aria-hidden="true"></div>
 
@@ -38,11 +62,9 @@ const { kicker, title, lead, primary, secondary, featured, video } = Astro.props
     </p>
     <div class="hero__right">
       {featured && <a class="hero__featured" href={featured.href}>{featured.label} <span aria-hidden="true">→</span></a>}
-      {video && (
-        <button class="hero__pause" type="button" aria-pressed="false" data-hero-pause>
-          <span data-hero-pause-label>Pause</span>
-        </button>
-      )}
+      <button class:list={['hero__pause', { 'hero__pause--bg': !video }]} type="button" data-hero-pause>
+        <span data-hero-pause-label>Pause</span><span class="visually-hidden"> {video ? 'video' : 'background animation'}</span>
+      </button>
     </div>
   </div>
 </section>
@@ -54,12 +76,8 @@ const { kicker, title, lead, primary, secondary, featured, video } = Astro.props
   const label = hero?.querySelector<HTMLElement>('[data-hero-pause-label]');
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   let userPaused = reduce.matches;
-
-  const setLabel = () => {
-    if (!btn || !label) return;
-    btn.setAttribute('aria-pressed', String(userPaused));
-    label.textContent = userPaused ? 'Play' : 'Pause';
-  };
+  let visible = true;
+  let ready = !video;
 
   const load = () => {
     if (!video || video.dataset.loaded) return;
@@ -73,19 +91,22 @@ const { kicker, title, lead, primary, secondary, featured, video } = Astro.props
     video.load();
   };
 
-  const play = () => { if (!video || userPaused) return; load(); video.play().catch(() => {}); };
+  const apply = () => {
+    if (!hero) return;
+    const run = visible && !userPaused;
+    hero.classList.toggle('is-still', !run);
+    if (label) label.textContent = userPaused ? 'Play' : 'Pause';
+    if (!video) return;
+    if (run && ready) { load(); video.play().catch(() => {}); } else video.pause();
+  };
 
-  if (video) {
-    setLabel();
-    // Start after first paint so the poster stays the LCP image.
-    window.addEventListener('load', () => requestAnimationFrame(() => setTimeout(play, 150)), { once: true });
-    new IntersectionObserver(([e]) => (e.isIntersecting ? play() : video.pause()), { threshold: 0.1 }).observe(video);
-    reduce.addEventListener('change', (m) => { userPaused = m.matches; setLabel(); m.matches ? video.pause() : play(); });
-    btn?.addEventListener('click', () => {
-      userPaused = !userPaused;
-      setLabel();
-      userPaused ? video.pause() : play();
-    });
+  if (hero) {
+    apply();
+    // Start the video after first paint so the poster stays the LCP image.
+    if (video) window.addEventListener('load', () => requestAnimationFrame(() => setTimeout(() => { ready = true; apply(); }, 150)), { once: true });
+    new IntersectionObserver(([e]) => { visible = e.isIntersecting; apply(); }, { threshold: 0.1 }).observe(hero);
+    reduce.addEventListener('change', (m) => { userPaused = m.matches; apply(); });
+    btn?.addEventListener('click', () => { userPaused = !userPaused; apply(); });
   }
 </script>
 
@@ -95,6 +116,29 @@ const { kicker, title, lead, primary, secondary, featured, video } = Astro.props
     min-height: clamp(520px, 82vh, 820px); background: var(--hero-bg); color: var(--on-dark); overflow: hidden;
   }
   .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+  /* Animated fallback: thin sky lines at low opacity on --hero-bg, under the flat shade. */
+  .hero__bg { position: absolute; inset: 0; overflow: hidden; contain: strict; }
+  .hero__layer {
+    position: absolute; top: 0; left: 0; width: 200%; height: 100%;
+    fill: none; stroke: var(--sky); stroke-width: 1; will-change: transform;
+  }
+  .hero__layer path { vector-effect: non-scaling-stroke; }
+  .hero__layer--a { stroke-opacity: .16; animation: hero-drift 140s linear infinite; }
+  .hero__layer--b { stroke-opacity: .1; animation: hero-drift 200s linear infinite reverse; }
+  .hero__scan {
+    position: absolute; inset: 0; border-bottom: 1px solid rgba(156, 203, 242, .22);
+    transform: translateY(-100%); animation: hero-scan 18s linear infinite; will-change: transform;
+  }
+  .is-still .hero__layer, .is-still .hero__scan { animation-play-state: paused; }
+  @keyframes hero-drift { to { transform: translateX(-50%); } }
+  @keyframes hero-scan { to { transform: translateY(0); } }
+  @media (prefers-reduced-motion: reduce) {
+    .hero__layer, .hero__scan { animation: none; }
+    .hero__scan { display: none; }
+    .hero__pause--bg { display: none; }
+  }
+
   .hero__shade { position: absolute; inset: 0; background: var(--hero-shade); }
   .hero__content, .hero__strip { position: relative; }
   .hero__content { padding-top: var(--s-7); padding-bottom: var(--s-5); }
@@ -113,11 +157,11 @@ const { kicker, title, lead, primary, secondary, featured, video } = Astro.props
     height: 1px; background: rgba(255, 255, 255, .22);
   }
   .hero__credit { margin: 0; color: var(--on-dark-mute); }
-  .hero__right { display: flex; align-items: center; gap: var(--s-3); }
+  .hero__right { display: flex; align-items: center; gap: var(--s-3); margin-left: auto; }
   .hero__featured { color: var(--on-dark); font-weight: 600; font-size: var(--fs-small); text-decoration: none; }
   .hero__featured:hover { color: var(--sky); }
   .hero__pause {
-    min-width: 72px; padding: 8px 12px; background: transparent; color: var(--on-dark);
+    min-width: 72px; min-height: 32px; padding: 8px 12px; background: transparent; color: var(--on-dark);
     border: 1px solid rgba(255, 255, 255, .6); font: 600 13px/1 var(--sans); cursor: pointer;
   }
   .hero__pause:hover { background: var(--white); color: var(--ink); }

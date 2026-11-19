@@ -1,0 +1,54 @@
+---
+// Plain share links: LinkedIn, email and copy link. No third-party scripts, no tracking
+// parameters; the LinkedIn link is an ordinary URL that only loads when someone follows it.
+interface Props { title: string; label?: string }
+const { title, label = 'Share' } = Astro.props;
+const url = new URL(Astro.url.pathname, Astro.site ?? Astro.url).href;
+const enc = encodeURIComponent;
+const lid = 'share-' + Math.random().toString(36).slice(2, 8);
+const linkedin = `https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}`;
+const mail = `mailto:?subject=${enc(`${title} · Reef Support`)}&body=${enc(`${title}\n${url}`)}`;
+---
+<div class="share" data-share>
+  <p class="share__label" id={lid}>{label}</p>
+  <ul class="share__list" aria-labelledby={lid}>
+    <li><a href={linkedin} rel="noopener" target="_blank">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+    <li><a href={mail}>Email</a></li>
+    <li hidden data-share-copy-item><button type="button" data-share-copy data-url={url}>Copy link</button></li>
+  </ul>
+  <p class="share__status meta" role="status" aria-live="polite" data-share-status></p>
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-share]').forEach((root) => {
+    const item = root.querySelector<HTMLElement>('[data-share-copy-item]');
+    const btn = root.querySelector<HTMLButtonElement>('[data-share-copy]');
+    const status = root.querySelector<HTMLElement>('[data-share-status]');
+    if (!item || !btn || !navigator.clipboard) return;
+    item.hidden = false;
+    let t: number | undefined;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.url ?? location.href);
+        if (status) status.textContent = 'Link copied to your clipboard.';
+      } catch {
+        if (status) status.textContent = 'Your browser blocked copying; copy the address from the address bar instead.';
+      }
+      window.clearTimeout(t);
+      t = window.setTimeout(() => { if (status) status.textContent = ''; }, 4000);
+    });
+  });
+</script>
+<style>
+  .share { border-top: 1px solid var(--line); padding-top: var(--s-2); }
+  .share__label { font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin: 0 0 var(--s-1); }
+  .share__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .share__list a, .share__list button {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 8px 14px;
+    border: 1px solid var(--line); background: var(--white); color: var(--ink);
+    font: 600 14px/1.2 var(--sans); text-decoration: none; cursor: pointer;
+    transition: border-color 150ms, color 150ms;
+  }
+  .share__list a:hover, .share__list button:hover { border-color: var(--ink); color: var(--teal); }
+  .share__status { margin: var(--s-1) 0 0; color: var(--mute); }
+  .share__status:empty { display: none; }
+</style>

@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import CardGrid from '../../components/CardGrid.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
 import { getAreas, getProjects } from '../../lib/data';
 
 const areas = await getAreas();
@@ -15,7 +16,7 @@ const countries = [...new Set(projects.flatMap((p) => p.data.country.split(', ')
 const statuses = order.filter((s) => projects.some((p) => p.data.status === s));
 const lead = 'Case studies from our four practice areas, with the partners who led the field work and the funders who supported it.';
 ---
-<Base title="Projects" description={lead}>
+<Base title="Projects" description="Case studies in coral reef monitoring, mangrove restoration and coastal water quality, with the partners who led field work and the funders who supported it.">
   <PageHeader kicker={['Projects']} title="Projects and case studies" lead={lead} display />
 
   <section class="section">
@@ -58,9 +59,17 @@ const lead = 'Case studies from our four practice areas, with the partners who l
           </div>
         ))}
       </CardGrid>
-      <p class="empty" data-empty hidden>No projects match these filters.</p>
+      <p class="empty" data-empty hidden>No projects match these filters. <a href="/projects">Show all projects</a> or <a href="/contact">tell us about your site</a>.</p>
     </div>
   </section>
+
+  <CtaBand
+    kicker="Work with us"
+    title="Planning monitoring for a reef, mangrove or coastal site?"
+    text="We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days."
+    primary={{ label: 'Tell us about your sites', href: '/contact' }}
+    secondary={{ label: 'Partner on a proposal', href: '/contact?topic=proposal' }}
+  />
 </Base>
 
 <script>
@@ -125,4 +134,5 @@ const lead = 'Case studies from our four practice areas, with the partners who l
   .item[hidden] { display: none; }
   .item > :global(*) { flex: 1; }
   .empty { margin-top: var(--s-3); color: var(--mute); }
+  .empty a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 </style>

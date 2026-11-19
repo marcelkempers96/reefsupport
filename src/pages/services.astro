@@ -1,0 +1,280 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Kicker from '../components/Kicker.astro';
+import Button from '../components/Button.astro';
+import JsonLd from '../components/JsonLd.astro';
+import data from '../data/services.json';
+import research from '../data/research.json';
+
+const { services, audiences } = data;
+const audienceName = (id: string) => {
+  const a = audiences.find((x) => x.id === id);
+  if (!a) throw new Error(`Unknown audience: ${id}`);
+  const name = a.label.replace(/^For /, '');
+  return name.charAt(0).toUpperCase() + name.slice(1);
+};
+const servicesFor = (id: string) => services.filter((s) => s.audiences.includes(id));
+
+const lead = 'Reef Support designs monitoring, integrates partner data, runs AI analysis and produces reporting for coral reefs, mangroves and coastal waters. These are the pieces of that work you can bring us in for, who each one is for, and which partner holds the field and measurement side.';
+const description = 'Services from Reef Support: monitoring design, data integration, Coral AI image analysis, 3D photogrammetry, mangrove monitoring, reporting and research partnerships.';
+
+const site = Astro.site!;
+const ld = {
+  '@type': 'ItemList',
+  name: 'Reef Support services',
+  itemListElement: services.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: s.title,
+      description: s.summary,
+      url: new URL(`/services#${s.id}`, site).href,
+      provider: { '@type': 'Organization', name: 'Reef Support B.V.', url: site.href },
+    },
+  })),
+};
+---
+<Base title="Services" description={description}>
+  <JsonLd slot="head" data={ld} />
+  <PageHeader kicker={['Services']} title="What we can do for you" lead={lead} display>
+    <div class="btn-row head-cta">
+      <Button href="/contact">Tell us about your sites</Button>
+      <Button href="#engagement" variant="secondary">How an engagement works</Button>
+    </div>
+  </PageHeader>
+
+  <section class="section section--tight" aria-labelledby="who-h">
+    <div class="container">
+      <h2 id="who-h" class="sec-h">Who we work with</h2>
+      <ul class="aud" role="list">
+        {audiences.map((a) => (
+          <li id={`for-${a.id}`} class="aud__item">
+            <h3>{a.label}</h3>
+            <p>{a.text}</p>
+            <p class="lbl">Services</p>
+            <ul class="aud__svc" role="list">
+              {servicesFor(a.id).map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}
+            </ul>
+            <p class="lbl">See also</p>
+            <ul class="aud__svc" role="list">
+              {a.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="svc-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="svc-h" class="sec-h">What you can bring us in for</h2>
+      </div>
+      <nav class="toc" aria-label="Services on this page">
+        <ol role="list">
+          {services.map((s, i) => (
+            <li><a href={`#${s.id}`}><span class="toc__n">{String(i + 1).padStart(2, '0')}</span>{s.title}</a></li>
+          ))}
+        </ol>
+      </nav>
+
+      <div class="svc-list">
+        {services.map((s, i) => (
+          <article id={s.id} class="svc" aria-labelledby={`${s.id}-h`} style={`--c: var(--${s.colour})`}>
+            <div class="svc__head">
+              <Kicker parts={[String(i + 1).padStart(2, '0'), 'Service']} colour={s.colour} />
+              <h3 id={`${s.id}-h`}>{s.title}</h3>
+              <p class="svc__sum">{s.summary}</p>
+              <p class="lbl">Who it is for</p>
+              <ul class="chips" role="list">
+                {s.audiences.map((id) => <li><a href={`#for-${id}`}>{audienceName(id)}</a></li>)}
+              </ul>
+            </div>
+            <div class="svc__body">
+              <div>
+                <h4 class="lbl">What you get</h4>
+                <ul class="get">
+                  {s.deliverables.map((d) => <li>{d}</li>)}
+                </ul>
+              </div>
+              <dl class="roles">
+                <div class="roles__us">
+                  <dt>What Reef Support does</dt>
+                  <dd>{s.weDo}</dd>
+                </div>
+                <div>
+                  <dt>What partners do</dt>
+                  <dd>{s.partnersDo}</dd>
+                </div>
+              </dl>
+              <div>
+                <h4 class="lbl">See it in practice</h4>
+                <ul class="proof" role="list">
+                  {s.proof.map((p) => <li><a href={p.href}>{p.label} <span aria-hidden="true">→</span></a></li>)}
+                </ul>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="not-h">
+    <div class="container">
+      <div class="not">
+        <h2 id="not-h">What we do not do</h2>
+        <ul>
+          <li>Reef Support does not generate satellite products: satellite water quality products come from Water Insight B.V. and are credited to their source.</li>
+          <li>Reef Support does not carry out physical sampling: field partners such as Indonesia Biru Foundation and Corales de Paz, or asset owners such as RanMarine Technology, collect the data.</li>
+          <li>Coral AI supports research and monitoring with human review, and is not validated for regulatory reporting on its own.</li>
+          <li>Mangrove growth and carbon models are still being calibrated with partner field data, so their outputs are presented as estimates until validation is complete.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="engagement" class="section rule-top" aria-labelledby="eng-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="eng-h" class="sec-h">How an engagement works</h2>
+        <a class="text-link" href="/research/methods">Full methods</a>
+      </div>
+      <p class="eng-intro">Every monitoring programme we run follows the same chain, and each step names who is responsible for it. It starts with a short note from you on where you work and what you need to measure, and we reply within five working days.</p>
+      <ol class="eng" role="list">
+        <li class="eng__start">
+          <span class="eng__n">0</span>
+          <div>
+            <h3>First conversation</h3>
+            <p>You tell us about your sites, your funder or authority and what you need to measure; for a proposal, include the call, the deadline and your role.</p>
+            <p class="eng__who">You and Reef Support</p>
+          </div>
+        </li>
+        {research.methods.map((m) => {
+          const [n, ...rest] = m.step.split(' ');
+          const ours = m.who.startsWith('Reef Support');
+          return (
+            <li class:list={{ ours }}>
+              <span class="eng__n">{n.replace('.', '')}</span>
+              <div>
+                <h3>{rest.join(' ')}</h3>
+                <p>{m.what}</p>
+                <p class="eng__who">{m.who}</p>
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+      <p class="legend"><span class="sw" aria-hidden="true"></span> Steps Reef Support is responsible for</p>
+    </div>
+  </section>
+
+  <section class="cta" aria-labelledby="cta-h">
+    <div class="container">
+      <h2 id="cta-h">Tell us about your sites</h2>
+      <p>We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days.</p>
+      <div class="btn-row">
+        <Button href="/contact" variant="on-dark">Contact us</Button>
+        <Button href="/about/opportunities" variant="on-dark-secondary">Partnering on a proposal</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .head-cta { margin-top: var(--s-4); }
+  .sec-h { margin-bottom: var(--s-4); }
+  .section-head .sec-h { margin-bottom: 0; }
+  .lbl {
+    display: block; margin: var(--s-2) 0 var(--s-1);
+    font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute);
+  }
+  ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
+  h2, h3 { hyphens: manual; }
+
+  /* Audiences */
+  .aud { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gutter); }
+  .aud__item { border: 1px solid var(--line); border-top: 4px solid var(--ink); padding: var(--s-3); scroll-margin-top: 96px; }
+  .aud__item:target { border-color: var(--ink); }
+  .aud__item h3 { font-size: var(--fs-h3); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  .aud__item > p:not(.lbl) { margin: var(--s-1) 0 0; font-size: 15px; color: var(--mute-dark); }
+  .aud__svc li { margin-top: 4px; font-size: var(--fs-small); }
+  .aud__svc a, .proof a { font-weight: 500; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); transition: text-decoration-color 150ms, color 150ms; }
+  .aud__svc a:hover, .proof a:hover { text-decoration-color: currentColor; }
+
+  /* Contents */
+  .toc { margin-bottom: var(--s-5); }
+  .toc ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 2px solid var(--ink); column-gap: var(--gutter); }
+  .toc li { border-bottom: 1px solid var(--line-soft); }
+  .toc a { display: flex; gap: var(--s-2); align-items: baseline; padding: 12px 0; font-weight: 500; text-decoration: none; }
+  .toc__n { font: 500 13px/1 var(--mono); color: var(--mute); }
+
+  /* Service blocks */
+  .svc {
+    display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-3) var(--s-5);
+    padding: var(--s-5) 0; border-top: 1px solid var(--line); scroll-margin-top: 80px;
+  }
+  .svc:first-child { border-top: 2px solid var(--ink); }
+  .svc__head { border-left: var(--bar) solid var(--c); padding-left: var(--s-3); }
+  .svc__head h3 { font-size: var(--fs-h2); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; margin-top: var(--s-1); }
+  .svc__sum { margin: var(--s-2) 0 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .chips a {
+    display: inline-block; padding: 4px 10px; border: 1px solid var(--line); background: var(--white);
+    font-size: 13px; font-weight: 600; text-decoration: none; transition: background-color 150ms, color 150ms, border-color 150ms;
+  }
+  .chips a:hover { background: var(--ink); border-color: var(--ink); color: var(--white); }
+  .svc__body { display: grid; gap: var(--s-3); align-content: start; }
+  .svc__body .lbl { margin-top: 0; }
+  .get { margin: 0; padding-left: 1.2em; }
+  .get li { margin-bottom: var(--s-1); }
+  .get li::marker { color: var(--royal); }
+  .roles { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--gutter); }
+  .roles > div { background: var(--mist); padding: var(--s-3); border-top: 3px solid var(--mute); color: var(--mute-dark); }
+  .roles > .roles__us { border-top-color: var(--royal); }
+  .roles dt { font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark); margin-bottom: var(--s-1); }
+  .roles dd { margin: 0; font-size: 15px; color: var(--ink); }
+  .proof li { margin-bottom: 6px; }
+
+  /* What we do not do */
+  .not { background: var(--mist); border-top: 4px solid var(--ink); padding: var(--s-5); }
+  .not h2 { margin-bottom: var(--s-3); }
+  .not ul { margin: 0; padding-left: 1.2em; max-width: 860px; color: var(--mute-dark); }
+  .not li { margin-bottom: var(--s-1); }
+
+  /* Engagement */
+  .eng-intro { max-width: var(--measure); margin: 0 0 var(--s-4); color: var(--mute-dark); }
+  .eng { counter-reset: none; border-top: 2px solid var(--ink); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .eng li { display: flex; gap: var(--s-2); padding: var(--s-3) var(--s-3) var(--s-3) 0; border-bottom: 1px solid var(--line); }
+  .eng__n { font: 700 32px/1 var(--sans); letter-spacing: -0.03em; color: var(--mute); min-width: 28px; }
+  .ours .eng__n, .eng__start .eng__n { color: var(--royal); }
+  .eng h3 { font-size: 17px; font-weight: 600; line-height: 1.3; }
+  .eng p { margin: 6px 0 0; font-size: var(--fs-small); }
+  .eng .eng__who { font-weight: 600; color: var(--mute-dark); }
+  .legend { display: flex; align-items: center; gap: 8px; margin-top: var(--s-3); font-size: var(--fs-small); color: var(--mute); }
+  .sw { width: 12px; height: 12px; background: var(--royal); }
+
+  /* CTA */
+  .cta { background: var(--ink); color: var(--on-dark); padding-block: 72px; }
+  .cta h2 { color: var(--on-dark); }
+  .cta p { max-width: var(--measure); color: var(--on-dark-mute); margin: var(--s-2) 0 var(--s-4); }
+
+  @media (max-width: 1100px) {
+    .eng { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 860px) {
+    .aud { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .svc { grid-template-columns: minmax(0, 1fr); }
+    .roles { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .aud, .toc ol, .eng { grid-template-columns: minmax(0, 1fr); }
+    .not { padding: var(--s-4) var(--s-3); }
+    .svc__head { padding-left: var(--s-2); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chips a, .aud__svc a, .proof a { transition: none; }
+  }
+</style>

@@ -7,7 +7,12 @@ import PartnerWall from '../../components/PartnerWall.astro';
 import TileGrid from '../../components/TileGrid.astro';
 import partnerData from '../../data/partners.json';
 import about from '../../data/about.json';
+import PhotogrammetryViz from '../../components/viz/PhotogrammetryViz.astro';
+import MangroveViz from '../../components/viz/MangroveViz.astro';
+import CoastalViz from '../../components/viz/CoastalViz.astro';
+import FieldViz from '../../components/viz/FieldViz.astro';
 import { getAreas, getProjects, type Area } from '../../lib/data';
+import { areaDescription } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const areas = await getAreas();
@@ -32,11 +37,20 @@ const devFilter: Record<string, RegExp> = {
   'coastal-water': /coastal/i,
   'field-programmes': /^$/,
 };
+// Schematic visual for the page header, one per practice area.
+const vizByArea: Record<string, typeof PhotogrammetryViz> = {
+  'coral-reefs': PhotogrammetryViz,
+  'mangroves-blue-carbon': MangroveViz,
+  'coastal-water': CoastalViz,
+  'field-programmes': FieldViz,
+};
+const Viz = vizByArea[area.id];
 const inDev = about.inDevelopment.filter((t) => devFilter[area.id].test(t));
 ---
-<Base title={a.name} description={a.lead}>
+<Base title={a.name} description={areaDescription(area.id, a.lead)}>
   <PageHeader kicker={[a.no, 'Practice area']} colour={a.colour} title={a.name} lead={a.lead} display>
     <a slot="before" class="back-link" href="/work"><span aria-hidden="true">←</span> All practice areas</a>
+    {Viz && <Viz />}
   </PageHeader>
 
   <section class="section" aria-labelledby="what-h">

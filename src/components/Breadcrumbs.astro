@@ -1,0 +1,73 @@
+---
+// Breadcrumb trail built from the URL, with BreadcrumbList structured data.
+// Labels come from the navigation data; the last crumb falls back to `current` (usually the page title).
+import nav from '../data/nav.json';
+import subnav from '../data/subnav.json';
+
+interface Props { current?: string; trail?: { label: string; href: string }[] }
+const { current, trail: given } = Astro.props;
+
+const labels = new Map<string, string>([['/', 'Home']]);
+for (const item of nav.main as { label: string; href: string; children?: { label: string; href: string }[] }[]) {
+  labels.set(item.href, item.label);
+  item.children?.forEach((c) => labels.set(c.href, c.label));
+}
+for (const list of Object.values(subnav)) {
+  for (const l of list) if (!labels.has(l.href)) labels.set(l.href, l.label);
+}
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const segments = path.split('/').filter(Boolean);
+
+const trail = given ?? [
+  { label: 'Home', href: '/' },
+  ...segments.map((_, i) => {
+    const href = '/' + segments.slice(0, i + 1).join('/');
+    const isLast = i === segments.length - 1;
+    const label = labels.get(href) ?? (isLast && current ? current : segments[i].replace(/-/g, ' ').replace(/^./, (m) => m.toUpperCase()));
+    return { label, href };
+  }),
+];
+
+const site = Astro.site ?? new URL(Astro.url.origin);
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: trail.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    item: new URL(c.href, site).href,
+  })),
+};
+const show = trail.length >= 3;
+---
+{show && (
+  <nav class="crumbs" aria-label="Breadcrumb">
+    <ol>
+      {trail.map((c, i) => (
+        <li>
+          {i < trail.length - 1
+            ? <a href={c.href}>{c.label}</a>
+            : <span aria-current="page">{c.label}</span>}
+        </li>
+      ))}
+    </ol>
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
+  </nav>
+)}
+<style>
+  .crumbs { margin: 0 0 var(--s-3); }
+  ol {
+    list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center;
+    gap: 4px 0; font: 400 var(--fs-small)/1.5 var(--sans); color: var(--mute);
+  }
+  li { display: inline-flex; align-items: center; min-width: 0; }
+  li + li::before {
+    content: ''; width: 6px; height: 6px; margin: 0 12px 0 10px; flex: none;
+    border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg);
+  }
+  a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+  a:hover { color: var(--teal); text-decoration-color: currentColor; }
+  [aria-current='page'] { color: var(--mute); overflow-wrap: anywhere; }
+</style>

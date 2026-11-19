@@ -1,24 +1,73 @@
 ---
 // Local section navigation (Research, About), rendered as a row of plain links.
+// On narrow screens the row scrolls sideways; edge arrows show when more links sit off screen.
 interface Props { label: string; links: { label: string; href: string }[] }
 const { label, links } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '');
 ---
-<nav class="subnav" aria-label={label}>
+<nav class="subnav" aria-label={label} data-subnav>
   <div class="container">
-    <ul>
-      {links.map((l) => (
-        <li><a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a></li>
-      ))}
-    </ul>
+    <div class="track">
+      <button class="edge edge--prev" type="button" tabindex="-1" aria-hidden="true" data-dir="-1">
+        <svg width="8" height="12" viewBox="0 0 8 12"><path d="M7 1L2 6l5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <ul data-subnav-list>
+        {links.map((l) => (
+          <li><a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a></li>
+        ))}
+      </ul>
+      <button class="edge edge--next" type="button" tabindex="-1" aria-hidden="true" data-dir="1">
+        <svg width="8" height="12" viewBox="0 0 8 12"><path d="M1 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+    </div>
   </div>
 </nav>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-subnav]').forEach((nav) => {
+    const list = nav.querySelector<HTMLElement>('[data-subnav-list]');
+    if (!list) return;
+    const update = () => {
+      const max = list.scrollWidth - list.clientWidth;
+      nav.toggleAttribute('data-more-prev', list.scrollLeft > 2);
+      nav.toggleAttribute('data-more-next', max - list.scrollLeft > 2);
+    };
+    // Bring the current page into view without moving the page vertically.
+    const current = list.querySelector<HTMLElement>('[aria-current="page"]');
+    if (current) {
+      const offset = current.offsetLeft - list.offsetLeft;
+      if (offset + current.offsetWidth > list.clientWidth) list.scrollLeft = offset - 24;
+    }
+    nav.querySelectorAll<HTMLButtonElement>('.edge').forEach((b) =>
+      b.addEventListener('click', () => {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        list.scrollBy({ left: Number(b.dataset.dir) * list.clientWidth * 0.7, behavior: reduce ? 'auto' : 'smooth' });
+      }));
+    list.addEventListener('scroll', update, { passive: true });
+    new ResizeObserver(update).observe(list);
+    update();
+  });
+</script>
 <style>
   .subnav { border-bottom: 1px solid var(--line); }
-  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s-3); overflow-x: auto; scrollbar-width: none; }
+  .track { position: relative; }
+  ul {
+    list-style: none; margin: 0 -4px; padding: 0 4px; display: flex; gap: var(--s-3);
+    overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain;
+  }
+  ul::-webkit-scrollbar { display: none; }
+  li { flex: none; }
   a {
     display: block; padding: 14px 0 12px; white-space: nowrap; font: 500 15px/1 var(--sans);
-    text-decoration: none; border-bottom: 2px solid transparent;
+    text-decoration: none; border-bottom: 2px solid transparent; transition: color 150ms, border-color 150ms;
   }
-  a[aria-current='page'] { border-bottom-color: var(--ink); }
+  a:focus-visible { outline-offset: -2px; }
+  a[aria-current='page'] { border-bottom-color: var(--ink); font-weight: 600; }
+  .edge {
+    display: none; position: absolute; top: 0; bottom: 2px; width: 32px; padding: 0;
+    place-items: center; background: var(--white); border: 0; color: var(--ink); cursor: pointer;
+  }
+  .edge:hover { color: var(--teal); }
+  .edge--prev { left: -4px; border-right: 1px solid var(--line); }
+  .edge--next { right: -4px; border-left: 1px solid var(--line); }
+  [data-more-prev] .edge--prev, [data-more-next] .edge--next { display: grid; }
 </style>

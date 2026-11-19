@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
 import ListRows from '../../components/ListRows.astro';
+import Glossary from '../../components/readability/Glossary.astro';
+import { pick } from '../../components/readability/terms';
 import subnav from '../../data/subnav.json';
 import research from '../../data/research.json';
 import { showValue } from '../../lib/confirm';
@@ -12,8 +14,18 @@ const rows = research.publications.map((p) => ({
   source: [p.authors, showValue(p.venue) ? p.venue : ''].filter(Boolean).join(' · '),
 }));
 ---
-<Base title="Publications" description="Models, papers and theses from Reef Support and its students.">
+<Base title="Publications" description="Models, papers and theses from Reef Support and its students, including the Coral AI model, Superpixels to the Rescue (2022) and an MSc thesis on reef rugosity.">
   <PageHeader kicker={['Research', 'Publications']} title="Publications" lead="Models, papers and theses from our work and from the students we host." />
   <SubNav label="Research" links={subnav.research} />
-  <section class="section"><div class="container"><ListRows rows={rows} /></div></section>
+  <section class="section" aria-labelledby="list-h">
+    <div class="container">
+      <h2 id="list-h" class="visually-hidden">All publications</h2>
+      <ListRows rows={rows} />
+      <p class="note">The model is the segmentation model described on the <a href="/research/open-source">open source page</a>. The 2022 paper explored superpixel methods for labelling coral images, and the 2022 MSc thesis compared ways of calculating reef rugosity from 3D photogrammetry.</p>
+    </div>
+  </section>
+  <section class="section rule-top">
+    <div class="container"><Glossary items={pick('segmentation', 'superpixel', 'photogrammetry', 'rugosity')} /></div>
+  </section>
 </Base>
+<style>.note { margin-top: var(--s-4); color: var(--mute-dark); } .note a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }</style>

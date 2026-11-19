@@ -11,26 +11,31 @@ const showForm = !!endpoint || import.meta.env.DEV;
 <section class="news section" aria-labelledby="news-h">
   <div class="container news__inner">
     <div>
+      <p class="news__kicker">Field notes</p>
       <h2 id="news-h">Field notes, about once a month</h2>
-      <p>Project updates, open models and opportunities to collaborate.</p>
+      <p>Project updates, open models and opportunities to collaborate, from coral reefs, mangroves and coastal waters.</p>
     </div>
     {showForm ? (
-      <form class="news__form" method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. You are on the list for field notes.">
+      <form class="news__form" method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. You are on the list for field notes, about once a month.">
         {!endpoint && <ToConfirm note="newsletter provider endpoint (PUBLIC_NEWSLETTER_ENDPOINT)" />}
-        <label for="news-email" class="visually-hidden">Email address</label>
+        <label for="news-email" class="news__label">Email address</label>
         <div class="news__row">
-          <input id="news-email" name="email" type="email" required autocomplete="email" placeholder="Email address" />
+          <input id="news-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.org" aria-describedby="news-note" />
           <button class="btn btn--on-dark" type="submit">Subscribe</button>
         </div>
+        <p class="news__note" id="news-note">One email about once a month; your address is handled as described in our <a href="/privacy">privacy policy</a>.</p>
         <p class="news__status" role="status" aria-live="polite" data-form-status></p>
       </form>
     ) : (
-      <p><a class="btn btn--on-dark-secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a></p>
+      <div class="news__alt">
+        <p>Until the mailing list opens, we post project updates on LinkedIn.</p>
+        <p><a class="btn btn--on-dark-secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a></p>
+      </div>
     )}
   </div>
 </section>
 <style>
-  .news { background: var(--ink); color: var(--on-dark); }
+  .news { background: var(--ink); color: var(--on-dark); border-bottom: 1px solid rgba(255, 255, 255, .22); }
   .news__inner { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-3) var(--gutter); align-items: center; }
   .news__inner > div { grid-column: span 6; }
   .news__inner > :last-child { grid-column: 8 / span 5; }
@@ -43,5 +48,11 @@ const showForm = !!endpoint || import.meta.env.DEV;
   input::placeholder { color: var(--on-dark-mute); }
   .news :focus-visible { outline-color: var(--white); }
   .news__status:empty { display: none; }
+  .news__kicker { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--sky) !important; margin: 0 0 var(--s-1) !important; }
+  .news__label { display: block; font-weight: 600; font-size: 15px; margin-bottom: var(--s-1); }
+  .news .news__note { font-size: var(--fs-small); margin-top: var(--s-1); }
+  .news__note a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .news__alt p:first-child { margin-top: 0; }
+  .news :global(.form-done) { background: transparent; border-top: 4px solid var(--sky); color: var(--white); padding: var(--s-3) 0 0; }
   @media (max-width: 860px) { .news__inner > div, .news__inner > :last-child { grid-column: 1 / -1; } }
 </style>

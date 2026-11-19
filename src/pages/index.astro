@@ -11,6 +11,7 @@ import Newsletter from '../components/Newsletter.astro';
 import JsonLd from '../components/JsonLd.astro';
 import about from '../data/about.json';
 import partners from '../data/partners.json';
+import servicesData from '../data/services.json';
 import { getAreas, getProjects } from '../lib/data';
 import { organizationLd } from '../lib/org';
 
@@ -24,6 +25,8 @@ const featured = ['coral-lab-lombok', 'coral-ai', 'photogrammetry-colombia']
 // Hero footage is an open item. When the files exist in public/video/, set this:
 // const video = { mp4: '/video/hero.mp4', webm: '/video/hero.webm', poster: '/video/hero-poster.webp', credit: 'Footage: …' };
 const video = undefined;
+
+const homeAudiences = servicesData.audiences.filter((a) => a.id !== 'students');
 ---
 <Base>
   <JsonLd slot="head" data={organizationLd(Astro.site!)} />
@@ -44,7 +47,33 @@ const video = undefined;
     </div>
   </section>
 
-  <section class="section" aria-labelledby="areas-h">
+  <section class="section" aria-labelledby="help-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="help-h">How we can help</h2>
+        <a class="text-link" href="/services">All services</a>
+      </div>
+      <div class="help">
+        <p class="help__intro">You can bring Reef Support in for one piece of a monitoring programme or for the whole chain, from monitoring design to a report your funder or authority can check, while partners such as Water Insight, RanMarine Technology and Indonesia Biru Foundation hold the satellite, sensor and field side.</p>
+        <ol class="help__list" role="list">
+          {servicesData.services.map((s, i) => (
+            <li><a href={`/services#${s.id}`}><span class="help__n">{String(i + 1).padStart(2, '0')}</span><span>{s.title}</span></a></li>
+          ))}
+        </ol>
+      </div>
+      <ul class="aud" role="list" aria-label="Where to start">
+        {homeAudiences.map((a) => (
+          <li class="aud__item">
+            <h3><a href={`/services#for-${a.id}`}>{a.label}</a></h3>
+            <p>{a.text}</p>
+            <a class="aud__more" href={a.links[0].href}>{a.links[0].label} <span aria-hidden="true">→</span></a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="areas-h">
     <div class="container">
       <div class="section-head">
         <h2 id="areas-h">Four areas of work, one way of working</h2>
@@ -91,4 +120,20 @@ const video = undefined;
 
 <style>
   .rule-bottom { border-bottom: 1px solid var(--line); }
+  .help { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--s-3) var(--s-5); }
+  .help__intro { margin: 0; max-width: var(--measure); color: var(--mute-dark); }
+  .help__list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); border-top: 2px solid var(--ink); }
+  .help__list li { border-bottom: 1px solid var(--line-soft); }
+  .help__list a { display: flex; gap: var(--s-2); align-items: baseline; padding: 12px 0; font-weight: 500; text-decoration: none; }
+  .help__n { font: 500 13px/1 var(--mono); color: var(--mute); flex: none; }
+  .aud { list-style: none; margin: var(--s-5) 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gutter); }
+  .aud__item { border: 1px solid var(--line); border-top: 4px solid var(--ink); padding: var(--s-3); display: flex; flex-direction: column; }
+  .aud__item h3 { hyphens: manual; font-size: var(--fs-h3); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  .aud__item h3 a { text-decoration: none; }
+  .aud__item h3 a:hover { text-decoration: underline; text-underline-offset: 4px; }
+  .aud__item p { margin: var(--s-1) 0 var(--s-2); font-size: 15px; color: var(--mute-dark); }
+  .aud__more { margin-top: auto; font-size: var(--fs-small); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+  @media (max-width: 1100px) { .aud { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 860px) { .help { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 600px) { .aud, .help__list { grid-template-columns: minmax(0, 1fr); } }
 </style>

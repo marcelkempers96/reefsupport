@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
+import Summary from '../../components/readability/Summary.astro';
 import subnav from '../../data/subnav.json';
 const topics = [
   'Coral reef image segmentation and change detection',
@@ -10,9 +11,16 @@ const topics = [
   'Combining satellite water quality products with in-situ data',
 ];
 ---
-<Base title="Opportunities" description="Internships, thesis topics and proposal partnerships with Reef Support.">
+<Base title="Opportunities" description="Internships and MSc thesis topics in coral reef image segmentation, 3D photogrammetry and mangrove monitoring, and partnering with Reef Support on proposals.">
   <PageHeader kicker={['About', 'Opportunities']} title="Work with us" />
   <SubNav label="About" links={subnav.about} />
+  <section class="section section--tight">
+    <div class="container">
+      <Summary id="sum-h" label="Two ways to work with us">
+        <p>Students can join as interns or write an MSc thesis on a project that ends in an open model, a dataset or a documented method. Research consortia and restoration organisations can bring Reef Support into a proposal as the data and AI partner for monitoring design, data integration and reporting.</p>
+      </Summary>
+    </div>
+  </section>
   <section class="section">
     <div class="container opps">
       <article class="opp" aria-labelledby="int-h">

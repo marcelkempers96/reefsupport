@@ -1,0 +1,68 @@
+---
+// Coastal water: a pixel grid over a coastline with an indicator overlay. The satellite layer
+// stands for partner products (Water Insight B.V.); Reef Support integrates, it does not
+// process raw satellite imagery.
+import VizFrame from './VizFrame.astro';
+
+const S = 22, X0 = 16, Y0 = 40, NX = 20, NY = 10;
+// Coastline: land to the left of this x for a given y.
+const coast = (y: number) => 130 + 34 * Math.sin(y / 38) + 18 * Math.cos(y / 17);
+const coastPath = (() => {
+  let d = `M${X0} ${Y0}`;
+  for (let y = Y0; y <= Y0 + NY * S; y += 10) d += `L${Math.round(coast(y))} ${y}`;
+  return d + `L${X0} ${Y0 + NY * S}Z`;
+})();
+// Indicator field: higher near the coast and around a river mouth, as a shape only.
+const level = (cx: number, cy: number) => {
+  const dc = cx - coast(cy);
+  const plume = Math.exp(-((cy - 150) ** 2) / 1800) * 1.4;
+  const v = 1.6 * Math.exp(-dc / 90) + plume * Math.exp(-dc / 140) + 0.25 * Math.sin(cx / 30 + cy / 45);
+  return Math.max(0, Math.min(3, Math.floor(v * 2)));
+};
+const ops = [0.12, 0.32, 0.55, 0.85];
+const columns = Array.from({ length: NX }, (_, i) => {
+  const cells: { x: number; y: number; o: number }[] = [];
+  for (let j = 0; j < NY; j++) {
+    const x = X0 + i * S, y = Y0 + j * S;
+    if (x + S / 2 < coast(y + S / 2)) continue;
+    cells.push({ x, y, o: ops[level(x + S / 2, y + S / 2)] });
+  }
+  return cells;
+});
+const samples = [[250, 92], [298, 130], [338, 176], [392, 206], [436, 160]];
+---
+<VizFrame
+  caption="A satellite water quality product from partner Water Insight B.V., shown as a pixel grid over coastal water, is combined with in-situ samples from vessels and sensors and summarised as indicators for each site and reporting period."
+  legend={[
+    { label: 'Partner satellite product, low to high', c: 'var(--teal)' },
+    { label: 'In-situ sample', c: 'var(--ink)' },
+    { label: 'Land', c: 'var(--placeholder)' },
+  ]}
+>
+  <svg viewBox="0 0 480 280" role="img" aria-labelledby="viz-cw-t">
+    <title id="viz-cw-t">Schematic: a pixel grid of a partner satellite water quality indicator over a coastline, with in-situ sample points</title>
+    <defs>
+      <pattern id="viz-land" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line x1="0" y1="0" x2="0" y2="6" stroke="var(--line)" stroke-width="1.5" />
+      </pattern>
+    </defs>
+    <rect width="480" height="280" fill="var(--white)" />
+    <rect x={X0} y={Y0} width={NX * S} height={NY * S} fill="var(--white)" stroke="var(--line)" />
+    {columns.map((cells, i) => (
+      <g class="va" style={`--i:${i}`} fill="var(--teal)">
+        {cells.map((c) => <rect x={c.x} y={c.y} width={S} height={S} fill-opacity={c.o} />)}
+      </g>
+    ))}
+    <g stroke="var(--white)" stroke-width="1">
+      {Array.from({ length: NX - 1 }, (_, i) => <line x1={X0 + (i + 1) * S} y1={Y0} x2={X0 + (i + 1) * S} y2={Y0 + NY * S} />)}
+      {Array.from({ length: NY - 1 }, (_, j) => <line x1={X0} y1={Y0 + (j + 1) * S} x2={X0 + NX * S} y2={Y0 + (j + 1) * S} />)}
+    </g>
+    <path d={coastPath} fill="var(--placeholder)" />
+    <path d={coastPath} fill="url(#viz-land)" stroke="var(--ink)" stroke-width="1.5" />
+    <polyline class="va" style="--i:16" points={samples.map((p) => p.join(',')).join(' ')} fill="none" stroke="var(--ink)" stroke-dasharray="4 4" stroke-opacity=".6" />
+    {samples.map(([x, y], k) => <rect class="va" style={`--i:${18 + k}`} x={x - 5} y={y - 5} width="10" height="10" fill="var(--ink)" />)}
+    <text x="28" y="66" class="m">LAND</text>
+    <text x="16" y="24">Water quality indicator</text>
+    <text x="16" y="274" class="m">PIXEL GRID · PARTNER SATELLITE PRODUCT</text>
+  </svg>
+</VizFrame>

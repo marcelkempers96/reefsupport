@@ -1,10 +1,13 @@
 ---
 import Kicker from './Kicker.astro';
-interface Props { kicker: string[]; title: string; lead?: string; colour?: string; display?: boolean }
-const { kicker, title, lead, colour, display = false } = Astro.props;
+import Breadcrumbs from './Breadcrumbs.astro';
+// Breadcrumbs render automatically for pages two or more levels deep (e.g. /work/coral-reefs).
+interface Props { kicker: string[]; title: string; lead?: string; colour?: string; display?: boolean; breadcrumbs?: boolean }
+const { kicker, title, lead, colour, display = false, breadcrumbs = true } = Astro.props;
 ---
 <header class="page-header">
   <div class="container">
+    {breadcrumbs && <Breadcrumbs current={title} />}
     <slot name="before" />
     <Kicker parts={kicker} colour={colour} />
     <h1 class:list={{ display }}>{title}</h1>

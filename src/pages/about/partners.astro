@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
 import PartnerWall from '../../components/PartnerWall.astro';
+import Summary from '../../components/readability/Summary.astro';
 import subnav from '../../data/subnav.json';
 import partners from '../../data/partners.json';
 import { isDev } from '../../lib/confirm';
@@ -10,9 +11,16 @@ type Item = { name: string; publish?: boolean };
 const hidden = (items: Item[]) => items.filter((x) => x.publish === false).map((x) => x.name);
 const lead = 'Organisations we have delivered work with, been funded or incubated by, or run open challenges alongside.';
 ---
-<Base title="Partners and funders" description={lead}>
+<Base title="Partners and funders" description="Partners and funders of Reef Support, including Indonesia Biru Foundation, TU Delft, WWF Netherlands, Water Insight, RanMarine Technology and ESA BIC Noordwijk.">
   <PageHeader kicker={['About', 'Partners']} title="Partners and funders" lead={lead} />
   <SubNav label="About" links={subnav.about} />
+  <section class="section section--tight">
+    <div class="container">
+      <Summary id="sum-h" label="How to read this page">
+        <p>Partners are grouped by what they did with us. Delivery partners hold the field presence and measurement assets in our projects, funders and programmes supported or incubated the company, and challenge and research partners ran open AI challenges or research with us. Names appear as plain text until each organisation has given written permission to show its logo, and prizes are listed on the <a href="/about/media">awards and media page</a>.</p>
+      </Summary>
+    </div>
+  </section>
   {partners.groups.map((g, i) => (
     <section class:list={['section', { 'rule-top': i > 0 }]} aria-labelledby={`${g.id}-h`}>
       <div class="container">
@@ -26,12 +34,16 @@ const lead = 'Organisations we have delivered work with, been funded or incubate
   ))}
   <section class="section rule-top" aria-labelledby="infra-h">
     <div class="container">
-      <h2 id="infra-h" class="mb">Infrastructure and data</h2>
+      <h2 id="infra-h" class="mb-s">Infrastructure and data</h2>
+      <p class="sub">Cloud, computing and data services our work runs on.</p>
       <p>{partners.infrastructureAndData.join(' · ')}</p>
     </div>
   </section>
 </Base>
 <style>
   .mb { margin-bottom: var(--s-4); }
+  .mb-s { margin-bottom: var(--s-1); }
+  .sub { color: var(--mute-dark); }
+  :global(.brief__body a) { text-decoration: underline; text-underline-offset: 3px; }
   .dev { color: #8a5a00; margin-top: var(--s-2); }
 </style>

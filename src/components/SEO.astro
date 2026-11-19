@@ -1,37 +1,60 @@
 ---
+// Head metadata for every page: title, description, canonical, Open Graph, Twitter card,
+// language alternates and page-level JSON-LD (see src/lib/seo.ts).
 import company from '../data/company.json';
+import JsonLd from './JsonLd.astro';
+import { cleanPath, ogImageFor, ogImageAlt, pageLd } from '../lib/seo';
 
 interface Props {
   title?: string;          // page name; rendered as "Page · Reef Support"
   description?: string;
-  image?: string;          // absolute or root-relative OG image path
+  image?: string;          // absolute or root-relative OG image path; defaults to /og/<path>.png when rendered
+  imageAlt?: string;
   noindex?: boolean;
 }
-const { title, description = company.tagline, image = '/og/default.png', noindex = false } = Astro.props;
+const { title, description = company.tagline, image, imageAlt, noindex = false } = Astro.props;
+const site = Astro.site!;
+const path = cleanPath(Astro.url.pathname);
 const fullTitle = title ? `${title} · ${company.shortName}` : `${company.shortName} · Evidence for healthy coasts`;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = image ? new URL(image, Astro.site).href : undefined;
+const canonical = new URL(path, site).href;
+const ogImage = new URL(image ?? ogImageFor(path), site).href;
+const ogAlt = imageAlt ?? ogImageAlt(title);
+const isArticle = /^\/insights\/[^/]+$/.test(path);
+const ld = noindex ? [] : await pageLd(path, site);
 ---
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
-<link rel="canonical" href={canonical} />
-{noindex && <meta name="robots" content="noindex" />}
+{noindex
+  ? <meta name="robots" content="noindex, follow" />
+  : <>
+      <link rel="canonical" href={canonical} />
+      <link rel="alternate" hreflang="en" href={canonical} />
+      <link rel="alternate" hreflang="x-default" href={canonical} />
+    </>}
+<meta name="author" content={company.legalName} />
+<meta name="publisher" content={company.legalName} />
+<meta name="theme-color" content="#FFFFFF" />
+<meta name="color-scheme" content="light" />
 <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
-<meta property="og:type" content="website" />
+<meta property="og:type" content={isArticle ? 'article' : 'website'} />
 <meta property="og:site_name" content={company.shortName} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content="en_GB" />
-{ogImage && <meta property="og:image" content={ogImage} />}
-<meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
-
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Poppins:wght@400;500;600;700;800&display=swap"
-/>
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={ogAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogAlt} />
+{ld.map((data) => <JsonLd data={data} />)}
+{/* Fonts are self-hosted via src/components/Fonts.astro (loaded in Base.astro). */}

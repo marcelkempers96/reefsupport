@@ -8,8 +8,12 @@ import CardGrid from '../../components/CardGrid.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import Txt from '../../components/Txt.astro';
 import ToConfirm from '../../components/ToConfirm.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import CtaCoralAI from '../../components/CtaCoralAI.astro';
+import ShareLinks from '../../components/ShareLinks.astro';
 import { getAreas, getProjects, liveUrl, type Project } from '../../lib/data';
 import { showValue, realUrl } from '../../lib/confirm';
+import { projectDescription } from '../../lib/seo';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -37,8 +41,14 @@ const related = all
   .filter((x) => x.id !== project.id && x.data.publish)
   .sort((a, b) => Number(b.data.area === p.area) - Number(a.data.area === p.area))
   .slice(0, 3);
+
+// Engagement: route contact links by audience and project (read by the contact page), and
+// point coral reef case studies to the open Coral AI model and demo.
+const isCoralAI = project.id === 'coral-ai';
+const isCoral = !isCoralAI && (p.area === 'coral-reefs' || p.secondaryArea === 'coral-reefs');
+const contact = (topic?: string) => `/contact?${topic ? `topic=${topic}&` : ''}project=${encodeURIComponent(project.id)}`;
 ---
-<Base title={p.title} description={p.summary} noindex={!p.publish}>
+<Base title={p.title} description={projectDescription(project.id, p.summary)}noindex={!p.publish}>
   <article>
     <header class="head">
       <div class="container">
@@ -49,6 +59,12 @@ const related = all
         <div class="status"><StatusLabel status={p.status} />
           {secondary && <a class="also" href={`/work/${secondary.id}`}>Also part of {secondary.data.name}</a>}
         </div>
+        {isCoralAI && (
+          <div class="btn-row head-actions">
+            <a class="btn" href="https://reefsupport-coral-ai-demo.hf.space" rel="noopener" target="_blank">Try the public demo<span class="visually-hidden"> (opens in a new tab)</span></a>
+            <a class="btn btn--secondary" href="https://huggingface.co/reefsupport/coral-ai" rel="noopener" target="_blank">Model on Hugging Face<span class="visually-hidden"> (opens in a new tab)</span></a>
+          </div>
+        )}
       </div>
     </header>
 
@@ -95,15 +111,26 @@ const related = all
               <p>This work was supported by {p.funder}.</p>
             </div>
           )}
+          {isCoralAI && <CtaCoralAI variant="full" />}
           <div class="cta">
             <h2>Discuss a similar project</h2>
-            <p>Tell us where you work and what you need to measure.</p>
-            <a class="btn" href="/contact">Discuss a similar project</a>
+            <p>Tell us where you work, which ecosystem and what you need to measure, and we will reply within five working days.</p>
+            <a class="btn" href={contact()}>Discuss a similar project</a>
           </div>
+          {isCoral && <CtaCoralAI />}
+          <ShareLinks title={p.title} label="Share this case study" />
         </div>
       </div>
     </section>
   </article>
+
+  <CtaBand
+    kicker="Proposals and consortia"
+    title="Partner with us on a proposal"
+    text="Reef Support joins research consortia and funding proposals to design monitoring, integrate partner data, run AI analysis and produce reporting, while local partners lead the field work."
+    primary={{ label: 'Partner on a proposal', href: contact('proposal') }}
+    secondary={{ label: 'See our services', href: '/services' }}
+  />
 
   {related.length > 0 && (
     <section class="section rule-top" aria-labelledby="rel-h">
@@ -120,6 +147,7 @@ const related = all
   .display { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; max-width: 960px; }
   .lead { margin: var(--s-3) 0; }
   .status { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+  .head-actions { margin-top: var(--s-3); }
   .also { font-size: var(--fs-small); font-weight: 500; }
   .photo { margin: 0; }
   .bar { height: var(--bar); }

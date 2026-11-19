@@ -1,0 +1,39 @@
+---
+// Self-hosted fonts (no Google Fonts request, so no visitor IP leaves for a third party).
+// Latin subset only, woff2 only. Files are emitted to /_astro with hashed names (immutable cache).
+import p400 from '@fontsource/poppins/files/poppins-latin-400-normal.woff2?url';
+import p500 from '@fontsource/poppins/files/poppins-latin-500-normal.woff2?url';
+import p600 from '@fontsource/poppins/files/poppins-latin-600-normal.woff2?url';
+import p700 from '@fontsource/poppins/files/poppins-latin-700-normal.woff2?url';
+import p800 from '@fontsource/poppins/files/poppins-latin-800-normal.woff2?url';
+import m400 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url';
+import m500 from '@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2?url';
+
+const range =
+  'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD';
+const face = (family: string, weight: number, src: string) =>
+  `@font-face{font-family:'${family}';font-style:normal;font-display:swap;font-weight:${weight};src:url(${src}) format('woff2');unicode-range:${range}}`;
+
+const css = [
+  face('Poppins', 400, p400),
+  face('Poppins', 500, p500),
+  face('Poppins', 600, p600),
+  face('Poppins', 700, p700),
+  face('Poppins', 800, p800),
+  face('IBM Plex Mono', 400, m400),
+  face('IBM Plex Mono', 500, m500),
+  // Metric-matched fallbacks (Arial scaled to Poppins' width and line metrics, one face for
+  // regular weights and one for bold), so the swap to Poppins barely moves text.
+  // Referenced in --sans in global.css.
+  "@font-face{font-family:'Poppins fallback';font-weight:100 500;src:local('Arial'),local('ArialMT'),local('Liberation Sans');size-adjust:112.16%;ascent-override:93.62%;descent-override:31.21%;line-gap-override:8.92%}",
+  "@font-face{font-family:'Poppins fallback';font-weight:600 900;src:local('Arial Bold'),local('Arial-BoldMT'),local('Liberation Sans Bold');size-adjust:107.3%;ascent-override:97.86%;descent-override:32.62%;line-gap-override:9.32%}",
+].join('');
+
+// Preload the two weights each page paints first: body text (400) plus headings (700),
+// or the 800 hero headline on the home page (the only page with the video hero).
+const isHome = Astro.url.pathname === '/' || Astro.url.pathname === '/index.html';
+const headingFont = isHome ? p800 : p700;
+---
+<link rel="preload" href={p400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={headingFont} as="font" type="font/woff2" crossorigin />
+<style is:inline set:html={css}></style>

@@ -1,0 +1,39 @@
+/*
+  Page transitions (DESIGN.md: "a short fade between pages").
+  Cross-document View Transitions: same-origin navigations cross-fade in
+  browsers that support it; others navigate normally. No JS router, so the
+  inline scripts on each page keep working. Off under prefers-reduced-motion.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 180ms;
+    animation-timing-function: ease-out;
+  }
+
+  /* The sticky header is identical on every page: keep it still while the page fades. */
+  [data-header] {
+    view-transition-name: site-header;
+  }
+  ::view-transition-group(site-header) {
+    animation: none;
+  }
+  ::view-transition-old(site-header) {
+    display: none;
+  }
+  ::view-transition-new(site-header) {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
