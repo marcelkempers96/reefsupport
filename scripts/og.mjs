@@ -106,7 +106,6 @@ const sections = [
   ['research/open-source', ['Research', 'Open source'], 'Coral AI', 'An open YOLOv8 segmentation model for reef survey photos, MIT licence, on Hugging Face.'],
   ['research/methods', ['Research', 'Methods'], 'From field data to a report a funder can check', 'Seven steps from monitoring design to reporting, each with a named responsible party.'],
   ['about', ['About'], 'Marine technology built with the people who protect coasts', 'Founded in Delft in 2020, and winner of the ESA Copernicus Masters Overall Prize the same year.'],
-  ['about/team', ['About', 'Team'], 'Team', 'Marcel Kempers, Yohan Runhaar and Nikole Gualdron Chaparro.'],
   ['contact', ['Contact'], 'Tell us about your sites', 'Restoration organisations, research consortia and coastal authorities.'],
 ];
 try {

@@ -1,54 +1,19 @@
 ---
-// Accessibility statement. Keep the measures list true of the code (global.css focus ring and
-// tokens, Base.astro skip link and landmarks, VideoHero pause and reduced motion, SubNav, search).
 import Legal from '../layouts/Legal.astro';
-import ToConfirm from '../components/ToConfirm.astro';
 import company from '../data/company.json';
-const tel = company.phone.replace(/\s/g, '');
-const toc = [
-  { id: 'standard', label: 'Standard and status' },
-  { id: 'measures', label: 'What we have done' },
-  { id: 'limitations', label: 'Known limitations' },
-  { id: 'testing', label: 'How we checked' },
-  { id: 'report', label: 'Report a problem' },
-  { id: 'enforcement', label: 'If you are not satisfied' },
-];
 ---
-<Legal title="Accessibility" description="Accessibility statement for reef.support: built to WCAG 2.2 level AA, with keyboard access, visible focus, AA contrast, motion that pauses, known limitations and how to report a problem." toc={toc}>
-  <p>{company.legalName} wants everyone to be able to read and use reef.support, including people who use a keyboard, a screen reader, magnification or voice control. This statement describes the standard we work to, what we have done, where the site still falls short and how to tell us about a problem.</p>
-
-  <h2 id="standard">Standard and status</h2>
-  <p>We build and check the website against the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA. Based on our own checks we consider the site partially conformant, which means most of it meets the standard and the exceptions are listed under <a href="#limitations">Known limitations</a>. This statement was prepared on <ToConfirm note="statement date" />. <ToConfirm note="legal review, including whether the European Accessibility Act applies to this site" /></p>
-
-  <h2 id="measures">What we have done</h2>
+<Legal title="Accessibility" description="Accessibility statement for reef.support: built to WCAG 2.2 level AA, with keyboard support, sufficient contrast and reduced-motion support." updated="19 November 2026">
+  <p>We want everyone to be able to use this website. It is built to meet the Web Content Accessibility Guidelines (WCAG) 2.2 at level AA, and we test it with automated checks and by hand at phone and desktop widths.</p>
+  <h2>What we do</h2>
   <ul>
-    <li>Text and interface colours meet the WCAG AA contrast ratios: dark ink on white and light blue, and white only on dark blue fills.</li>
-    <li>The site is built to be used with a keyboard alone, with a clearly visible focus outline and a "Skip to content" link as the first item on each page.</li>
-    <li>Pages use one main heading, a logical heading order and landmarks for the header, navigation, main content and footer, so screen reader users can move around quickly.</li>
-    <li>The page language is set to British English, so screen readers use the right pronunciation.</li>
-    <li>The navigation menus and dropdowns announce whether they are open or closed, and the project filter announces how its results change.</li>
-    <li>Looping animations, such as the moving background at the top of the home page and the Coral AI figure, have a pause button and stop when scrolled out of view. Short drawing animations in the figures play once, and no animation plays when your device is set to reduce motion.</li>
-    <li>Layouts work from 360 px wide screens upward without sideways page scrolling.</li>
-    <li>Form fields have visible labels, required fields are marked, and the result of sending a form is announced on the page.</li>
-    <li>Schematic figures on the practice area pages have a written caption and legend, so the information does not depend on the drawing alone.</li>
-    <li>Most Research and About pages open with a short "In brief" summary, and several of them explain technical terms in plain language in a list near the end.</li>
+    <li>Text and background colours meet AA contrast ratios.</li>
+    <li>Every page works with a keyboard, with a visible focus ring and a skip link to the main content.</li>
+    <li>Pages use headings, landmarks and labelled forms so screen readers can move around them.</li>
+    <li>Animations are short or can be paused, and stop when your device asks for reduced motion.</li>
+    <li>Layouts work from 360 px wide screens upward without sideways scrolling.</li>
   </ul>
-
-  <h2 id="limitations">Known limitations</h2>
-  <ul>
-    <li><strong>Photos and video.</strong> Field photos and the home page video are still to be added; until then the site shows plain placeholders. When we add them, each photo will have a text alternative that describes what it shows and a photographer credit, the home page video will be silent and decorative with a pause control, and any video with speech will have captions.</li>
-    <li><strong>Site search.</strong> Search needs JavaScript. Without it, the search page links to the Work, Projects and Research sections so you can browse instead.</li>
-    <li><strong>Section navigation.</strong> On narrow screens the row of section links under some page titles scrolls sideways within its own row; all links can still be reached with the keyboard.</li>
-    <li><strong>Other websites.</strong> Links to other services, such as the Coral AI browser demo on Hugging Face, partner sites and press articles, lead to pages we do not control and that may not meet the same standard.</li>
-  </ul>
-  <p><ToConfirm note="any further known issues found in a manual or screen reader review" /></p>
-
-  <h2 id="testing">How we checked</h2>
-  <p>This statement is based on our own assessment: automated testing with axe and Lighthouse, and checks of layout and keyboard use at 360 px and 1440 px screen widths. The site has not yet been audited by an independent party. <ToConfirm note="date of the last check; a manual keyboard pass of every page; whether an independent audit or screen reader test is planned" /></p>
-
-  <h2 id="report">Report a problem</h2>
-  <p>If something on this website does not work for you, or you need information in another format, please tell us through the <a href="/contact">contact form</a> or by phone on <a href={`tel:${tel}`}>{company.phone}</a>. Say which page you were on, what you were trying to do and, if you can, which browser and assistive technology you use. We aim to reply within five working days.</p>
-
-  <h2 id="enforcement">If you are not satisfied</h2>
-  <p>If you are not satisfied with our reply, please write to us again so we can look at it a second time. <ToConfirm note="legal review: external body to refer complaints to, if any applies to a private company" /></p>
+  <h2>Known limitations</h2>
+  <p>Photos and video are still being added. Each will get a text alternative, and video will have no sound or will carry captions.</p>
+  <h2>Report a problem</h2>
+  <p>If something on this site does not work for you, email <a href={`mailto:${company.email}`}>{company.email}</a> with the page and what went wrong. We aim to reply within five working days.</p>
 </Legal>

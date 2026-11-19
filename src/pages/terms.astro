@@ -1,0 +1,19 @@
+---
+import Legal from '../layouts/Legal.astro';
+import company from '../data/company.json';
+---
+<Legal title="Terms of use" description="Terms of use for reef.support, the website of Reef Support B.V.: use of content, open models, links and liability." updated="19 November 2026">
+  <p>These terms apply to your use of reef.support, run by {company.legalName} (KvK {company.kvk}), {company.registeredAddress}. By using the website you accept them.</p>
+  <h2>Content</h2>
+  <p>The text, design and logos on this website belong to {company.legalName} unless stated otherwise. You may quote and link to our pages with attribution. Partner names and marks belong to their owners. Logos in the press kit may be used to refer to Reef Support in press and partner materials.</p>
+  <h2>Open models and code</h2>
+  <p>Models and code we publish, such as Coral AI, are released under their own licence (for Coral AI, the MIT licence), which applies instead of these terms. Coral AI supports research and monitoring with human review and is not validated for regulatory reporting on its own.</p>
+  <h2>Information on this site</h2>
+  <p>We take care that the information on this website is accurate, but it is general information, not advice for a specific situation. Project descriptions show the state of work at the time of writing. Agreements with clients and partners are made in separate contracts.</p>
+  <h2>Links</h2>
+  <p>We link to partner and third-party websites. We are not responsible for their content or their privacy practices.</p>
+  <h2>Liability</h2>
+  <p>To the extent the law allows, {company.legalName} is not liable for damage resulting from the use of this website or from it being temporarily unavailable.</p>
+  <h2>Law</h2>
+  <p>Dutch law applies to these terms. Questions go to <a href={`mailto:${company.email}`}>{company.email}</a>.</p>
+</Legal>

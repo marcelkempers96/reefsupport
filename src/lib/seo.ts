@@ -5,7 +5,6 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { getEntry } from 'astro:content';
 import company from '../data/company.json';
-import team from '../data/team.json';
 import { stripConfirm } from './confirm';
 
 /**
@@ -120,25 +119,6 @@ function coralAiLd(site: URL): Ld {
   };
 }
 
-/** The three core team members on /about/team (CONTENT.md section 9). */
-function teamLd(site: URL): Ld[] {
-  const tud = { '@type': 'CollegeOrUniversity', name: 'TU Delft', url: 'https://www.tudelft.nl/' };
-  const alumni: Record<string, Ld[]> = {
-    'marcel-kempers': [tud],
-    'yohan-runhaar': [tud],
-  };
-  return team.team.map((p) => ({
-    '@type': 'Person',
-    '@id': abs(`/about/team#${p.slug}`, site),
-    name: p.name,
-    jobTitle: p.role,
-    description: p.focus,
-    url: abs(`/about/team#${p.slug}`, site),
-    worksFor: orgRef(site),
-    ...(alumni[p.slug] ? { alumniOf: alumni[p.slug] } : {}),
-    ...(p.links?.length ? { sameAs: p.links.map((l) => l.url) } : {}),
-  }));
-}
 
 /** Organisation names from a CONTENT.md partner or funder string, with notes removed. */
 function orgNames(value?: string): string[] {
@@ -179,7 +159,6 @@ async function projectLd(slug: string, site: URL): Promise<Ld | undefined> {
 export async function pageLd(path: string, site: URL): Promise<Ld[]> {
   if (path === '/') return [websiteLd(site)];
   if (path === '/research/open-source') return [coralAiLd(site)];
-  if (path === '/about/team') return teamLd(site);
   const m = path.match(/^\/projects\/([a-z0-9-]+)$/);
   if (m) {
     const ld = await projectLd(m[1], site);

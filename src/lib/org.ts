@@ -13,7 +13,6 @@ export function organizationLd(site: URL) {
     description: company.shortDescription,
     foundingDate: company.founded,
     foundingLocation: 'Delft, Netherlands',
-    founder: company.founders.map((name) => ({ '@type': 'Person', name })),
     ...(hasConfirm(company.email) ? {} : { email: company.email }),
     telephone: company.phone,
     identifier: { '@type': 'PropertyValue', propertyID: 'KvK', value: company.kvk },

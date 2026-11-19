@@ -1,12 +1,10 @@
 ---
-// Newsletter block. The provider is chosen later (CLAUDE.md): set PUBLIC_NEWSLETTER_ENDPOINT
-// to a form endpoint that accepts POST with an "email" field. Without it the form is not shown
-// in production; LinkedIn is offered instead.
-import ToConfirm from './ToConfirm.astro';
+// Newsletter block. Sign-ups go to FormSubmit by default (src/lib/forms.ts), which emails
+// each address to the team; swap PUBLIC_NEWSLETTER_ENDPOINT for a mailing-list provider later.
+import { newsletterEndpoint as endpoint } from '../lib/forms';
 import company from '../data/company.json';
-const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT as string | undefined;
 const linkedin = company.social.find((s) => s.label === 'LinkedIn')!.url;
-const showForm = !!endpoint || import.meta.env.DEV;
+const showForm = true;
 ---
 <section class="news section" aria-labelledby="news-h">
   <div class="container news__inner">
@@ -16,8 +14,9 @@ const showForm = !!endpoint || import.meta.env.DEV;
       <p>Project updates, open models and opportunities to collaborate, from coral reefs, mangroves and coastal waters.</p>
     </div>
     {showForm ? (
-      <form class="news__form" method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. You are on the list for field notes, about once a month.">
-        {!endpoint && <ToConfirm note="newsletter provider endpoint (PUBLIC_NEWSLETTER_ENDPOINT)" />}
+      <form class="news__form" method="post" action={endpoint} data-async-form data-success="Thanks. You are on the list for field notes, about once a month.">
+        <input type="hidden" name="_subject" value="Newsletter sign-up from reef.support" />
+        <div class="visually-hidden" aria-hidden="true"><label for="news-honey">Leave this field empty</label><input id="news-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" /></div>
         <label for="news-email" class="news__label">Email address</label>
         <div class="news__row">
           <input id="news-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.org" aria-describedby="news-note" />

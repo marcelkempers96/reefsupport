@@ -7,6 +7,11 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/about/team",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
       "source": "/solutions",
       "destination": "/work",
       "permanent": true
@@ -93,7 +98,7 @@
     },
     {
       "source": "/team",
-      "destination": "/about/team",
+      "destination": "/about",
       "permanent": true
     },
     {

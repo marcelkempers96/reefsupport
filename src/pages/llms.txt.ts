@@ -3,7 +3,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import company from '../data/company.json';
-import team from '../data/team.json';
 import about from '../data/about.json';
 import research from '../data/research.json';
 import { hasConfirm, stripConfirm, realUrl } from '../lib/confirm';
@@ -83,11 +82,6 @@ export const GET: APIRoute = async ({ site }) => {
     ...(insights.length
       ? ['## Insights', '', ...insights.slice(0, 20).map((i) => `- [${i.data.title}](${url(`/insights/${i.id}`)}) (${i.data.date.toISOString().slice(0, 10)}): ${clean(i.data.summary)}`), '']
       : []),
-    '## Team',
-    '',
-    ...team.team.map((t) => `- ${t.name}, ${t.role}: ${t.focus}`),
-    `- Team page: ${url('/about/team')}`,
-    '',
     '## Key pages',
     '',
     `- [About](${url('/about')})`,

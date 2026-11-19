@@ -34,7 +34,6 @@
       "overview": "About Reef Support",
       "intro": "A Dutch marine technology company, founded in Delft in 2020.",
       "children": [
-        { "label": "Team", "href": "/about/team", "desc": "Three people lead our work, with partners and students on each project." },
         { "label": "Partners", "href": "/about/partners", "desc": "Organisations we deliver with, are funded by or run challenges alongside." },
         { "label": "Awards and media", "href": "/about/media", "desc": "Prizes, including the ESA Copernicus Masters Overall Prize 2020, and press." },
         { "label": "Policies", "href": "/about/policies", "desc": "Data protection, research data, safeguarding, anti-fraud and gender equality." },
@@ -67,7 +66,6 @@
       "heading": "Company",
       "links": [
         { "label": "About", "href": "/about" },
-        { "label": "Team", "href": "/about/team" },
         { "label": "Partners", "href": "/about/partners" },
         { "label": "Opportunities", "href": "/about/opportunities" },
         { "label": "Contact", "href": "/contact" }
@@ -77,6 +75,7 @@
   "legal": [
     { "label": "Privacy", "href": "/privacy" },
     { "label": "Cookies", "href": "/cookies" },
-    { "label": "Accessibility", "href": "/accessibility" }
+    { "label": "Accessibility", "href": "/accessibility" },
+    { "label": "Terms", "href": "/terms" }
   ]
 }

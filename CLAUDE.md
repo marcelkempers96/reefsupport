@@ -109,14 +109,16 @@ It must return nothing. Then build, and look at every changed page at 360 px and
 - [ ] Name and funder of the 2023 R&D project with RanMarine; FFplus grant details
 - [ ] Start years for Mangrove AI and Akar Biru Lombok; Coral Lab planting numbers achieved
 - [ ] Links: El Tiempo article, NOS interview, ProfCast, FD 50, "Superpixels to the Rescue", Baauw thesis
-- [ ] One contact email: hello@reef.support or info@reef.support
+- [x] One contact email: hello@reef.support (owner, Nov 2026)
 - [ ] Hero video clip (reef or Coral Lab footage, with rights) and poster frame
 - [ ] Field photos with photographer credit and permission
 - [ ] Logo: keep current mark or adopt the three-bar mark in `DESIGN.md`
 - [ ] Clean or take offline: docs.reef.support, GitHub READMEs, Hugging Face Space text
 - [ ] Whether a Reef Support foundation or NGO branch exists before mentioning one
-- [ ] Contact form endpoint (Formspree or Vercel function) for `PUBLIC_CONTACT_ENDPOINT`
-- [ ] Newsletter provider and endpoint for `PUBLIC_NEWSLETTER_ENDPOINT` (until then production shows a LinkedIn link)
+- [x] Contact form endpoint: FormSubmit (free, no account) to hello@reef.support by default; activate it by clicking the link in the first FormSubmit email. Override with `PUBLIC_CONTACT_ENDPOINT`
+- [x] Newsletter: sign-ups emailed via FormSubmit for now; swap `PUBLIC_NEWSLETTER_ENDPOINT` for a mailing-list provider later
 - [ ] Migrate the old blog posts listed in `CONTENT.md` section 7 into `src/content/insights/` (the build session could not reach reef.support)
-- [ ] Privacy policy: form and newsletter processors, retention period, legal review and publication date
-- [ ] Policy pages: each policy text, date and Director signature
+- [x] Privacy, cookies, accessibility and terms pages: simple versions written on owner instruction (Nov 2026)
+- [x] Policy pages: simple statements published on owner instruction (Nov 2026)
+- [x] Team member names removed from the site on owner instruction (Nov 2026): no Team page, people referred to by role only. Do not reintroduce names without asking.
+- [ ] Owner uploads to `uploads/`: hero video, logo, photos, old blog posts

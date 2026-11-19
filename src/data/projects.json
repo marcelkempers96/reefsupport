@@ -32,11 +32,11 @@
     "image": "Segmented reef transect",
     "summary": "Open segmentation model that turns reef survey photos into coral cover estimates, published on Hugging Face.",
     "problem": "Coral reef surveys produce thousands of photos that divers and scientists still classify by hand, which slows reporting and limits how many sites can be monitored.",
-    "whatWeDid": "Reef Support built Coral AI to segment reef images into coral types, algae, rubble and sand, so cover estimates for transects come out of the photos directly. The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023), where the earlier GoogleNet classifier reached about 86% accuracy across six functional groups. ML6 contributed a segmentation approach built on the Seaview dataset, and Yohan Runhaar's research with University of Amsterdam support explored superpixel methods.",
+    "whatWeDid": "Reef Support built Coral AI to segment reef images into coral types, algae, rubble and sand, so cover estimates for transects come out of the photos directly. The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023), where the earlier GoogleNet classifier reached about 86% accuracy across six functional groups. ML6 contributed a segmentation approach built on the Seaview dataset, and co-founder research with University of Amsterdam support explored superpixel methods.",
     "outputs": [
       { "label": "YOLOv8 segmentation model, MIT licence", "url": "https://huggingface.co/reefsupport/coral-ai" },
       { "label": "Public browser demo", "url": "https://reefsupport-coral-ai-demo.hf.space" },
-      { "label": "Superpixels to the Rescue (Runhaar, 2022)", "toConfirm": "link" },
+      { "label": "Superpixels to the Rescue (2022)", "toConfirm": "link" },
       { "label": "ML6 write-up", "url": "https://www.ml6.eu/blogpost/building-a-coral-segmentation-model-using-sparse-data" }
     ],
     "publish": true

@@ -1,49 +1,62 @@
 ---
-// Policy summaries. The policy texts are an open item (CLAUDE.md): each becomes a short dated page
-// signed by the Director (CONTENT.md section 12). Until then this page states only the intended
-// scope of each policy, with no commitments that have not been written and approved.
+// Short policy statements. Simple versions approved for publication by the owner; each can be
+// replaced by a fuller signed text later without changing the page structure.
 import Legal from '../../layouts/Legal.astro';
 import SubNav from '../../components/SubNav.astro';
-import ToConfirm from '../../components/ToConfirm.astro';
 import subnav from '../../data/subnav.json';
+import company from '../../data/company.json';
 
-interface Policy { id: string; name: string; covers: string; appliesTo: string; open: string; privacy?: boolean }
+interface Policy { id: string; name: string; points: string[] }
 const policies: Policy[] = [
   {
     id: 'data-protection',
     name: 'Data protection (GDPR)',
-    covers: 'How Reef Support collects, uses, stores and deletes personal data in all of its work: enquiries and newsletter sign-ups through this website, contact details of partners, funders and consortium members, applications from students and interns, and any personal data contained in project records. It will also set out how data subject requests and personal data breaches are handled.',
-    appliesTo: 'Everyone who works for Reef Support, including students and interns, and the service providers that process personal data on its behalf.',
-    open: 'roles as controller or processor in partner projects, data processing agreements, breach procedure; legal review',
-    privacy: true,
+    points: [
+      'We collect only the personal data we need for a stated purpose, use it only for that purpose and delete it when it is no longer needed.',
+      'Personal data is stored with providers that offer GDPR safeguards, and access is limited to the people who need it.',
+      'In partner projects we agree in writing who is the controller and who is the processor before personal data is shared.',
+      'A suspected data breach is assessed straight away and reported to the Autoriteit Persoonsgegevens and the people affected where the law requires it.',
+      'How this website handles personal data is set out in the privacy policy.',
+    ],
   },
   {
     id: 'research-data',
     name: 'Research data management and open data',
-    covers: 'How data from projects and research is collected, documented, stored, shared and archived, including reef survey images, 3D photogrammetry image sets, field records and data received from partners, and how open models such as Coral AI are released. It will also set out how partner ownership, licences and confidentiality are respected when data is reused.',
-    appliesTo: 'Reef Support staff, students and interns, and project partners where a project agreement says so.',
-    open: 'licences for code, models and data, repositories used, data ownership terms with partners',
+    points: [
+      'Survey images, 3D image sets, field records and partner data are documented with their source, date, site and licence when they enter a project.',
+      'Data received from partners stays theirs and is used only as the project agreement allows.',
+      'Where a project allows it, we publish models, code and methods openly, as with Coral AI under an MIT licence.',
+      'Project data is stored securely with backups and kept for as long as the project agreement or funder requires.',
+    ],
   },
   {
     id: 'safeguarding',
     name: 'Safeguarding and code of conduct',
-    covers: 'The conduct expected of everyone who represents Reef Support, in the field, at partner sites and online, and the protection of people in the communities where field work takes place, including children and adults at risk if the work brings staff into contact with them. It will also cover the supervision of students and interns, how concerns are reported and how they are handled, and how the policy works alongside the policies of partners who lead local field teams, such as Indonesia Biru Foundation in Lombok.',
-    appliesTo: 'Reef Support staff, students, interns and visitors taking part in field work.',
-    open: 'reporting route and safeguarding contact person',
+    points: [
+      'Everyone who represents Reef Support treats colleagues, partners and community members with respect, in the field, at partner sites and online.',
+      'Field work follows the lead of local partners, respects local customs and rules, and takes place only with the consent of the communities involved.',
+      'Harassment, discrimination, exploitation and abuse are not tolerated, and any contact with children or vulnerable adults happens only in the presence of the local partner.',
+      'Concerns can be raised in confidence with the Director, and anyone who raises a concern in good faith is protected.',
+    ],
   },
   {
     id: 'anti-fraud',
     name: 'Anti-fraud and anti-corruption',
-    covers: 'The proper use of grant and project funds, conflicts of interest, gifts and hospitality, bribery, payments to partners and suppliers, financial records and audit, and how suspicions of fraud or corruption are reported and investigated.',
-    appliesTo: 'Reef Support directors, staff, students and interns, and partners and subcontractors where a contract says so.',
-    open: 'reporting route and how reports are protected; legal review',
+    points: [
+      'Grant and project funds are used only for the purposes agreed with the funder, and every payment is recorded and supported by documents.',
+      'We do not offer, pay, ask for or accept bribes, and gifts or hospitality beyond a modest value are declined.',
+      'Conflicts of interest are declared before decisions are made.',
+      'Suspected fraud or corruption is investigated, reported to the funder concerned and, where needed, to the authorities.',
+    ],
   },
   {
     id: 'gender-equality',
     name: 'Gender equality statement',
-    covers: 'How Reef Support considers gender equality in recruitment, in selecting students and interns, in working conditions and in the design of projects with partners.',
-    appliesTo: 'Reef Support as an employer and as a project partner.',
-    open: 'whether a Horizon Europe Gender Equality Plan applies to Reef Support as a private company; legal review',
+    points: [
+      'We recruit staff, students and interns on merit, and aim for balanced teams and panels.',
+      'Working conditions, pay and opportunities do not depend on gender.',
+      'We consider gender in project design with partners, for example in programmes where women-majority cooperatives lead coastal restoration.',
+    ],
   },
 ];
 const toc = policies.map((p) => ({ id: p.id, label: p.name }));
@@ -52,23 +65,18 @@ const toc = policies.map((p) => ({ id: p.id, label: p.name }));
   title="Policies"
   heading="How we work responsibly"
   kicker={['About', 'Policies']}
-  description="Reef Support's policies on data protection (GDPR), research data management and open data, safeguarding, anti-fraud and anti-corruption, and gender equality, with the scope of each."
+  description="Reef Support's policies on data protection (GDPR), research data management and open data, safeguarding, anti-fraud and anti-corruption, and gender equality."
+  updated="19 November 2026"
   toc={toc}
 >
   <SubNav slot="subnav" label="About" links={subnav.about} />
-  <p>Reef Support is preparing five policies, each published as a short page with its date and the signature of the Director. Until each text is published, this page sets out what it is intended to cover and who it applies to. If you need a policy for a proposal or due diligence, <a href="/contact">contact us</a>.</p>
-
+  <p>These five policies apply to everyone who works for Reef Support, including students and interns, and to partners and subcontractors where a contract says so. They are approved by the Director of {company.legalName}.</p>
   {policies.map((p) => (
-    <section class="policy" aria-labelledby={p.id}>
+    <>
       <h2 id={p.id}>{p.name}</h2>
-      <dl>
-        <div><dt>Intended scope</dt><dd>{p.covers}{p.privacy && <> For personal data sent through this website, the <a href="/privacy">privacy policy</a> already applies.</>}</dd></div>
-        <div><dt>Applies to</dt><dd>{p.appliesTo}</dd></div>
-        <div><dt>Status</dt><dd>The text is in preparation and will be published here with its date and the Director's signature. <ToConfirm note={`full text, date and Director signature; ${p.open}`} /></dd></div>
-      </dl>
-    </section>
+      <ul>{p.points.map((pt) => <li>{pt}</li>)}</ul>
+    </>
   ))}
-
   <h2 id="questions">Questions</h2>
-  <p>For questions about any of these policies, use the <a href="/contact">contact form</a> and choose "Other" as the reason for writing.</p>
+  <p>Questions about these policies, or a concern you want to raise, can go to <a href={`mailto:${company.email}`}>{company.email}</a>.</p>
 </Legal>

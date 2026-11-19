@@ -1,5 +1,5 @@
 ---
-// Contact form posts to PUBLIC_CONTACT_ENDPOINT (Formspree or a serverless function), with an
+// Contact form posts to FormSubmit by default (see src/lib/forms.ts), with an
 // on-page confirmation via src/scripts/forms.ts.
 import Base from '../layouts/Base.astro';
 import PageHeader from '../components/PageHeader.astro';
@@ -8,8 +8,7 @@ import Txt from '../components/Txt.astro';
 import company from '../data/company.json';
 import { showValue, hasConfirm } from '../lib/confirm';
 import { getProjects } from '../lib/data';
-const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
-if (import.meta.env.PROD && !endpoint) console.warn('[contact] PUBLIC_CONTACT_ENDPOINT is not set: the contact form cannot send messages.');
+import { contactEndpoint as endpoint } from '../lib/forms';
 const lead = 'We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days.';
 const ecosystems = ['Coral reef', 'Mangrove', 'Seagrass', 'Coastal water', 'Other'];
 const tel = company.phone.replace(/\s/g, '');
@@ -53,8 +52,9 @@ const include = [
         </div>
       </div>
       <div class="split__main form-col">
-        <form method="post" action={endpoint ?? '#'} data-async-form data-contact data-projects={JSON.stringify(projectTitles)} data-success="Thanks. Your message has reached the team." class="form" novalidate={false}>
-          {!endpoint && <ToConfirm note="form endpoint (PUBLIC_CONTACT_ENDPOINT, Formspree or serverless)" />}
+        <form method="post" action={endpoint} data-async-form data-contact data-projects={JSON.stringify(projectTitles)} data-success="Thanks. Your message has reached the team." class="form" novalidate={false}>
+          <input type="hidden" name="_subject" value="New message from reef.support" />
+          <input type="hidden" name="_template" value="table" />
           <fieldset class="topics" aria-describedby="topic-req">
             <legend>What are you writing about? <span aria-hidden="true">*</span></legend>
             <div class="topics__grid">
@@ -94,7 +94,7 @@ const include = [
             <input id="c-consent" name="consent" type="checkbox" required value="yes" />
             <label for="c-consent">I agree that Reef Support stores this message to reply to me, as described in the <a href="/privacy">privacy policy</a>.</label>
           </div>
-          <div class="visually-hidden" aria-hidden="true"><label for="c-gotcha">Leave this field empty</label><input id="c-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></div>
+          <div class="visually-hidden" aria-hidden="true"><label for="c-gotcha">Leave this field empty</label><input id="c-gotcha" type="text" name="_honey" tabindex="-1" autocomplete="off" /></div>
           <p class="req meta">* Required</p>
           <button class="btn" type="submit">Send message</button>
           <p class="status" role="status" aria-live="polite" data-form-status></p>

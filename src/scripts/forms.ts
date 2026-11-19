@@ -17,8 +17,11 @@ document.querySelectorAll<HTMLFormElement>('form[data-async-form]').forEach((for
     if (btn) btn.textContent = 'Sending';
     if (status) status.textContent = '';
     try {
-      const res = await fetch(action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
-      if (!res.ok) throw new Error(String(res.status));
+      // JSON body works for FormSubmit's /ajax/ endpoint and for Formspree.
+      const body = JSON.stringify(Object.fromEntries(new FormData(form)));
+      const res = await fetch(action, { method: 'POST', body, headers: { 'Content-Type': 'application/json', Accept: 'application/json' } });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === 'false' || data.success === false) throw new Error(String(res.status));
       form.reset();
       const done = Object.assign(document.createElement('p'), {
         className: 'form-done',

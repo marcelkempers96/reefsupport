@@ -9,7 +9,7 @@
   ],
   "publications": [
     { "type": "Model", "title": "Coral AI (YOLOv8 segmentation)", "authors": "Reef Support", "venue": "Hugging Face", "year": "2024", "url": "https://huggingface.co/reefsupport/coral-ai" },
-    { "type": "Paper", "title": "Superpixels to the Rescue", "authors": "Yohan Runhaar", "venue": "[TO CONFIRM: venue]", "year": "2022", "url": "[TO CONFIRM]" },
+    { "type": "Paper", "title": "Superpixels to the Rescue", "authors": "Reef Support", "venue": "[TO CONFIRM: venue]", "year": "2022", "url": "[TO CONFIRM]" },
     { "type": "MSc thesis", "title": "3D photogrammetry for coral reef monitoring: comparing rugosity calculation approaches", "authors": "Marc Baauw", "venue": "[TO CONFIRM: institution]", "year": "2022", "url": "[TO CONFIRM]" }
   ],
   "methods": [
