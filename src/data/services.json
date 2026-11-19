@@ -143,7 +143,7 @@
         "Open methods and models that feed back into partner projects, as the challenges did for Coral AI"
       ],
       "weDo": "We act as challenge owner, bring the monitoring problem, host student projects and build the results into usable models and methods.",
-      "partnersDo": "Challenge platforms such as FruitPunch AI and Zindi bring participants, and universities such as TU Delft and the University of Amsterdam bring students and academic supervision.",
+      "partnersDo": "Challenge platforms such as FruitPunch AI and Zindi bring participants, and universities such as TU Delft and the University of Amsterdam bring students.",
       "proof": [
         { "label": "Hackathons and challenges", "href": "/research/hackathons" },
         { "label": "Internships and thesis topics", "href": "/about/opportunities" },

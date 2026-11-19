@@ -3,7 +3,7 @@
 interface Props { label: string; ratio?: string; class?: string }
 const { label, ratio = '16 / 9', class: cls } = Astro.props;
 ---
-<div class:list={['ph', cls]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Photo to come: ${label}`}>
+<div class:list={['ph', cls]} style={`aspect-ratio: ${ratio}`} role="img" data-pagefind-ignore aria-label={`Photo to come: ${label}`}>
   <span class="ph__label">{label}</span>
 </div>
 <style>

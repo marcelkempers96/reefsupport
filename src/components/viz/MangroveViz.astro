@@ -32,7 +32,7 @@ const base = 230;
     <text x="24" y="62" class="m">SEA</text>
     {plots.map(([x, y], k) => (
       <g class="va" style={`--i:${k + 2}`}>
-        <rect x={x - 6} y={y - 6} width="12" height="12" fill="var(--navy)" />
+        <rect x={x - 4} y={y - 4} width="8" height="8" fill="var(--white)" stroke="var(--navy)" stroke-width="1" />
         <rect x={x - 10} y={y - 10} width="20" height="20" fill="none" stroke="var(--navy)" stroke-opacity=".35" />
       </g>
     ))}
@@ -49,7 +49,7 @@ const base = 230;
       const x = 280 + k * 64;
       return (
         <g>
-          <rect class="va" style={`--i:${12 + k * 2}`} x={x} y={base - d.s * 1.5} width="20" height={d.s * 1.5} fill="var(--navy)" />
+          <rect class="va" style={`--i:${12 + k * 2}`} x={x} y={base - d.s * 1.5} width="20" height={d.s * 1.5} fill="var(--navy)" fill-opacity=".75" />
           <rect class="va" style={`--i:${13 + k * 2}`} x={x + 22} y={base - d.g * 1.5} width="20" height={d.g * 1.5} fill="var(--sky)" />
           <text x={x} y={base + 20} class="m">{`R${k + 1}`}</text>
         </g>

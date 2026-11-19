@@ -8,7 +8,9 @@ interface Props { project: Project; area: Area; headingLevel?: 'h2' | 'h3' }
 const { project, area, headingLevel = 'h3' } = Astro.props;
 const p = project.data;
 const H = headingLevel;
-const years = isDev ? p.years : stripConfirm(p.years);
+const stripped = stripConfirm(p.years);
+// In production an unconfirmed start year would leave a bare "to now": show nothing instead.
+const years = isDev ? p.years : /^to\b/.test(stripped) ? '' : stripped;
 ---
 <article class="card" data-area={p.area} data-country={p.country} data-status={p.status}>
   <PhotoPlaceholder label={p.image} />
@@ -18,7 +20,7 @@ const years = isDev ? p.years : stripConfirm(p.years);
     <H class="title"><a href={`/projects/${project.id}`}>{p.title}</a></H>
     <p class="summary">{p.summary}</p>
     <div class="foot">
-      <span class="meta"><Txt text={years} /></span>
+      <span class="meta">{years && <Txt text={years} />}</span>
       <StatusLabel status={p.status} />
       {!p.publish && <p class="meta unpublished">Unpublished: hidden in production</p>}
     </div>

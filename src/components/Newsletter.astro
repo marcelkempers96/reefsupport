@@ -21,7 +21,7 @@ const showForm = !!endpoint || import.meta.env.DEV;
         <label for="news-email" class="news__label">Email address</label>
         <div class="news__row">
           <input id="news-email" name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@example.org" aria-describedby="news-note" />
-          <button class="btn btn--on-dark" type="submit">Subscribe</button>
+          <button class="btn" type="submit">Subscribe</button>
         </div>
         <p class="news__note" id="news-note">One email about once a month; your address is handled as described in our <a href="/privacy">privacy policy</a>.</p>
         <p class="news__status" role="status" aria-live="polite" data-form-status></p>
@@ -29,30 +29,31 @@ const showForm = !!endpoint || import.meta.env.DEV;
     ) : (
       <div class="news__alt">
         <p>Until the mailing list opens, we post project updates on LinkedIn.</p>
-        <p><a class="btn btn--on-dark-secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a></p>
+        <p><a class="btn btn--secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a></p>
       </div>
     )}
   </div>
 </section>
 <style>
-  .news { background: var(--ink); color: var(--on-dark); border-bottom: 1px solid rgba(255, 255, 255, .22); }
-  .news__inner { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-3) var(--gutter); align-items: center; }
+  .news { background: var(--mist); color: var(--ink); border-top: 2px solid var(--ink); }
+  .news__inner { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-3) var(--gutter); align-items: end; }
   .news__inner > div { grid-column: span 6; }
   .news__inner > :last-child { grid-column: 8 / span 5; }
-  .news p { color: var(--on-dark-mute); margin: var(--s-1) 0 0; }
+  .news p { color: var(--mute-dark); margin: var(--s-1) 0 0; }
   .news__row { display: flex; gap: 0; }
   input {
     flex: 1; min-width: 0; padding: 12px 14px; font: 400 16px/1.2 var(--sans);
-    border: 2px solid var(--white); background: transparent; color: var(--white);
+    border: 1px solid var(--mute); border-right: 0; background: var(--white); color: var(--ink);
   }
-  input::placeholder { color: var(--on-dark-mute); }
-  .news :focus-visible { outline-color: var(--white); }
+  input::placeholder { color: var(--mute); }
+  input:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; }
   .news__status:empty { display: none; }
-  .news__kicker { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--sky) !important; margin: 0 0 var(--s-1) !important; }
+  .news__kicker { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute-dark) !important; margin: 0 0 var(--s-1) !important; }
   .news__label { display: block; font-weight: 600; font-size: 15px; margin-bottom: var(--s-1); }
   .news .news__note { font-size: var(--fs-small); margin-top: var(--s-1); }
-  .news__note a { color: var(--white); text-decoration: underline; text-underline-offset: 3px; }
+  .news__note a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+  .news__alt { justify-self: start; }
   .news__alt p:first-child { margin-top: 0; }
-  .news :global(.form-done) { background: transparent; border-top: 4px solid var(--sky); color: var(--white); padding: var(--s-3) 0 0; }
+  .news :global(.form-done) { background: var(--white); border-top: 4px solid var(--ink); color: var(--ink); padding: var(--s-3); }
   @media (max-width: 860px) { .news__inner > div, .news__inner > :last-child { grid-column: 1 / -1; } }
 </style>

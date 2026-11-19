@@ -1,4 +1,5 @@
 ---
+import { cleanPath } from '../lib/seo';
 import Logo from './Logo.astro';
 import nav from '../data/nav.json';
 
@@ -6,7 +7,7 @@ type Child = { label: string; href: string; desc?: string; colour?: string; no?:
 type Item = { label: string; href: string; overview?: string; intro?: string; wide?: boolean; children?: Child[] };
 
 const items = nav.main as Item[];
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = cleanPath(Astro.url.pathname);
 const isActive = (href: string) => path === href || path.startsWith(href + '/');
 // Items in the right half of the bar open their panel right-aligned so it stays on screen.
 const alignRight = (i: number) => i >= Math.ceil(items.length / 2);

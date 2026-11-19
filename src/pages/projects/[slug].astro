@@ -115,7 +115,7 @@ const contact = (topic?: string) => `/contact?${topic ? `topic=${topic}&` : ''}p
           <div class="cta">
             <h2>Discuss a similar project</h2>
             <p>Tell us where you work, which ecosystem and what you need to measure, and we will reply within five working days.</p>
-            <a class="btn" href={contact()}>Discuss a similar project</a>
+            <a class="btn" href={contact()}>Contact us</a>
           </div>
           {isCoral && <CtaCoralAI />}
           <ShareLinks title={p.title} label="Share this case study" />
@@ -144,7 +144,7 @@ const contact = (topic?: string) => `/contact?${topic ? `topic=${topic}&` : ''}p
 
 <style>
   .head { padding: var(--s-6) 0 var(--s-3); }
-  .display { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; max-width: 960px; }
+  .display { font-size: var(--fs-display); font-weight: var(--w-display); line-height: 1.05; letter-spacing: var(--ls-display); max-width: 960px; }
   .lead { margin: var(--s-3) 0; }
   .status { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
   .head-actions { margin-top: var(--s-3); }

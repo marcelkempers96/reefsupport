@@ -1,4 +1,5 @@
 ---
+import { cleanPath } from '../lib/seo';
 // Breadcrumb trail built from the URL, with BreadcrumbList structured data.
 // Labels come from the navigation data; the last crumb falls back to `current` (usually the page title).
 import nav from '../data/nav.json';
@@ -16,7 +17,7 @@ for (const list of Object.values(subnav)) {
   for (const l of list) if (!labels.has(l.href)) labels.set(l.href, l.label);
 }
 
-const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const path = cleanPath(Astro.url.pathname);
 const segments = path.split('/').filter(Boolean);
 
 const trail = given ?? [

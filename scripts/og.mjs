@@ -24,7 +24,6 @@ const font = (pkg, file) =>
   readFileSync(new URL(`node_modules/@fontsource/${pkg}/files/${file}`, root)).toString('base64');
 const faces = [
   ['Poppins', 600, font('poppins', 'poppins-latin-600-normal.woff2')],
-  ['Poppins', 800, font('poppins', 'poppins-latin-800-normal.woff2')],
   ['Poppins', 400, font('poppins', 'poppins-latin-400-normal.woff2')],
   ['IBM Plex Mono', 500, font('ibm-plex-mono', 'ibm-plex-mono-latin-500-normal.woff2')],
 ]
@@ -51,7 +50,7 @@ function page({ kicker = [], colour, title, text, meta }) {
   .kicker { margin-top: auto; display: flex; align-items: center; gap: 14px; font-family: 'IBM Plex Mono', monospace;
             font-weight: 500; font-size: 20px; letter-spacing: .08em; text-transform: uppercase; color: ${C.mute}; }
   .sq { width: 18px; height: 18px; flex: none; }
-  h1 { font-weight: 800; font-size: ${size}px; line-height: 1.04; letter-spacing: -0.03em; margin-top: 20px; max-width: 1000px;
+  h1 { font-weight: 600; font-size: ${size}px; line-height: 1.04; letter-spacing: -0.015em; margin-top: 20px; max-width: 1000px;
        display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   p { font-weight: 400; font-size: 26px; color: ${C.mute}; margin-top: 22px; max-width: 980px; line-height: 1.4;
       display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }

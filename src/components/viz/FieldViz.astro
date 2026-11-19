@@ -49,7 +49,7 @@ const hub = { x: 400, y: 112 };
     </g>
     {nodes.map((nd, k) => (
       <g class="va" style={`--i:${k + 8}`}>
-        <rect x={nd.x} y={nd.y - 7} width="14" height="14" fill="var(--white)" stroke="var(--ink)" stroke-width="2" />
+        <rect x={nd.x} y={nd.y - 7} width="14" height="14" fill="var(--white)" stroke="var(--ink)" stroke-width="1" />
         <text x={nd.x} y={nd.y - 14} class="m">{nd.t}</text>
       </g>
     ))}

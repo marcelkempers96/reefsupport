@@ -8,29 +8,45 @@ const { headingLevel = 'h2' } = Astro.props;
 const H = headingLevel;
 const legend = [
   { label: 'Hard coral', c: 'var(--royal)' },
-  { label: 'Soft coral', c: 'var(--sky)' },
+  { label: 'Soft coral', c: 'var(--teal)' },
   { label: 'Algae', c: 'var(--navy)' },
-  { label: 'Sand and rubble', c: 'var(--line)' },
+  { label: 'Sand and rubble', c: 'var(--mute)' },
 ];
 
-// Mask regions in a 400 x 300 scene. `at` is the animation tick (400 ms each) at which the
-// scan line has passed the region; labels sit on a 72% ink chip like photo credits.
+// Mask regions in a 400 x 300 scene, drawn as jagged polygons like real segmentation output.
+// `at` is the animation tick (400 ms each) at which the scan line has passed the region.
+const rnd = (i: number, seed: number) => {
+  const x = Math.sin(i * 12.9898 + seed * 78.233) * 43758.5453;
+  return x - Math.floor(x);
+};
+const poly = (cx: number, cy: number, rx: number, ry: number, n: number, seed: number) => {
+  const pts = Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2;
+    const k = 0.72 + rnd(i, seed) * 0.4;
+    return `${(cx + Math.cos(a) * rx * k).toFixed(1)} ${(cy + Math.sin(a) * ry * k).toFixed(1)}`;
+  });
+  return `M${pts.join(' L')}Z`;
+};
+const seabed = (() => {
+  const pts = Array.from({ length: 21 }, (_, i) => `${i * 20} ${(204 + Math.sin(i * 0.9) * 10 + (rnd(i, 7) - 0.5) * 12).toFixed(1)}`);
+  return `M${pts.join(' L')} L400 300 L0 300Z`;
+})();
 const regions = [
-  { at: 4, cls: 'Sand and rubble', fill: 'var(--line)', d: 'M0 210 C60 190 120 230 190 205 S320 180 400 200 V300 H0Z', lx: 14, ly: 268 },
-  { at: 5, cls: 'Hard coral', fill: 'var(--royal)', d: 'M30 120 C40 70 110 60 140 95 C170 130 150 190 95 195 C50 198 25 160 30 120Z', lx: 44, ly: 126 },
-  { at: 8, cls: 'Soft coral', fill: 'var(--sky)', d: 'M160 40 C175 30 200 35 200 55 C200 72 180 80 165 72 C152 64 150 48 160 40Z', lx: 120, ly: 14 },
-  { at: 9, cls: 'Algae', fill: 'var(--navy)', d: 'M150 210 C170 180 230 175 250 200 C265 220 245 245 210 248 C175 250 140 235 150 210Z', lx: 166, ly: 206 },
-  { at: 12, cls: 'Soft coral', fill: 'var(--sky)', d: 'M220 60 C260 40 320 60 330 100 C340 140 300 165 260 160 C215 155 195 95 220 60Z', lx: 236, ly: 98 },
-  { at: 14, cls: 'Hard coral', fill: 'var(--royal)', d: 'M300 190 C320 175 365 180 370 205 C374 228 340 240 315 232 C295 225 290 202 300 190Z', lx: 300, ly: 244 },
+  { at: 4, cls: 'Sand and rubble', fill: 'var(--mute)', d: seabed, lx: 14, ly: 270 },
+  { at: 5, cls: 'Hard coral', fill: 'var(--royal)', d: poly(90, 130, 62, 58, 26, 1), lx: 44, ly: 122 },
+  { at: 8, cls: 'Soft coral', fill: 'var(--teal)', d: poly(180, 56, 24, 22, 16, 2), lx: 150, ly: 14 },
+  { at: 9, cls: 'Algae', fill: 'var(--navy)', d: poly(205, 214, 52, 32, 22, 3), lx: 172, ly: 206 },
+  { at: 12, cls: 'Soft coral', fill: 'var(--teal)', d: poly(275, 105, 58, 52, 24, 4), lx: 236, ly: 98 },
+  { at: 14, cls: 'Hard coral', fill: 'var(--royal)', d: poly(335, 210, 36, 28, 18, 5), lx: 300, ly: 248 },
 ];
-const chipW = (s: string) => Math.round(s.length * 6.1 + 12);
+const chipW = (s: string) => Math.round(s.length * 5.9 + 12);
 
 // Example values only, chosen to sum to 100. Not survey results.
 const readout = [
   { label: 'Hard coral', v: 34, c: 'var(--royal)', at: 18 },
-  { label: 'Soft coral', v: 18, c: 'var(--sky)', at: 19 },
+  { label: 'Soft coral', v: 18, c: 'var(--teal)', at: 19 },
   { label: 'Algae', v: 22, c: 'var(--navy)', at: 20 },
-  { label: 'Sand and rubble', v: 26, c: 'var(--line)', at: 21 },
+  { label: 'Sand and rubble', v: 26, c: 'var(--mute)', at: 21 },
 ];
 ---
 <div class="coral split">
@@ -51,28 +67,32 @@ const readout = [
         <title id="seg-t">Schematic Coral AI segmentation demo</title>
         <desc id="seg-d">A drawn reef scene is scanned from left to right and divided into hard coral, soft coral, algae, and sand and rubble regions, each with a label.</desc>
         <defs>
-          <pattern id="coral-hatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="var(--line)" stroke-width="1" />
+          <pattern id="coral-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M20 0 H0 V20" fill="none" stroke="var(--line-soft)" stroke-width="1" />
           </pattern>
         </defs>
-        <rect width="400" height="300" fill="var(--placeholder)" />
-        <rect width="400" height="300" fill="url(#coral-hatch)" />
+        <rect width="400" height="300" fill="var(--white)" />
+        <rect width="400" height="300" fill="url(#coral-grid)" />
+        <g class="ticks" stroke="var(--mute)" stroke-width="1">
+          {Array.from({ length: 9 }, (_, i) => <line x1={i * 50} y1="0" x2={i * 50} y2="5" />)}
+          {Array.from({ length: 7 }, (_, i) => <line x1="0" y1={i * 50} x2="5" y2={i * 50} />)}
+        </g>
         <g class="outline" fill="none" stroke="var(--mute)" stroke-opacity=".45" stroke-dasharray="3 3">
           {regions.map((r) => <path d={r.d} />)}
         </g>
         {regions.map((r) => (
           <g class="seg" data-at={r.at}>
-            <path d={r.d} fill={r.fill} fill-opacity=".9" stroke="var(--white)" stroke-width="1.5" />
+            <path d={r.d} fill={r.fill} fill-opacity=".18" stroke={r.fill} stroke-width="1" stroke-linejoin="miter" />
             <g class="chip" transform={`translate(${r.lx} ${r.ly})`}>
-              <rect width={chipW(r.cls)} height="18" fill="var(--ink)" fill-opacity=".8" />
-              <text x="6" y="13" fill="var(--white)">{r.cls}</text>
+              <rect width={chipW(r.cls)} height="16" fill="var(--white)" stroke={r.fill} stroke-width="1" />
+              <text x="6" y="11.5" fill="var(--ink)">{r.cls}</text>
             </g>
           </g>
         ))}
         <g class="scan" aria-hidden="true">
-          <rect x="-1" y="0" width="2" height="300" fill="var(--ink)" />
-          <rect x="-1" y="0" width="40" height="16" fill="var(--ink)" />
-          <text x="5" y="12" class="scan__t" fill="var(--white)">SCAN</text>
+          <rect x="-0.5" y="0" width="1" height="300" fill="var(--royal)" />
+          <rect x="0" y="0" width="34" height="14" fill="var(--royal)" />
+          <text x="4" y="10.5" class="scan__t" fill="var(--white)">SCAN</text>
         </g>
       </svg>
     </div>
@@ -136,19 +156,19 @@ const readout = [
 <style>
   .sq { width: 12px; height: 12px; background: var(--royal); }
   .title { font-size: var(--fs-h1); margin-bottom: var(--s-3); }
-  .title.h1 { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; }
+  .title.h1 { font-size: var(--fs-display); font-weight: var(--w-display); line-height: 1.05; letter-spacing: var(--ls-display); }
   .lead { margin-bottom: var(--s-2); }
   .btn-row { margin: var(--s-4) 0 var(--s-3); }
   .note { color: var(--mute); }
   .preview { margin: 0; border: 1px solid var(--line); }
   .stage { position: relative; }
   .preview svg { display: block; width: 100%; height: auto; }
-  .preview text { font: 600 11px/1 var(--sans); }
+  .preview text { font: 400 9.5px/1 var(--mono); letter-spacing: .02em; }
   .preview .scan__t { font: 500 10px/1 var(--mono); letter-spacing: .08em; }
   figcaption { padding: var(--s-2); border-top: 1px solid var(--line); }
   .legend { list-style: none; margin: 0 0 var(--s-2); padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--fs-small); }
   .legend li { display: inline-flex; align-items: center; gap: 8px; }
-  .legend span { width: 12px; height: 12px; border: 1px solid rgba(10,31,51,.15); }
+  .legend span { width: 10px; height: 10px; }
   .cap { margin: 0; color: var(--mute); }
 
   .readout__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-1) var(--s-2); margin-bottom: var(--s-1); }
@@ -164,9 +184,9 @@ const readout = [
   .readout__h .meta { color: var(--mute); }
   .readout ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
   .readout li { display: grid; grid-template-columns: 8.5em 1fr 3.2em; gap: 8px; align-items: center; font-size: var(--fs-small); }
-  .track { height: 10px; background: var(--white); outline: 1px solid var(--line-soft); }
-  .fill { display: block; height: 100%; transform-origin: left; border-right: 1px solid rgba(10,31,51,.15); }
-  .readout__v { text-align: right; }
+  .track { height: 6px; background: var(--line-soft); }
+  .fill { display: block; height: 100%; transform-origin: left; }
+  .readout__v { text-align: right; font-variant-numeric: tabular-nums; }
 
   /* Animated state: only applied by the script, so no-JS and reduced motion keep the final frame. */
   .scan { opacity: 0; }

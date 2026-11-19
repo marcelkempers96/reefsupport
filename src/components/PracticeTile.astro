@@ -1,12 +1,14 @@
 ---
+// Practice tile, light variant: white card, 1 px border, 4 px practice-colour rule on top,
+// colour square in the kicker. Colour signals the area without large filled blocks (DESIGN.md principle 7).
 import type { Area } from '../lib/data';
 interface Props { area: Area; headingLevel?: 'h2' | 'h3' }
 const { area, headingLevel = 'h3' } = Astro.props;
 const { no, name, colour, tile } = area.data;
 const H = headingLevel;
 ---
-<a href={`/work/${area.id}`} class:list={['tile', `tile--${colour}`]}>
-  <p class="tile__kicker">{no} · Practice area</p>
+<a href={`/work/${area.id}`} class="tile" style={`--c: var(--${colour})`}>
+  <p class="tile__kicker"><span class="sq" aria-hidden="true"></span>{no} · Practice area</p>
   <H class="tile__name">{name}</H>
   <p class="tile__text">{tile}</p>
   <span class="tile__arrow" aria-hidden="true">→</span>
@@ -14,22 +16,24 @@ const H = headingLevel;
 <style>
   .tile {
     position: relative; display: flex; flex-direction: column; min-height: 240px; padding: var(--s-4);
-    text-decoration: none; color: var(--white);
+    text-decoration: none; color: var(--ink); background: var(--white);
+    border: 1px solid var(--line); border-top: 4px solid var(--c);
+    transition: background-color 150ms, border-color 150ms;
   }
-  .tile:hover { color: var(--white); }
-  .tile--royal { background: var(--royal); }
-  .tile--navy { background: var(--navy); }
-  .tile--teal { background: var(--teal); }
-  .tile--sky { background: var(--sky); color: var(--ink); }
-  .tile--sky:hover { color: var(--ink); }
+  .tile:hover { color: var(--ink); background: var(--mist); }
   .tile:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
-  .tile__kicker { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 var(--s-2); }
+  .tile__kicker {
+    display: flex; align-items: center; gap: var(--s-1);
+    font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute);
+    margin: 0 0 var(--s-2);
+  }
+  .sq { width: 10px; height: 10px; background: var(--c); flex: none; }
   .tile__name {
     font-size: var(--fs-h3); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; text-wrap: pretty;
-    text-decoration: underline 2px transparent; text-underline-offset: 6px; transition: text-decoration-color 150ms;
+    text-decoration: underline 1px transparent; text-underline-offset: 6px; transition: text-decoration-color 150ms;
   }
   .tile:hover .tile__name, .tile:focus-visible .tile__name { text-decoration-color: currentColor; }
-  .tile__text { margin: auto 0 0; padding-top: var(--s-3); padding-right: var(--s-4); font-size: var(--fs-small); line-height: 1.5; }
-  .tile__arrow { position: absolute; right: var(--s-4); bottom: var(--s-4); font-weight: 600; transition: transform 150ms ease-out; }
+  .tile__text { margin: auto 0 0; padding-top: var(--s-3); padding-right: var(--s-4); font-size: var(--fs-small); line-height: 1.5; color: var(--mute-dark); }
+  .tile__arrow { position: absolute; right: var(--s-4); bottom: var(--s-4); color: var(--c); font-weight: 500; transition: transform 150ms ease-out; }
   .tile:hover .tile__arrow, .tile:focus-visible .tile__arrow { transform: translateX(4px); }
 </style>

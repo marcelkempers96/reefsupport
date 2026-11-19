@@ -42,8 +42,8 @@ const cams = [[78, 70], [158, 42], [240, 32], [322, 42], [402, 70]].map(([x, y],
     </g>
     {cams.map((c, k) => (
       <g class="va" style={`--i:${k}`}>
-        <rect x={c.x} y={c.y} width="22" height="14" fill="var(--ink)" />
-        <rect x={c.x + 7} y={c.y + 14} width="8" height="4" fill="var(--ink)" />
+        <rect x={c.x} y={c.y} width="22" height="14" fill="var(--white)" stroke="var(--ink)" stroke-width="1" />
+        <rect x={c.x + 7} y={c.y + 14} width="8" height="4" fill="var(--white)" stroke="var(--ink)" stroke-width="1" />
       </g>
     ))}
     <text x="16" y="24" class="va" style="--i:5">Camera positions</text>

@@ -60,7 +60,7 @@ const samples = [[250, 92], [298, 130], [338, 176], [392, 206], [436, 160]];
     <path d={coastPath} fill="var(--placeholder)" />
     <path d={coastPath} fill="url(#viz-land)" stroke="var(--ink)" stroke-width="1.5" />
     <polyline class="va" style="--i:16" points={samples.map((p) => p.join(',')).join(' ')} fill="none" stroke="var(--ink)" stroke-dasharray="4 4" stroke-opacity=".6" />
-    {samples.map(([x, y], k) => <rect class="va" style={`--i:${18 + k}`} x={x - 5} y={y - 5} width="10" height="10" fill="var(--ink)" />)}
+    {samples.map(([x, y], k) => <rect class="va" style={`--i:${18 + k}`} x={x - 4} y={y - 4} width="8" height="8" fill="var(--white)" stroke="var(--ink)" stroke-width="1" />)}
     <text x="28" y="66" class="m">LAND</text>
     <text x="16" y="24">Water quality indicator</text>
     <text x="16" y="274" class="m">PIXEL GRID · PARTNER SATELLITE PRODUCT</text>

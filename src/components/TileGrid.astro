@@ -4,9 +4,10 @@ import type { Area } from '../lib/data';
 interface Props { areas: Area[]; headingLevel?: 'h2' | 'h3' }
 const { areas, headingLevel = 'h3' } = Astro.props;
 ---
-<div class="tiles">{areas.map((a) => <PracticeTile area={a} headingLevel={headingLevel} />)}</div>
+<div class:list={['tiles', { 'tiles--3': areas.length === 3 }]}>{areas.map((a) => <PracticeTile area={a} headingLevel={headingLevel} />)}</div>
 <style>
   .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gutter); }
-  @media (max-width: 1100px) { .tiles { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 600px) { .tiles { grid-template-columns: 1fr; } }
+  .tiles--3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 1100px) { .tiles, .tiles--3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .tiles, .tiles--3 { grid-template-columns: 1fr; } }
 </style>

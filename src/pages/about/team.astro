@@ -4,7 +4,6 @@ import PageHeader from '../../components/PageHeader.astro';
 import SubNav from '../../components/SubNav.astro';
 import PersonCard from '../../components/PersonCard.astro';
 import CardGrid from '../../components/CardGrid.astro';
-import PhotoPlaceholder from '../../components/PhotoPlaceholder.astro';
 import Txt from '../../components/Txt.astro';
 import ToConfirm from '../../components/ToConfirm.astro';
 import Summary from '../../components/readability/Summary.astro';
@@ -36,10 +35,7 @@ const alumni = data.alumni.filter((a) => a.consent);
   {data.team.map((p) => (
     <section class="section rule-top bio" id={p.slug} aria-labelledby={`${p.slug}-h`}>
       <div class="container split">
-        <div class="split__side bio__photo">
-          <PhotoPlaceholder label={`Portrait: ${p.name}`} ratio="4 / 5" />
-          <div class="bar" style={`background: var(--${p.colour})`}></div>
-        </div>
+        <div class="bio__mark" aria-hidden="true"><span style={`background: var(--${p.colour})`}></span></div>
         <div class="split__main bio__text">
           <p class="kicker">{p.role}</p>
           <h2 id={`${p.slug}-h`}>{p.name}</h2>
@@ -62,10 +58,11 @@ const alumni = data.alumni.filter((a) => a.consent);
   {isDev && alumni.length === 0 && <div class="container"><p><ToConfirm note="alumni hidden until consent: true is set per person" /></p></div>}
 </Base>
 <style>
-  .bio__photo { grid-column: 1 / span 4; max-width: 360px; }
-  .bio__text { grid-column: 6 / span 7; }
+  .bio__mark { grid-column: 1 / span 3; padding-top: 6px; }
+  .bio__mark span { display: block; width: 48px; height: 4px; }
+  .bio__text { grid-column: 4 / span 8; }
   .bar { height: var(--bar); }
   .bio h2 { margin-bottom: var(--s-1); }
   .focus { color: var(--mute); font-weight: 500; }
-  @media (max-width: 960px) { .bio__photo, .bio__text { grid-column: 1 / -1; } .bio__photo { max-width: 280px; } }
+  @media (max-width: 960px) { .bio__mark, .bio__text { grid-column: 1 / -1; } }
 </style>
