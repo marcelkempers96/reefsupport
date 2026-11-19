@@ -1,0 +1,24 @@
+{
+  "hackathons": [
+    { "date": "Jul 2023", "title": "IndabaX South Africa hackathon: coral classification and segmentation", "partners": "InstaDeep, Zindi", "url": "https://zindi.africa/competitions/indabax-south-africa-2023" },
+    { "date": "2022", "title": "AI for Coral Bleaching hackathon, Sausalito", "partners": "Sustainable Ocean Alliance, The Nature Conservancy", "url": "/insights/soa-hackathon-2022" },
+    { "date": "Nov 2021", "title": "Ocean Hackathon Cape Town and Coral Classification Challenge", "partners": "OceanHub Africa, Zindi", "url": "https://zindi.africa/competitions/coral-classification-challenge" },
+    { "date": "Oct–Dec 2021", "title": "AI for Coral Reefs challenge", "partners": "FruitPunch AI", "url": "/insights/ai-for-coral-reefs-monitoring" },
+    { "date": "Sep 2021", "title": "AI for Coral Reefs hackathon, A Predicted Ocean", "partners": "Ocean Decade Laboratories", "url": "/insights/ocean-decade-hackathon" },
+    { "date": "Apr 2021", "title": "Student hackathon case", "partners": "YES!Delft Students", "url": null }
+  ],
+  "publications": [
+    { "type": "Model", "title": "Coral AI (YOLOv8 segmentation)", "authors": "Reef Support", "venue": "Hugging Face", "year": "2024", "url": "https://huggingface.co/reefsupport/coral-ai" },
+    { "type": "Paper", "title": "Superpixels to the Rescue", "authors": "Yohan Runhaar", "venue": "[TO CONFIRM: venue]", "year": "2022", "url": "[TO CONFIRM]" },
+    { "type": "MSc thesis", "title": "3D photogrammetry for coral reef monitoring: comparing rugosity calculation approaches", "authors": "Marc Baauw", "venue": "[TO CONFIRM: institution]", "year": "2022", "url": "[TO CONFIRM]" }
+  ],
+  "methods": [
+    { "step": "1. Design", "what": "Indicators, sites, sampling frequency and reporting format agreed with the client and scientific lead", "who": "Reef Support with the project's scientific lead" },
+    { "step": "2. Collection", "what": "Survey photos, transects, GPS-tagged field records, in-situ measurements", "who": "Field partner (IBF, Corales de Paz) or asset owner (RanMarine)" },
+    { "step": "3. Satellite products", "what": "Water quality and habitat products from Copernicus data", "who": "Specialist provider (Water Insight B.V.)" },
+    { "step": "4. Integration and checks", "what": "Data harmonised by site and period; outliers and gaps flagged", "who": "Reef Support" },
+    { "step": "5. Analysis", "what": "AI image analysis, indicator calculation", "who": "Reef Support" },
+    { "step": "6. Review", "what": "Scientific review before release", "who": "Director of Marine Science, plus an independent party where required" },
+    { "step": "7. Reporting", "what": "Dashboards, reports and exports in the funder's or authority's format", "who": "Reef Support" }
+  ]
+}

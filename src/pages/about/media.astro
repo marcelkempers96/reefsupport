@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import ListRows from '../../components/ListRows.astro';
+import subnav from '../../data/subnav.json';
+import media from '../../data/media.json';
+const typeColour: Record<string, string> = { Press: 'royal', Interview: 'teal', Podcast: 'navy', Broadcast: 'navy', Talk: 'sky', 'Case study': 'teal', 'Partner blog': 'sky', Ranking: 'royal' };
+---
+<Base title="Awards and media" description="Awards and press coverage for Reef Support, including the ESA Copernicus Masters Overall Prize 2020.">
+  <PageHeader kicker={['About', 'Media']} title="Awards and media" lead="Prizes for Reef Support and its founders, and coverage of our work in the press, podcasts and partner publications." />
+  <SubNav label="About" links={subnav.about} />
+  <section class="section" aria-labelledby="aw-h">
+    <div class="container">
+      <h2 id="aw-h" class="mb">Awards</h2>
+      <ListRows rows={media.awards.map((a) => ({ type: 'Award', colour: 'royal', title: a.title, source: `${a.by} · ${a.to}`, year: a.year }))} />
+    </div>
+  </section>
+  <section class="section rule-top" aria-labelledby="md-h">
+    <div class="container">
+      <h2 id="md-h" class="mb">Media</h2>
+      <ListRows rows={media.media.map((m) => ({ type: m.type, colour: typeColour[m.type], title: m.title, source: m.outlet, year: m.year, url: m.url }))} />
+      <p class="note">Some older coverage describes plans and early prototypes from 2020 and 2021. Our current capabilities are described on the <a href="/work">Work</a> pages.</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .mb { margin-bottom: var(--s-4); }
+  .note { margin-top: var(--s-4); color: var(--mute); font-size: var(--fs-small); }
+</style>

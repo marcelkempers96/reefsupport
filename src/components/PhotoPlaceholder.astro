@@ -1,0 +1,19 @@
+---
+// Stand-in for a real field photo (DESIGN.md): light blue, fine diagonal lines, label chip.
+interface Props { label: string; ratio?: string; class?: string }
+const { label, ratio = '16 / 9', class: cls } = Astro.props;
+---
+<div class:list={['ph', cls]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Photo to come: ${label}`}>
+  <span class="ph__label">{label}</span>
+</div>
+<style>
+  .ph {
+    position: relative; width: 100%; background-color: var(--placeholder);
+    background-image: repeating-linear-gradient(135deg, transparent 0 11px, rgba(10, 31, 51, .07) 11px 12px);
+  }
+  .ph__label {
+    position: absolute; left: 12px; bottom: 12px; max-width: calc(100% - 24px);
+    padding: 4px 8px; background: rgba(10, 31, 51, .72); color: var(--white);
+    font: 400 12px/1.4 var(--mono); letter-spacing: .04em;
+  }
+</style>

@@ -1,0 +1,38 @@
+---
+import PhotoPlaceholder from './PhotoPlaceholder.astro';
+import StatusLabel from './StatusLabel.astro';
+import Txt from './Txt.astro';
+import { stripConfirm, isDev } from '../lib/confirm';
+import type { Area, Project } from '../lib/data';
+interface Props { project: Project; area: Area; headingLevel?: 'h2' | 'h3' }
+const { project, area, headingLevel = 'h3' } = Astro.props;
+const p = project.data;
+const H = headingLevel;
+const years = isDev ? p.years : stripConfirm(p.years);
+---
+<article class="card" data-area={p.area} data-country={p.country} data-status={p.status}>
+  <PhotoPlaceholder label={p.image} />
+  <div class="bar" style={`background: var(--${area.data.colour})`}></div>
+  <div class="body">
+    <p class="kicker">{area.data.name} · {p.country}</p>
+    <H class="title"><a href={`/projects/${project.id}`}>{p.title}</a></H>
+    <p class="summary">{p.summary}</p>
+    <div class="foot">
+      <span class="meta"><Txt text={years} /></span>
+      <StatusLabel status={p.status} />
+    </div>
+    {!p.publish && <p class="meta unpublished">Unpublished: hidden in production</p>}
+  </div>
+</article>
+<style>
+  .card { position: relative; display: flex; flex-direction: column; background: var(--white); border: 1px solid var(--line); }
+  .bar { height: var(--bar); }
+  .body { display: flex; flex-direction: column; flex: 1; padding: var(--s-3); }
+  .kicker { margin-bottom: var(--s-1); }
+  .title a { text-decoration: none; }
+  .title a::after { content: ''; position: absolute; inset: 0; }
+  .card:hover .title a { color: var(--teal); }
+  .summary { font-size: var(--fs-small); line-height: 1.5; color: var(--mute); margin: var(--s-1) 0 var(--s-3); }
+  .foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); margin-top: auto; color: var(--mute); }
+  .unpublished { margin: var(--s-2) 0 0; color: #8a5a00; }
+</style>

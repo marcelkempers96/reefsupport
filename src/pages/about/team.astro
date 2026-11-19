@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import PersonCard from '../../components/PersonCard.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import PhotoPlaceholder from '../../components/PhotoPlaceholder.astro';
+import Txt from '../../components/Txt.astro';
+import ToConfirm from '../../components/ToConfirm.astro';
+import subnav from '../../data/subnav.json';
+import data from '../../data/team.json';
+import { isDev, stripConfirm } from '../../lib/confirm';
+const lead = "Three people lead Reef Support's work, with partners and students across each project.";
+const alumni = data.alumni.filter((a) => a.consent);
+---
+<Base title="Team" description={lead}>
+  <PageHeader kicker={['About', 'Team']} title="Team" lead={lead} />
+  <SubNav label="About" links={subnav.about} />
+  <section class="section">
+    <div class="container">
+      <h2 class="visually-hidden">Team members</h2>
+      <CardGrid>
+        {data.team.map((p) => <PersonCard name={p.name} role={p.role} focus={p.focus} colour={p.colour} href={`#${p.slug}`} />)}
+      </CardGrid>
+    </div>
+  </section>
+
+  {data.team.map((p) => (
+    <section class="section rule-top bio" id={p.slug} aria-labelledby={`${p.slug}-h`}>
+      <div class="container split">
+        <div class="split__side bio__photo">
+          <PhotoPlaceholder label={`Portrait: ${p.name}`} ratio="4 / 5" />
+          <div class="bar" style={`background: var(--${p.colour})`}></div>
+        </div>
+        <div class="split__main bio__text">
+          <p class="kicker">{p.role}</p>
+          <h2 id={`${p.slug}-h`}>{p.name}</h2>
+          <p class="focus">{p.focus}</p>
+          <p><Txt text={isDev ? p.bio : stripConfirm(p.bio)} /></p>
+          {p.links.length > 0 && <p>{p.links.map((l) => <a class="text-link" href={l.url} rel="noopener">{l.label}</a>)}</p>}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  {alumni.length > 0 && (
+    <section class="section rule-top" aria-labelledby="al-h">
+      <div class="container">
+        <h2 id="al-h">Alumni and past contributors</h2>
+        <ul>{alumni.map((a) => <li>{a.name}, {a.context}</li>)}</ul>
+      </div>
+    </section>
+  )}
+  {isDev && alumni.length === 0 && <div class="container"><p><ToConfirm note="alumni hidden until consent: true is set per person" /></p></div>}
+</Base>
+<style>
+  .bio__photo { grid-column: 1 / span 4; max-width: 360px; }
+  .bio__text { grid-column: 6 / span 7; }
+  .bar { height: var(--bar); }
+  .bio h2 { margin-bottom: var(--s-1); }
+  .focus { color: var(--mute); font-weight: 500; }
+  @media (max-width: 960px) { .bio__photo, .bio__text { grid-column: 1 / -1; } .bio__photo { max-width: 280px; } }
+</style>

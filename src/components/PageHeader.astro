@@ -1,0 +1,20 @@
+---
+import Kicker from './Kicker.astro';
+interface Props { kicker: string[]; title: string; lead?: string; colour?: string; display?: boolean }
+const { kicker, title, lead, colour, display = false } = Astro.props;
+---
+<header class="page-header">
+  <div class="container">
+    <slot name="before" />
+    <Kicker parts={kicker} colour={colour} />
+    <h1 class:list={{ display }}>{title}</h1>
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</header>
+<style>
+  .page-header { padding: var(--s-6) 0 var(--s-5); border-bottom: 1px solid var(--line); }
+  h1 { max-width: 920px; }
+  h1.display { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; }
+  .lead { margin-top: var(--s-3); margin-bottom: 0; }
+</style>

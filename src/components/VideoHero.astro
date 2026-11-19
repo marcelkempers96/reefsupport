@@ -1,0 +1,125 @@
+---
+// Full-bleed video hero (DESIGN.md). Video sources are optional: until the footage exists
+// (open item) the hero shows the flat --hero-bg fallback and no pause control.
+import ToConfirm from './ToConfirm.astro';
+import Kicker from './Kicker.astro';
+
+interface Props {
+  kicker: string[];
+  title: string;
+  lead: string;
+  primary: { label: string; href: string };
+  secondary: { label: string; href: string };
+  featured?: { label: string; href: string };
+  video?: { mp4: string; webm?: string; poster: string; credit: string };
+}
+const { kicker, title, lead, primary, secondary, featured, video } = Astro.props;
+---
+<section class="hero" aria-labelledby="hero-title" data-hero>
+  {video && (
+    <video class="hero__video" muted loop playsinline preload="none" poster={video.poster} aria-hidden="true"
+           data-hero-video data-webm={video.webm} data-mp4={video.mp4}></video>
+  )}
+  <div class="hero__shade" aria-hidden="true"></div>
+
+  <div class="container hero__content">
+    <Kicker parts={kicker} class="hero__kicker" />
+    <h1 id="hero-title" class="hero__title">{title}</h1>
+    <p class="hero__lead">{lead}</p>
+    <div class="btn-row">
+      <a class="btn btn--on-dark" href={primary.href}>{primary.label}</a>
+      <a class="btn btn--on-dark-secondary" href={secondary.href}>{secondary.label}</a>
+    </div>
+  </div>
+
+  <div class="container hero__strip">
+    <p class="meta hero__credit">
+      {video ? video.credit : <ToConfirm note="hero video clip, poster and footage credit" />}
+    </p>
+    <div class="hero__right">
+      {featured && <a class="hero__featured" href={featured.href}>{featured.label} <span aria-hidden="true">→</span></a>}
+      {video && (
+        <button class="hero__pause" type="button" aria-pressed="false" data-hero-pause>
+          <span data-hero-pause-label>Pause</span>
+        </button>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-hero]');
+  const video = hero?.querySelector<HTMLVideoElement>('[data-hero-video]');
+  const btn = hero?.querySelector<HTMLButtonElement>('[data-hero-pause]');
+  const label = hero?.querySelector<HTMLElement>('[data-hero-pause-label]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let userPaused = reduce.matches;
+
+  const setLabel = () => {
+    if (!btn || !label) return;
+    btn.setAttribute('aria-pressed', String(userPaused));
+    label.textContent = userPaused ? 'Play' : 'Pause';
+  };
+
+  const load = () => {
+    if (!video || video.dataset.loaded) return;
+    video.dataset.loaded = '1';
+    for (const [type, src] of [['video/webm', video.dataset.webm], ['video/mp4', video.dataset.mp4]]) {
+      if (!src) continue;
+      const s = document.createElement('source');
+      s.src = src; s.type = type!;
+      video.append(s);
+    }
+    video.load();
+  };
+
+  const play = () => { if (!video || userPaused) return; load(); video.play().catch(() => {}); };
+
+  if (video) {
+    setLabel();
+    // Start after first paint so the poster stays the LCP image.
+    window.addEventListener('load', () => requestAnimationFrame(() => setTimeout(play, 150)), { once: true });
+    new IntersectionObserver(([e]) => (e.isIntersecting ? play() : video.pause()), { threshold: 0.1 }).observe(video);
+    reduce.addEventListener('change', (m) => { userPaused = m.matches; setLabel(); m.matches ? video.pause() : play(); });
+    btn?.addEventListener('click', () => {
+      userPaused = !userPaused;
+      setLabel();
+      userPaused ? video.pause() : play();
+    });
+  }
+</script>
+
+<style>
+  .hero {
+    position: relative; display: flex; flex-direction: column; justify-content: flex-end;
+    min-height: clamp(520px, 82vh, 820px); background: var(--hero-bg); color: var(--on-dark); overflow: hidden;
+  }
+  .hero__video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .hero__shade { position: absolute; inset: 0; background: var(--hero-shade); }
+  .hero__content, .hero__strip { position: relative; }
+  .hero__content { padding-top: var(--s-7); padding-bottom: var(--s-5); }
+  .hero :global(.hero__kicker) { color: var(--on-dark-mute); }
+  .hero__title {
+    font-size: var(--fs-hero); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em;
+    max-width: 1000px; color: var(--on-dark);
+  }
+  .hero__lead { font-size: var(--fs-lead); font-weight: 500; line-height: 1.5; max-width: var(--measure); margin: var(--s-3) 0 var(--s-4); }
+  .hero__strip {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--s-2) var(--s-3);
+    padding-top: var(--s-2); padding-bottom: var(--s-2);
+  }
+  .hero__strip::before {
+    content: ''; position: absolute; top: 0; left: max(var(--margin), env(safe-area-inset-left)); right: max(var(--margin), env(safe-area-inset-right));
+    height: 1px; background: rgba(255, 255, 255, .22);
+  }
+  .hero__credit { margin: 0; color: var(--on-dark-mute); }
+  .hero__right { display: flex; align-items: center; gap: var(--s-3); }
+  .hero__featured { color: var(--on-dark); font-weight: 600; font-size: var(--fs-small); text-decoration: none; }
+  .hero__featured:hover { color: var(--sky); }
+  .hero__pause {
+    min-width: 72px; padding: 8px 12px; background: transparent; color: var(--on-dark);
+    border: 1px solid rgba(255, 255, 255, .6); font: 600 13px/1 var(--sans); cursor: pointer;
+  }
+  .hero__pause:hover { background: var(--white); color: var(--ink); }
+  .hero :focus-visible { outline-color: var(--white); }
+</style>

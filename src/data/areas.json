@@ -1,0 +1,62 @@
+[
+  {
+    "id": "coral-reefs",
+    "no": "01",
+    "name": "Coral reef intelligence",
+    "colour": "royal",
+    "tile": "Open AI models and 3D photogrammetry for reef surveys and restoration.",
+    "lead": "Reef surveys produce more images than scientists can classify by hand. We build open segmentation models and 3D reconstruction methods that turn survey photos into coral cover and structure measurements.",
+    "whatWeDo": [
+      { "title": "Image segmentation", "text": "Coral AI labels reef photos by coral type, algae, rubble and sand, so transect cover estimates come straight from survey images." },
+      { "title": "3D photogrammetry", "text": "Diver-captured image sets become 3D reef models for rugosity, growth and restoration tracking." },
+      { "title": "Restoration monitoring", "text": "Before-and-after measurement of restoration sites, reported in the format partners and funders need." }
+    ],
+    "projects": ["coral-ai", "photogrammetry-colombia", "coral-lab-lombok", "singapore-oceanarium"],
+    "partners": ["FruitPunch AI", "Corales de Paz", "WWF Netherlands", "Zindi", "ML6", "University of Amsterdam"]
+  },
+  {
+    "id": "mangroves-blue-carbon",
+    "no": "02",
+    "name": "Mangroves and blue carbon",
+    "colour": "navy",
+    "tile": "Survival, growth and carbon monitoring for community restoration.",
+    "lead": "Restoration projects need survival, growth and carbon estimates that funders and communities can trust. We provide the monitoring layer, from field records to reporting, alongside local partners who lead the work.",
+    "whatWeDo": [
+      { "title": "Field data collection", "text": "GPS-tagged records of planting, survival and growth, collected by community teams in their own language and working offline." },
+      { "title": "Growth and carbon estimation", "text": "Models that estimate growth and carbon uptake from field records, currently being calibrated with partner data." },
+      { "title": "Adaptation and finance reporting", "text": "Monitoring outputs shaped for ecosystem-based adaptation funders and blue carbon feasibility work." }
+    ],
+    "projects": ["mangrove-ai", "akar-biru-lombok"],
+    "partners": ["Indonesia Biru Foundation"]
+  },
+  {
+    "id": "coastal-water",
+    "no": "03",
+    "name": "Coastal water and earth observation",
+    "colour": "teal",
+    "tile": "Satellite, sensor and field data combined into indicators and reports.",
+    "lead": "Coastal authorities now report ecosystem condition under the EU Nature Restoration Regulation and the Water Framework Directive. We combine satellite water quality products, in-situ data and field observations from partners into indicators and reports.",
+    "whatWeDo": [
+      { "title": "Data integration", "text": "Satellite products from specialist providers, sensor and vessel data and field observations, harmonised by site and reporting period." },
+      { "title": "Bloom and debris detection R&D", "text": "Algae Tracker and Plastic Tracker tested Copernicus Sentinel-2 and -3 detection of cyanobacteria and floating debris." },
+      { "title": "Reporting for obligations", "text": "Indicators and reports structured for Nature Restoration Regulation and Water Framework Directive reporting, delivered with accredited partners." }
+    ],
+    "projects": ["algae-tracker", "plastic-tracker", "coastal-gis"],
+    "partners": ["Water Insight B.V.", "RanMarine Technology B.V.", "ESA BIC Noordwijk", "Copernicus"]
+  },
+  {
+    "id": "field-programmes",
+    "no": "04",
+    "name": "Field programmes and open innovation",
+    "colour": "sky",
+    "tile": "Coral Lab, open AI challenges and student research with partners.",
+    "lead": "Technology for the ocean improves when the people closest to the problem help build it. We run challenges, host student research and work inside partner programmes such as the Coral Lab in Lombok.",
+    "whatWeDo": [
+      { "title": "Partner field programmes", "text": "Coral Lab in Lombok, built in 2021 with Indonesia Biru Foundation and TU Delft students, and run by IBF." },
+      { "title": "Open AI challenges", "text": "Six challenges since 2021 with FruitPunch AI, Sustainable Ocean Alliance, OceanHub Africa, Zindi and others." },
+      { "title": "Student and thesis research", "text": "MSc and minor projects with TU Delft and the University of Amsterdam that produce open methods and models." }
+    ],
+    "projects": ["coral-lab-lombok"],
+    "partners": ["Indonesia Biru Foundation", "TU Delft", "Sustainable Ocean Alliance", "OceanHub Africa", "The Nature Conservancy"]
+  }
+]

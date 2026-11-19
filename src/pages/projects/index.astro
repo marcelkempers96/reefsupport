@@ -1,0 +1,128 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getAreas, getProjects } from '../../lib/data';
+
+const areas = await getAreas();
+const areaById = Object.fromEntries(areas.map((a) => [a.id, a]));
+const order = ['Ongoing', 'Ongoing R&D', 'Completed', 'Closed', 'Superseded'];
+const projects = (await getProjects()).sort(
+  (a, b) => order.indexOf(a.data.status) - order.indexOf(b.data.status) || a.data.title.localeCompare(b.data.title),
+);
+const countries = [...new Set(projects.flatMap((p) => p.data.country.split(', ')))].sort();
+const statuses = order.filter((s) => projects.some((p) => p.data.status === s));
+const lead = 'Case studies from our four practice areas, with the partners who led the field work and the funders who supported it.';
+---
+<Base title="Projects" description={lead}>
+  <PageHeader kicker={['Projects']} title="Projects and case studies" lead={lead} display />
+
+  <section class="section">
+    <div class="container">
+      <form class="filters" data-filters aria-label="Filter projects" onsubmit="return false">
+        <fieldset>
+          <legend>Practice area</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="area" value="" checked /><span>All</span></label>
+            {areas.map((a) => (
+              <label class="chip"><input type="radio" name="area" value={a.id} /><span><i style={`background: var(--${a.data.colour})`} />{a.data.name}</span></label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="filters__row">
+          <fieldset>
+            <legend>Country</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="country" value="" checked /><span>All</span></label>
+              {countries.map((c) => <label class="chip"><input type="radio" name="country" value={c} /><span>{c}</span></label>)}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Status</legend>
+            <div class="chips">
+              <label class="chip"><input type="radio" name="status" value="" checked /><span>All</span></label>
+              {statuses.map((s) => <label class="chip"><input type="radio" name="status" value={s} /><span>{s}</span></label>)}
+            </div>
+          </fieldset>
+        </div>
+      </form>
+
+      <p class="count meta" role="status" aria-live="polite" data-count>{projects.length} projects</p>
+
+      <CardGrid class="project-grid">
+        {projects.map((p) => (
+          <div class="item" data-item data-area={[p.data.area, p.data.secondaryArea].filter(Boolean).join(' ')}
+               data-country={p.data.country} data-status={p.data.status}>
+            <ProjectCard project={p} area={areaById[p.data.area]} headingLevel="h2" />
+          </div>
+        ))}
+      </CardGrid>
+      <p class="empty" data-empty hidden>No projects match these filters.</p>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-filters]');
+  const items = Array.from(document.querySelectorAll<HTMLElement>('[data-item]'));
+  const count = document.querySelector<HTMLElement>('[data-count]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+
+  const apply = () => {
+    if (!form) return;
+    const f = new FormData(form);
+    const area = String(f.get('area') ?? '');
+    const country = String(f.get('country') ?? '');
+    const status = String(f.get('status') ?? '');
+    let n = 0;
+    for (const el of items) {
+      const ok =
+        (!area || (el.dataset.area ?? '').split(' ').includes(area)) &&
+        (!country || (el.dataset.country ?? '').split(', ').includes(country)) &&
+        (!status || el.dataset.status === status);
+      el.hidden = !ok;
+      if (ok) n++;
+    }
+    if (count) count.textContent = `${n} ${n === 1 ? 'project' : 'projects'}`;
+    if (empty) empty.hidden = n > 0;
+    const url = new URL(location.href);
+    for (const [k, v] of [['area', area], ['country', country], ['status', status]]) v ? url.searchParams.set(k, v) : url.searchParams.delete(k);
+    history.replaceState(null, '', url);
+  };
+
+  // Restore filters from the URL, e.g. /projects?area=coral-reefs
+  const params = new URLSearchParams(location.search);
+  for (const k of ['area', 'country', 'status']) {
+    const v = params.get(k);
+    if (!v) continue;
+    const input = form?.querySelector<HTMLInputElement>(`input[name="${k}"][value="${CSS.escape(v)}"]`);
+    if (input) input.checked = true;
+  }
+  form?.addEventListener('change', apply);
+  apply();
+</script>
+
+<style>
+  .filters { display: grid; gap: var(--s-3); margin-bottom: var(--s-4); }
+  .filters__row { display: flex; flex-wrap: wrap; gap: var(--s-3) var(--s-5); }
+  fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+  legend { font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: var(--s-1); padding: 0; }
+  .chips { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .chip { position: relative; cursor: pointer; }
+  .chip input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chip span {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px;
+    border: 1px solid var(--line); background: var(--white); font: 500 14px/1.3 var(--sans);
+    transition: background-color 150ms, color 150ms, border-color 150ms;
+  }
+  .chip i { width: 10px; height: 10px; flex: none; }
+  .chip:hover span { border-color: var(--ink); }
+  .chip input:checked + span { background: var(--ink); color: var(--white); border-color: var(--ink); }
+  .chip input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .count { color: var(--mute); margin-bottom: var(--s-3); }
+  .item { display: flex; }
+  .item[hidden] { display: none; }
+  .item > :global(*) { flex: 1; }
+  .empty { margin-top: var(--s-3); color: var(--mute); }
+</style>

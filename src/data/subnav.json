@@ -1,0 +1,17 @@
+{
+  "research": [
+    { "label": "Overview", "href": "/research" },
+    { "label": "Open source", "href": "/research/open-source" },
+    { "label": "Publications", "href": "/research/publications" },
+    { "label": "Hackathons", "href": "/research/hackathons" },
+    { "label": "Methods", "href": "/research/methods" }
+  ],
+  "about": [
+    { "label": "About", "href": "/about" },
+    { "label": "Team", "href": "/about/team" },
+    { "label": "Partners", "href": "/about/partners" },
+    { "label": "Awards and media", "href": "/about/media" },
+    { "label": "Policies", "href": "/about/policies" },
+    { "label": "Opportunities", "href": "/about/opportunities" }
+  ]
+}

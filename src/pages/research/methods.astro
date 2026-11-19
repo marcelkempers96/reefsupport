@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import subnav from '../../data/subnav.json';
+import research from '../../data/research.json';
+const lead = 'Every monitoring programme we run follows the same chain, and each step names who is responsible for it. Reef Support does not generate satellite products or carry out physical sampling; where a step needs those, a partner delivers it.';
+---
+<Base title="Methods" description="From field data to a report a funder can check: the seven steps of every Reef Support monitoring programme and who is responsible for each.">
+  <PageHeader kicker={['Research', 'Methods']} title="From field data to a report a funder can check" lead={lead} />
+  <SubNav label="Research" links={subnav.research} />
+  <section class="section">
+    <div class="container">
+      <ol class="steps">
+        {research.methods.map((m) => {
+          const [n, ...rest] = m.step.split(' ');
+          const ours = m.who.startsWith('Reef Support');
+          return (
+            <li class:list={{ ours }}>
+              <span class="n">{n.replace('.', '')}</span>
+              <h2>{rest.join(' ')}</h2>
+              <p class="what">{m.what}</p>
+              <p class="who"><span class="lbl">Responsible</span>{m.who}</p>
+            </li>
+          );
+        })}
+      </ol>
+      <p class="legend"><span class="sw" aria-hidden="true"></span> Steps Reef Support is responsible for</p>
+    </div>
+  </section>
+</Base>
+<style>
+  .steps { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+  .steps li {
+    display: grid; grid-template-columns: 64px minmax(0, 3fr) minmax(0, 5fr) minmax(0, 4fr); gap: var(--s-1) var(--s-3);
+    align-items: baseline; padding: var(--s-3) 0; border-bottom: 1px solid var(--line);
+  }
+  .n { font: 700 32px/1 var(--sans); letter-spacing: -0.03em; color: var(--mute); }
+  .ours .n { color: var(--royal); }
+  h2 { font-size: var(--fs-h3); font-weight: 600; }
+  .what { margin: 0; }
+  .who { margin: 0; font-weight: 500; }
+  .lbl { display: block; font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 2px; }
+  .legend { display: flex; align-items: center; gap: 8px; margin-top: var(--s-3); font-size: var(--fs-small); color: var(--mute); }
+  .sw { width: 12px; height: 12px; background: var(--royal); }
+  @media (max-width: 860px) {
+    .steps li { grid-template-columns: 48px minmax(0, 1fr); }
+    .what, .who { grid-column: 2; }
+  }
+</style>

@@ -7,7 +7,7 @@ interface Props {
   image?: string;          // absolute or root-relative OG image path
   noindex?: boolean;
 }
-const { title, description = company.tagline, image, noindex = false } = Astro.props;
+const { title, description = company.tagline, image = '/og/default.png', noindex = false } = Astro.props;
 const fullTitle = title ? `${title} · ${company.shortName}` : `${company.shortName} · Evidence for healthy coasts`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = image ? new URL(image, Astro.site).href : undefined;

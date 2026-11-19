@@ -1,0 +1,27 @@
+---
+import { formatDate, type Insight, type Area } from '../lib/data';
+interface Props { post: Insight; area?: Area; headingLevel?: 'h2' | 'h3' }
+const { post, area, headingLevel = 'h3' } = Astro.props;
+const d = post.data;
+const H = headingLevel;
+---
+<article class="post">
+  <div class="bar" style={`background: ${area ? `var(--${area.data.colour})` : 'var(--ink)'}`}></div>
+  <div class="body">
+    <p class="kicker">{[d.type, area?.data.name].filter(Boolean).join(' · ')}</p>
+    <H class="title"><a href={`/insights/${post.id}`}>{d.title}</a></H>
+    <p class="summary">{d.summary}</p>
+    <p class="meta date"><time datetime={d.date.toISOString().slice(0, 10)}>{formatDate(d.date)}</time> · {d.author}</p>
+  </div>
+</article>
+<style>
+  .post { position: relative; display: flex; flex-direction: column; border: 1px solid var(--line); height: 100%; }
+  .bar { height: var(--bar); }
+  .body { display: flex; flex-direction: column; flex: 1; padding: var(--s-3); }
+  .kicker { margin-bottom: var(--s-1); }
+  .title a { text-decoration: none; }
+  .title a::after { content: ''; position: absolute; inset: 0; }
+  .post:hover .title a { color: var(--teal); }
+  .summary { color: var(--mute); font-size: var(--fs-small); line-height: 1.5; margin: var(--s-1) 0 var(--s-3); }
+  .date { margin: auto 0 0; color: var(--mute); }
+</style>

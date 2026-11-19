@@ -1,17 +1,94 @@
 ---
-// Step 1 shell. The full home page (video hero, facts strip, tiles, partner wall) is build step 3.
 import Base from '../layouts/Base.astro';
+import VideoHero from '../components/VideoHero.astro';
+import FactsStrip from '../components/FactsStrip.astro';
+import TileGrid from '../components/TileGrid.astro';
+import CardGrid from '../components/CardGrid.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import StatementPanel from '../components/StatementPanel.astro';
+import PartnerWall from '../components/PartnerWall.astro';
+import Newsletter from '../components/Newsletter.astro';
+import JsonLd from '../components/JsonLd.astro';
+import about from '../data/about.json';
+import partners from '../data/partners.json';
+import { getAreas, getProjects } from '../lib/data';
+import { organizationLd } from '../lib/org';
+
+const areas = await getAreas();
+const areaById = Object.fromEntries(areas.map((a) => [a.id, a]));
+const projects = await getProjects();
+const featured = ['coral-lab-lombok', 'coral-ai', 'photogrammetry-colombia']
+  .map((id) => projects.find((p) => p.id === id))
+  .filter((p) => p !== undefined);
+
+// Hero footage is an open item. When the files exist in public/video/, set this:
+// const video = { mp4: '/video/hero.mp4', webm: '/video/hero.webm', poster: '/video/hero-poster.webp', credit: 'Footage: …' };
+const video = undefined;
 ---
 <Base>
-  <section class="section">
+  <JsonLd slot="head" data={organizationLd(Astro.site!)} />
+
+  <VideoHero
+    kicker={['Reef Support', 'Marine technology and research']}
+    title="Evidence for healthy coasts"
+    lead="We build AI models and monitoring methods for coral reefs, mangroves and coastal waters, and run them with the organisations that work on the water."
+    primary={{ label: 'Explore our work', href: '/work' }}
+    secondary={{ label: 'Try Coral AI', href: '/research/open-source' }}
+    featured={{ label: 'Featured: Coral Lab, Lombok', href: '/projects/coral-lab-lombok' }}
+    video={video}
+  />
+
+  <section class="section section--tight rule-bottom" aria-label="Key facts">
     <div class="container">
-      <p class="kicker">Reef Support · Marine technology and research</p>
-      <h1 style="font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em;">Evidence for healthy coasts</h1>
-      <p class="lead" style="margin-top: var(--s-3);">We build AI models and monitoring methods for coral reefs, mangroves and coastal waters, and run them with the organisations that work on the water.</p>
-      <p style="display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4);">
-        <a class="btn" href="/work">Explore our work</a>
-        <a class="btn btn--secondary" href="/research/open-source">Try Coral AI</a>
-      </p>
+      <FactsStrip items={about.facts.map((f) => f.label === 'Open models' ? { ...f, href: '/research/open-source' } : f)} />
     </div>
   </section>
+
+  <section class="section" aria-labelledby="areas-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="areas-h">Four areas of work, one way of working</h2>
+        <a class="text-link" href="/work">How we work</a>
+      </div>
+      <TileGrid areas={areas} />
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="projects-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="projects-h">Recent projects</h2>
+        <a class="text-link" href="/projects">All projects</a>
+      </div>
+      <CardGrid>
+        {featured.map((p) => <ProjectCard project={p} area={areaById[p.data.area]} />)}
+      </CardGrid>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <StatementPanel
+        kicker="Why we exist"
+        statement="Most coral and mangrove monitoring still depends on photos and notebooks reviewed by hand. We make that data faster to analyse and easier to report."
+        link={{ label: 'How we work', href: '/about' }}
+      />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="partners-h">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="partners-h">We have worked with</h2>
+        <a class="text-link" href="/about/partners">All partners and funders</a>
+      </div>
+      <PartnerWall items={partners.home} />
+    </div>
+  </section>
+
+  <Newsletter />
 </Base>
+
+<style>
+  .rule-bottom { border-bottom: 1px solid var(--line); }
+</style>

@@ -1,0 +1,19 @@
+---
+import about from '../data/about.json';
+interface Props { headingId?: string }
+const { headingId = 'how-h' } = Astro.props;
+---
+<h2 id={headingId}>How we work</h2>
+<p class="intro">Reef Support designs monitoring, integrates partner data, runs AI analysis and produces reporting. Partners hold the field presence and measurement assets.</p>
+<div class="table-wrap">
+  <table class="data-table">
+    <thead><tr><th scope="col">Role</th><th scope="col">Who holds it</th></tr></thead>
+    <tbody>
+      {about.howWeWork.map((r) => <tr><th scope="row">{r.role}</th><td>{r.who}</td></tr>)}
+    </tbody>
+  </table>
+</div>
+<style>
+  h2 { margin-bottom: var(--s-2); }
+  .intro { color: var(--mute); margin-bottom: var(--s-4); }
+</style>

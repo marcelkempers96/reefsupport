@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import TileGrid from '../../components/TileGrid.astro';
+import HowWeWork from '../../components/HowWeWork.astro';
+import { getAreas } from '../../lib/data';
+const areas = await getAreas();
+const lead = 'Reef Support works in four practice areas. In each one we design the monitoring, integrate partner data, run the analysis and produce the reporting, while partners hold the field presence and measurement assets.';
+---
+<Base title="Work" description={lead}>
+  <PageHeader kicker={['Work']} title="What we do" lead={lead} display />
+  <section class="section" aria-label="Practice areas">
+    <div class="container"><TileGrid areas={areas} headingLevel="h2" /></div>
+  </section>
+  <section class="section rule-top" aria-labelledby="how-h">
+    <div class="container"><HowWeWork /></div>
+  </section>
+</Base>

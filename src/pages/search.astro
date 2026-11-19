@@ -1,0 +1,49 @@
+---
+// Site search with Pagefind. The index is built after `astro build` (see package.json),
+// so search works in `npm run preview` and production, not in `npm run dev`.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+---
+<Base title="Search" description="Search reef.support." searchable={false}>
+  <link slot="head" rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <PageHeader kicker={['Search']} title="Search" />
+  <section class="section">
+    <div class="container">
+      <div id="search" class="search"></div>
+      <noscript><p>Search needs JavaScript. You can also browse <a href="/work">Work</a>, <a href="/projects">Projects</a> and <a href="/research">Research</a>.</p></noscript>
+    </div>
+  </section>
+</Base>
+<script is:inline src="/pagefind/pagefind-ui.js"></script>
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.PagefindUI) {
+      document.getElementById('search').textContent = 'Search is available on the built site (npm run build, then npm run preview).';
+      return;
+    }
+    const q = new URLSearchParams(location.search).get('q');
+    const ui = new window.PagefindUI({ element: '#search', showSubResults: true, showImages: false, resetStyles: false, autofocus: !q });
+    if (q) ui.triggerSearch(q);
+    const label = () => document.querySelector('#search input')?.setAttribute('aria-label', 'Search reef.support');
+    label(); new MutationObserver(label).observe(document.getElementById('search'), { childList: true, subtree: true });
+  });
+</script>
+<style is:global>
+  .search {
+    --pagefind-ui-scale: 1;
+    --pagefind-ui-primary: var(--ink);
+    --pagefind-ui-text: var(--ink);
+    --pagefind-ui-background: var(--white);
+    --pagefind-ui-border: var(--mute);
+    --pagefind-ui-tag: var(--mist);
+    --pagefind-ui-border-width: 1px;
+    --pagefind-ui-border-radius: 0;
+    --pagefind-ui-font: var(--sans);
+    max-width: 860px;
+  }
+  .search .pagefind-ui__search-input { font-weight: 400; }
+  .search .pagefind-ui__result-link { color: var(--ink); text-underline-offset: 3px; }
+  .search .pagefind-ui__result-link:hover { color: var(--teal); }
+  .search mark { background: var(--mist); color: var(--ink); }
+  .search .pagefind-ui__button { border-radius: 0; font-weight: 600; }
+</style>

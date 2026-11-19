@@ -1,0 +1,65 @@
+{
+  "groups": [
+    {
+      "id": "delivery",
+      "heading": "Delivery partners",
+      "items": [
+        { "name": "Indonesia Biru Foundation", "url": "https://indonesia-biru.com/", "logo": "not-asked" },
+        { "name": "RanMarine Technology B.V.", "url": "https://www.ranmarine.io/", "logo": "not-asked" },
+        { "name": "Water Insight B.V.", "url": "https://www.waterinsight.nl/", "logo": "not-asked" },
+        { "name": "Corales de Paz", "url": "https://www.coralesdepaz.org/", "logo": "not-asked" },
+        { "name": "TU Delft", "url": "https://www.tudelft.nl/", "logo": "not-asked" },
+        { "name": "AV Soluciones S.A.S.", "logo": "not-asked", "publish": false }
+      ]
+    },
+    {
+      "id": "funders",
+      "heading": "Funders",
+      "items": [
+        { "name": "WWF Netherlands", "note": "INNO-fonds", "url": "https://www.wwf.nl/", "logo": "not-asked" },
+        { "name": "Sustainable Ocean Alliance", "note": "Microgrants and Coral Lab funding", "url": "https://www.soalliance.org/", "logo": "not-asked" },
+        { "name": "FAST Fund TU Delft", "logo": "name-only" },
+        { "name": "TU Delft Aerospace Innovation Hub", "logo": "name-only" },
+        { "name": "FFplus", "publish": false }
+      ]
+    },
+    {
+      "id": "programmes",
+      "heading": "Programmes and incubators",
+      "items": [
+        { "name": "ESA BIC Noordwijk", "url": "https://www.sbicnoordwijk.nl/", "logo": "not-asked" },
+        { "name": "Copernicus Accelerator", "logo": "not-asked" },
+        { "name": "ClimateLaunchpad", "logo": "name-only" },
+        { "name": "Ignition Programme", "logo": "name-only" },
+        { "name": "Netherlands AI Coalition", "logo": "name-only" },
+        { "name": "Innovation Quarter", "logo": "name-only" }
+      ]
+    },
+    {
+      "id": "challengesAndResearch",
+      "heading": "Challenges and research",
+      "items": [
+        { "name": "FruitPunch AI" },
+        { "name": "OceanHub Africa" },
+        { "name": "Zindi" },
+        { "name": "InstaDeep" },
+        { "name": "ML6" },
+        { "name": "The Nature Conservancy" },
+        { "name": "Ocean Decade Laboratories" },
+        { "name": "YES!Delft Students" },
+        { "name": "University of Amsterdam" }
+      ]
+    }
+  ],
+  "infrastructureAndData": [
+    "Amazon Web Services (with Cloudnation)",
+    "Microsoft AI for Earth",
+    "UbiOps",
+    "Copernicus and ESA Sentinel data"
+  ],
+  "home": [
+    "Indonesia Biru Foundation", "TU Delft", "WWF Netherlands", "ESA BIC Noordwijk",
+    "Sustainable Ocean Alliance", "RanMarine Technology", "Water Insight", "Corales de Paz",
+    "FruitPunch AI", "OceanHub Africa", "Copernicus Accelerator", "Zindi"
+  ]
+}

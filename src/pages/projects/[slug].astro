@@ -1,0 +1,134 @@
+---
+import Base from '../../layouts/Base.astro';
+import Kicker from '../../components/Kicker.astro';
+import FactsStrip from '../../components/FactsStrip.astro';
+import PhotoPlaceholder from '../../components/PhotoPlaceholder.astro';
+import StatusLabel from '../../components/StatusLabel.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Txt from '../../components/Txt.astro';
+import ToConfirm from '../../components/ToConfirm.astro';
+import { getAreas, getProjects, liveUrl, type Project } from '../../lib/data';
+import { showValue, realUrl } from '../../lib/confirm';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}
+interface Props { project: Project }
+const { project } = Astro.props;
+const p = project.data;
+const areas = await getAreas();
+const areaById = Object.fromEntries(areas.map((a) => [a.id, a]));
+const area = areaById[p.area];
+const secondary = p.secondaryArea ? areaById[p.secondaryArea] : undefined;
+
+const facts = [
+  { label: 'Location', value: p.country },
+  { label: 'Years', value: p.years },
+  ...(p.partners ? [{ label: 'Partners', value: p.partners }] : []),
+  ...(p.funder ? [{ label: 'Funding', value: p.funder }] : []),
+  { label: 'Status', value: p.status },
+].filter((f) => showValue(f.value));
+
+const outputs = await Promise.all(p.outputs.map(async (o) => ({ ...o, url: (await liveUrl(o.url)) ?? undefined })));
+const all = await getProjects();
+const related = all
+  .filter((x) => x.id !== project.id && x.data.publish)
+  .sort((a, b) => Number(b.data.area === p.area) - Number(a.data.area === p.area))
+  .slice(0, 3);
+---
+<Base title={p.title} description={p.summary} noindex={!p.publish}>
+  <article>
+    <header class="head">
+      <div class="container">
+        <a class="back-link" href="/projects"><span aria-hidden="true">←</span> All projects</a>
+        <Kicker parts={[area.data.name, p.country]} colour={area.data.colour} />
+        <h1 class="display">{p.title}</h1>
+        <p class="lead">{p.summary}</p>
+        <div class="status"><StatusLabel status={p.status} />
+          {secondary && <a class="also" href={`/work/${secondary.id}`}>Also part of {secondary.data.name}</a>}
+        </div>
+      </div>
+    </header>
+
+    <section class="section section--tight" aria-label="Project facts">
+      <div class="container"><FactsStrip items={facts} /></div>
+    </section>
+
+    <div class="container">
+      <figure class="photo">
+        <PhotoPlaceholder label={p.image} />
+        <div class="bar" style={`background: var(--${area.data.colour})`}></div>
+      </figure>
+    </div>
+
+    <section class="section">
+      <div class="container split">
+        <div class="split__main prose">
+          <h2>The problem</h2>
+          <p><Txt text={p.problem} /></p>
+          <h2>What we did</h2>
+          <p><Txt text={p.whatWeDid} /></p>
+          {p.toConfirm && <p><ToConfirm note={p.toConfirm} /></p>}
+          {outputs.length > 0 && (
+            <>
+              <h2>Outputs</h2>
+              <ul class="outputs">
+                {outputs.map((o) => {
+                  const href = realUrl(o.url);
+                  return (
+                    <li>
+                      {href ? <a href={href} {...(href.startsWith('http') ? { rel: 'noopener' } : {})}>{o.label}</a> : o.label}
+                      {o.toConfirm && <> <ToConfirm note={o.toConfirm} /></>}
+                    </li>
+                  );
+                })}
+              </ul>
+            </>
+          )}
+        </div>
+        <div class="split__side">
+          {p.funder && (
+            <div class="side-panel">
+              <h2>Funding acknowledgement</h2>
+              <p>This work was supported by {p.funder}.</p>
+            </div>
+          )}
+          <div class="cta">
+            <h2>Discuss a similar project</h2>
+            <p>Tell us where you work and what you need to measure.</p>
+            <a class="btn" href="/contact">Discuss a similar project</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section rule-top" aria-labelledby="rel-h">
+      <div class="container">
+        <h2 id="rel-h" class="mb">Related projects</h2>
+        <CardGrid>{related.map((r) => <ProjectCard project={r} area={areaById[r.data.area]} />)}</CardGrid>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .head { padding: var(--s-6) 0 var(--s-3); }
+  .display { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; max-width: 960px; }
+  .lead { margin: var(--s-3) 0; }
+  .status { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); }
+  .also { font-size: var(--fs-small); font-weight: 500; }
+  .photo { margin: 0; }
+  .bar { height: var(--bar); }
+  .prose h2:first-child { margin-top: 0; }
+  .outputs { padding-left: 1.2em; }
+  .split__side { display: grid; gap: var(--gutter); align-content: start; }
+  .side-panel p { margin: 0; }
+  .cta { border: 1px solid var(--line); padding: var(--s-4); }
+  .cta h2 { font-size: var(--fs-h3); margin-bottom: var(--s-1); }
+  .cta p { color: var(--mute); font-size: var(--fs-small); }
+  .mb { margin-bottom: var(--s-4); }
+</style>

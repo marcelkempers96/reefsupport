@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import subnav from '../../data/subnav.json';
+const topics = [
+  'Coral reef image segmentation and change detection',
+  '3D photogrammetry workflows for restoration monitoring',
+  'Mangrove survival and growth estimation from field records',
+  'Combining satellite water quality products with in-situ data',
+];
+---
+<Base title="Opportunities" description="Internships, thesis topics and proposal partnerships with Reef Support.">
+  <PageHeader kicker={['About', 'Opportunities']} title="Work with us" />
+  <SubNav label="About" links={subnav.about} />
+  <section class="section">
+    <div class="container opps">
+      <article class="opp" aria-labelledby="int-h">
+        <span class="bar" style="background: var(--sky)"></span>
+        <h2 id="int-h">Internships and thesis topics</h2>
+        <p>We host MSc students and interns on projects that produce something others can use: an open model, a dataset or a documented method. Past topics include coral segmentation with superpixels (University of Amsterdam, 2022) and rugosity measurement from 3D photogrammetry (2022).</p>
+        <h3>Current topic areas</h3>
+        <ul>{topics.map((t) => <li>{t}</li>)}</ul>
+        <a class="btn" href="/contact">Ask about a topic</a>
+      </article>
+      <article class="opp" aria-labelledby="prop-h">
+        <span class="bar" style="background: var(--royal)"></span>
+        <h2 id="prop-h">Partnering on proposals</h2>
+        <p>Research consortia and restoration organisations bring us in as the data and AI partner. If you are building a proposal and need monitoring design, data integration or reporting, write to us with the call, deadline and your role.</p>
+        <a class="btn" href="/contact">Write to us</a>
+      </article>
+    </div>
+  </section>
+</Base>
+<style>
+  .opps { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gutter); }
+  .opp { border: 1px solid var(--line); padding: 0 var(--s-4) var(--s-4); display: flex; flex-direction: column; align-items: flex-start; }
+  .bar { display: block; height: var(--bar); margin: 0 calc(-1 * var(--s-4)) var(--s-4); align-self: stretch; }
+  .opp h2 { margin-bottom: var(--s-2); }
+  .opp h3 { margin: var(--s-2) 0 var(--s-1); }
+  .opp ul { padding-left: 1.2em; margin: 0 0 var(--s-3); }
+  .opp .btn { margin-top: auto; }
+  @media (max-width: 860px) { .opps { grid-template-columns: 1fr; } }
+</style>

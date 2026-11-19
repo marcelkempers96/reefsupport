@@ -1,0 +1,8 @@
+---
+// Renders a string that may contain "[TO CONFIRM ...]" markers.
+import ToConfirm from './ToConfirm.astro';
+import { splitConfirm } from '../lib/confirm';
+interface Props { text: string }
+const parts = splitConfirm(Astro.props.text);
+---
+{parts.map((p) => ('text' in p ? p.text : <ToConfirm note={p.confirm} />))}

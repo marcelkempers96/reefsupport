@@ -1,0 +1,20 @@
+---
+import Legal from '../layouts/Legal.astro';
+import ToConfirm from '../components/ToConfirm.astro';
+import company from '../data/company.json';
+---
+<Legal title="Privacy policy" description="How Reef Support B.V. handles personal data sent through this website.">
+  <h2>Who we are</h2>
+  <p>This website is run by {company.legalName}, registered with the Netherlands Chamber of Commerce (KvK) under number {company.kvk}, {company.registeredAddress}. We are the controller for personal data sent to us through this website.</p>
+  <h2>What we collect</h2>
+  <p>When you use the contact form we receive your name, organisation, email address and message, and the country and ecosystem if you give them. If you sign up for field notes we receive your email address.</p>
+  <h2>Why we use it</h2>
+  <p>We use contact form details only to reply to you, on the basis of your consent, which you give with the checkbox on the form. We use newsletter sign-ups only to send field notes, and every message includes a way to unsubscribe.</p>
+  <h2>Who processes it</h2>
+  <p>Form messages are delivered to us through a form service, and the site is hosted on Vercel. <ToConfirm note="name the form and newsletter providers and their data locations" /></p>
+  <p>This site loads its fonts from Google Fonts, which means your browser connects to Google servers when a page loads.</p>
+  <h2>How long we keep it</h2>
+  <p><ToConfirm note="retention period for contact messages and newsletter addresses" /></p>
+  <h2>Your rights</h2>
+  <p>You can ask us to see, correct or delete the personal data we hold about you, or withdraw your consent, by contacting us through the <a href="/contact">contact page</a>. You can also complain to the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).</p>
+</Legal>

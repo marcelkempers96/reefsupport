@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import HowWeWork from '../../components/HowWeWork.astro';
+import Timeline from '../../components/Timeline.astro';
+import ListRows from '../../components/ListRows.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import Txt from '../../components/Txt.astro';
+import subnav from '../../data/subnav.json';
+import about from '../../data/about.json';
+import company from '../../data/company.json';
+import timeline from '../../data/timeline.json';
+import media from '../../data/media.json';
+import { organizationLd } from '../../lib/org';
+import { showValue } from '../../lib/confirm';
+const title = 'Marine technology built with the people who protect coasts';
+---
+<Base title="About" description={company.shortDescription}>
+  <JsonLd slot="head" data={organizationLd(Astro.site!)} />
+  <PageHeader kicker={['About']} title={title} display />
+  <SubNav label="About" links={subnav.about} />
+
+  <section class="section">
+    <div class="container split">
+      <div class="split__main">
+        <p class="lead">{about.longDescription}</p>
+      </div>
+      <div class="split__side">
+        <div class="side-panel">
+          <h2>Company details</h2>
+          <dl>
+            <div><dt>Legal name</dt><dd>{company.legalName}</dd></div>
+            <div><dt>KvK</dt><dd>{company.kvk}</dd></div>
+            {showValue(company.vat) && <div><dt>VAT</dt><dd><Txt text={company.vat} /></dd></div>}
+            <div><dt>Registered address</dt><dd>{company.registeredAddress}</dd></div>
+            <div><dt>Working base</dt><dd>{company.workingBase}</dd></div>
+            <div><dt>Founded</dt><dd>Since {company.founded}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="how-h">
+    <div class="container"><HowWeWork /></div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="tl-h">
+    <div class="container">
+      <h2 id="tl-h" class="mb">Timeline</h2>
+      <Timeline items={timeline} />
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="dev-h">
+    <div class="container">
+      <div class="side-panel dev">
+        <h2 id="dev-h">In development with partners</h2>
+        <ul>{about.inDevelopment.map((t) => <li>{t}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="aw-h">
+    <div class="container">
+      <div class="section-head"><h2 id="aw-h">Awards and media</h2><a class="text-link" href="/about/media">All awards and media</a></div>
+      <ListRows rows={media.awards.slice(0, 4).map((a) => ({ type: 'Award', colour: 'royal', title: a.title, source: `${a.by} · ${a.to}`, year: a.year }))} />
+    </div>
+  </section>
+</Base>
+<style>
+  .mb { margin-bottom: var(--s-4); }
+  .split__main .lead { max-width: 720px; }
+  .dev ul { margin: 0; padding-left: 1.2em; color: var(--ink); }
+  .dev li + li { margin-top: var(--s-1); }
+</style>

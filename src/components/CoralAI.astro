@@ -1,0 +1,59 @@
+---
+// Coral AI block for Research index and Open source pages.
+interface Props { headingLevel?: 'h1' | 'h2' }
+const { headingLevel = 'h2' } = Astro.props;
+const H = headingLevel;
+const legend = [
+  { label: 'Hard coral', c: 'var(--royal)' },
+  { label: 'Soft coral', c: 'var(--sky)' },
+  { label: 'Algae', c: 'var(--navy)' },
+  { label: 'Sand and rubble', c: 'var(--line)' },
+];
+---
+<div class="coral split">
+  <div class="split__main">
+    <p class="kicker"><span class="sq" aria-hidden="true"></span>Open model · Coral reef intelligence</p>
+    <H class:list={['title', { h1: headingLevel === 'h1' }]}>Coral AI</H>
+    <p class="lead">A YOLOv8 segmentation model that labels reef photos by coral type, algae, rubble and sand, so cover estimates for transects come straight from survey images.</p>
+    <p>It grew out of open challenges since 2021; the earlier GoogleNet classifier reached about 86% accuracy across six functional groups.</p>
+    <div class="btn-row">
+      <a class="btn" href="https://huggingface.co/reefsupport/coral-ai" rel="noopener">Model on Hugging Face</a>
+      <a class="btn btn--secondary" href="https://github.com/reefsupport" rel="noopener">Code on GitHub</a>
+    </div>
+    <p class="note meta">MIT licence · Research and monitoring support with human review; not validated for regulatory reporting on its own.</p>
+  </div>
+  <figure class="split__side preview">
+    <svg viewBox="0 0 400 300" role="img" aria-labelledby="seg-t">
+      <title id="seg-t">Schematic segmentation preview: a reef photo divided into hard coral, soft coral, algae, and sand and rubble regions</title>
+      <rect width="400" height="300" fill="var(--placeholder)" />
+      <path d="M0 210 C60 190 120 230 190 205 S320 180 400 200 V300 H0Z" fill="var(--line)" />
+      <path d="M30 120 C40 70 110 60 140 95 C170 130 150 190 95 195 C50 198 25 160 30 120Z" fill="var(--royal)" />
+      <path d="M220 60 C260 40 320 60 330 100 C340 140 300 165 260 160 C215 155 195 95 220 60Z" fill="var(--sky)" />
+      <path d="M150 210 C170 180 230 175 250 200 C265 220 245 245 210 248 C175 250 140 235 150 210Z" fill="var(--navy)" />
+      <path d="M300 190 C320 175 365 180 370 205 C374 228 340 240 315 232 C295 225 290 202 300 190Z" fill="var(--royal)" />
+      <path d="M160 40 C175 30 200 35 200 55 C200 72 180 80 165 72 C152 64 150 48 160 40Z" fill="var(--sky)" />
+    </svg>
+    <figcaption>
+      <ul class="legend">
+        {legend.map((l) => <li><span style={`background: ${l.c}`} aria-hidden="true"></span>{l.label}</li>)}
+      </ul>
+      <p class="meta cap">Schematic illustration. <a href="https://reefsupport-coral-ai-demo.hf.space" rel="noopener">Try the public demo</a> with your own image.</p>
+    </figcaption>
+  </figure>
+</div>
+<style>
+  .sq { width: 12px; height: 12px; background: var(--royal); }
+  .title { font-size: var(--fs-h1); margin-bottom: var(--s-3); }
+  .title.h1 { font-size: var(--fs-display); font-weight: 800; line-height: 1.05; letter-spacing: -0.025em; }
+  .lead { margin-bottom: var(--s-2); }
+  .btn-row { margin: var(--s-4) 0 var(--s-3); }
+  .note { color: var(--mute); }
+  .preview { margin: 0; border: 1px solid var(--line); }
+  .preview svg { width: 100%; height: auto; }
+  figcaption { padding: var(--s-2); border-top: 1px solid var(--line); }
+  .legend { list-style: none; margin: 0 0 var(--s-1); padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--fs-small); }
+  .legend li { display: inline-flex; align-items: center; gap: 8px; }
+  .legend span { width: 12px; height: 12px; border: 1px solid rgba(10,31,51,.15); }
+  .cap { margin: 0; color: var(--mute); }
+  @media (min-width: 961px) { .split__side { grid-column: 8 / span 5; } }
+</style>

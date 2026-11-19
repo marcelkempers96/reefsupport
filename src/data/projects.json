@@ -1,0 +1,168 @@
+[
+  {
+    "id": "coral-lab-lombok",
+    "title": "Coral Lab, Lombok",
+    "area": "field-programmes",
+    "secondaryArea": "coral-reefs",
+    "country": "Indonesia",
+    "years": "2021 to now",
+    "status": "Ongoing",
+    "partners": "Indonesia Biru Foundation, TU Delft",
+    "funder": "Sustainable Ocean Alliance (initial funding)",
+    "image": "Coral Lab tanks, Kecinan Bay",
+    "summary": "Land-based coral lab in Kecinan Bay, West Lombok, built with IBF and four TU Delft students and run by IBF.",
+    "problem": "Lombok's reefs are degrading from warming, destructive fishing and coastal development, and local groups had no land-based facility to grow and study resilient corals.",
+    "whatWeDid": "In 2021 Reef Support and Indonesia Biru Foundation set up a land-based coral lab in Kecinan Bay, West Lombok, with four TU Delft students from the Delft Centre for Entrepreneurship minor. The project set a target of restoring 500 m² of reef. The lab tests micro-fragmentation and the exposure of young corals to higher temperatures in a controlled setting, and IBF runs it day to day.",
+    "toConfirm": "Area restored and corals planted to date, from IBF records",
+    "outputs": [
+      { "label": "Land-based coral nursery operated by IBF" },
+      { "label": "Coral Lab field notes, parts 1 and 2", "url": "/insights/coral-lab-part-1" },
+      { "label": "TU Delft coverage, 2021", "url": "https://www.tudelft.nl/en/2021/valorisatie/ai-and-satellite-imagery-speed-up-coral-reef-protection" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "coral-ai",
+    "title": "Coral AI",
+    "area": "coral-reefs",
+    "country": "Global",
+    "years": "2021 to now",
+    "status": "Ongoing",
+    "partners": "FruitPunch AI, ML6, Zindi, OceanHub Africa, InstaDeep, University of Amsterdam",
+    "image": "Segmented reef transect",
+    "summary": "Open segmentation model that turns reef survey photos into coral cover estimates, published on Hugging Face.",
+    "problem": "Coral reef surveys produce thousands of photos that divers and scientists still classify by hand, which slows reporting and limits how many sites can be monitored.",
+    "whatWeDid": "Reef Support built Coral AI to segment reef images into coral types, algae, rubble and sand, so cover estimates for transects come out of the photos directly. The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023), where the earlier GoogleNet classifier reached about 86% accuracy across six functional groups. ML6 contributed a segmentation approach built on the Seaview dataset, and Yohan Runhaar's research with University of Amsterdam support explored superpixel methods.",
+    "outputs": [
+      { "label": "YOLOv8 segmentation model, MIT licence", "url": "https://huggingface.co/reefsupport/coral-ai" },
+      { "label": "Public browser demo", "url": "https://reefsupport-coral-ai-demo.hf.space" },
+      { "label": "Superpixels to the Rescue (Runhaar, 2022)", "toConfirm": "link" },
+      { "label": "ML6 write-up", "url": "https://www.ml6.eu/blogpost/building-a-coral-segmentation-model-using-sparse-data" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "photogrammetry-colombia",
+    "title": "3D photogrammetry for reef restoration",
+    "area": "coral-reefs",
+    "country": "Colombia",
+    "years": "2023",
+    "status": "Completed",
+    "partners": "Corales de Paz, DeepCo",
+    "funder": "WWF Netherlands INNO-fonds",
+    "image": "Twin-camera rig, Caribbean coast",
+    "summary": "A twin-camera rig and 3D reef models for restoration monitoring with Corales de Paz.",
+    "problem": "Measuring reef structure and coral growth on restoration sites has meant repeated dives by teams of five or six people over several days, which few Colombian organisations can afford each year.",
+    "whatWeDid": "Reef Support ran an open call to bring photogrammetry into reef restoration monitoring, funded by WWF Netherlands' INNO-fonds. Ángela Alegría of Corales de Paz won it and built a twin-camera rig that captures about 1,500 photos per dive, processed into 3D reef models for rugosity and growth measurement. The technique has since been taught to local fishers through Corales de Paz, and the work was covered by El Tiempo.",
+    "outputs": [
+      { "label": "Camera rig design and survey protocol" },
+      { "label": "3D models of restoration sites" },
+      { "label": "El Tiempo coverage", "toConfirm": "link" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "akar-biru-lombok",
+    "title": "Akar Biru Lombok",
+    "area": "mangroves-blue-carbon",
+    "country": "Indonesia",
+    "years": "[TO CONFIRM: start year] to now",
+    "status": "Ongoing",
+    "partners": "Indonesia Biru Foundation (lead)",
+    "image": "Mangrove nursery, East Lombok",
+    "summary": "IBF's community mangrove programme with women-majority cooperatives, led by Indonesia Biru Foundation, with Reef Support as technical partner.",
+    "problem": "Coastal villages in Lombok face erosion and flooding while mangrove cover has declined, and restoration rarely produces income or decision-making power for the women who do much of the coastal work.",
+    "whatWeDid": "Akar Biru Lombok is Indonesia Biru Foundation's community mangrove programme, built around women-majority cooperatives that hold the signing rights over project revenue. It is led by Indonesia Biru Foundation, with Reef Support as technical partner for monitoring, data and reporting, with field records collected in Bahasa Indonesia. The programme was selected as a finalist in the GRP Innovation Challenge (TECH4Resilience / TECH4Nature).",
+    "outputs": [
+      { "label": "Monitoring design and field data workflow for mangrove survival and growth" },
+      { "label": "GRP Innovation Challenge finalist" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "mangrove-ai",
+    "title": "Mangrove AI",
+    "area": "mangroves-blue-carbon",
+    "country": "Indonesia",
+    "years": "[TO CONFIRM: start year] to now",
+    "status": "Ongoing",
+    "partners": "Indonesia Biru Foundation",
+    "image": "GPS-tagged seedlings",
+    "summary": "Field records and models for mangrove survival, growth and carbon estimates.",
+    "problem": "Mangrove restoration is often reported as seedlings planted, while funders and communities need to know how many survive, how they grow and how much carbon they store.",
+    "whatWeDid": "Mangrove AI records planting, survival and growth through GPS-tagged field observations and estimates growth and carbon uptake from them. The growth and sequestration models are still being calibrated with partner field data, so outputs are presented as estimates until validation is complete.",
+    "outputs": [
+      { "label": "Field survey protocol for mangrove growth" },
+      { "label": "Growth and carbon models in calibration" },
+      { "label": "Monitoring layer for Akar Biru Lombok", "url": "/projects/akar-biru-lombok" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "algae-tracker",
+    "title": "Algae Tracker",
+    "area": "coastal-water",
+    "country": "Europe",
+    "years": "2022 to now",
+    "status": "Ongoing R&D",
+    "partners": "RanMarine Technology [TO CONFIRM: role]",
+    "image": "Sentinel-2 bloom map",
+    "summary": "Detection of bloom indicators from Copernicus Sentinel-2 and Sentinel-3 imagery.",
+    "problem": "Harmful algal blooms spread quickly in rivers, harbours and coastal water, and point sampling misses where and when they start.",
+    "whatWeDid": "Algae Tracker tested detection of cyanobacteria (through phycocyanin), turbidity, surface temperature and salinity from enhanced Copernicus imagery, focused on European waters. RanMarine's WasteShark collections offered a way to compare detections with biomass actually removed from the water. Satellite products are credited to their source.",
+    "outputs": [
+      { "label": "Detection prototypes for bloom indicators" },
+      { "label": "Comparison approach with in-water collection data" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "plastic-tracker",
+    "title": "Plastic Tracker",
+    "area": "coastal-water",
+    "country": "Netherlands, Romania",
+    "years": "2022 to 2023",
+    "status": "Closed",
+    "image": "River debris hotspot",
+    "summary": "Satellite detection of floating debris in rivers and coastal water, with two case studies.",
+    "problem": "Floating plastic in rivers and coastal water collects in hotspots that clean-up teams struggle to find in time.",
+    "whatWeDid": "Plastic Tracker trained models on enhanced satellite imagery to detect floating debris in river and ocean settings, with case studies in the Netherlands and Romania. The project has closed, and its methods fed into Algae Tracker.",
+    "outputs": [
+      { "label": "Case studies in the Netherlands and Romania", "toConfirm": "links" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "coastal-gis",
+    "title": "Coastal GIS and satellite data tool",
+    "area": "coastal-water",
+    "country": "Global",
+    "years": "2021 to 2023",
+    "status": "Superseded",
+    "partners": "ESA BIC Noordwijk",
+    "funder": "ESA BIC Noordwijk incubation",
+    "image": "Coastal conditions map",
+    "summary": "The first earth observation product, showing coastal ocean and weather conditions from satellite data.",
+    "problem": "Ocean and weather data from satellites were hard for coastal managers and small organisations to read without specialist skills.",
+    "whatWeDid": "From 2021 to 2023, during incubation at ESA BIC Noordwijk, Reef Support built a GIS tool that let users map a coastal area and read ocean and weather conditions from satellite data. It was the company's first earth observation product and has since been superseded.",
+    "outputs": [
+      { "label": "ESA BIC Noordwijk interview, 2022", "url": "https://www.sbicnoordwijk.nl/reef-support-coral-reef-marine-ecology-esa-bic/" }
+    ],
+    "publish": true
+  },
+  {
+    "id": "singapore-oceanarium",
+    "title": "Coral restoration monitoring pilot",
+    "area": "coral-reefs",
+    "country": "Singapore",
+    "years": "2026",
+    "status": "Ongoing",
+    "partners": "Singapore Oceanarium",
+    "image": "Restoration monitoring pilot",
+    "summary": "Paid restoration monitoring pilot, Phase 1.",
+    "problem": "[TO CONFIRM: case study text, after written client consent]",
+    "whatWeDid": "[TO CONFIRM: case study text, after written client consent]",
+    "outputs": [],
+    "publish": false
+  }
+]

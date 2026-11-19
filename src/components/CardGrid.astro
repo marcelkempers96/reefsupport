@@ -1,0 +1,9 @@
+---
+interface Props { class?: string }
+---
+<div class:list={['cards', Astro.props.class]}><slot /></div>
+<style>
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); }
+  @media (max-width: 860px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+</style>

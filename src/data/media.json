@@ -1,0 +1,26 @@
+{
+  "awards": [
+    { "year": "2020", "title": "Copernicus Masters Overall Prize and Netherlands prize", "by": "European Space Agency", "to": "Reef Support" },
+    { "year": "2023", "title": "Emerging Talent, Falling Walls Science Summit global call", "by": "Falling Walls Foundation", "to": "Marcel Kempers" },
+    { "year": "2021", "title": "First prize, Falling Walls Lab Groningen", "by": "Falling Walls Foundation", "to": "Marcel Kempers" },
+    { "year": "2021", "title": "25 under 25", "by": "MT/Sprout", "to": "Marcel Kempers and Yohan Runhaar" },
+    { "year": "2021", "title": "FD 50 Young Talents", "by": "Het Financieele Dagblad", "to": "Marcel Kempers" },
+    { "year": "2021", "title": "ClimateLaunchpad global finalist", "by": "Climate-KIC", "to": "Reef Support" },
+    { "year": "2021", "title": "Efficient Solution label", "by": "Solar Impulse Foundation", "to": "Reef Support" }
+  ],
+  "media": [
+    { "year": "2023", "type": "Press", "title": "AI and photogrammetry to choose coral restoration sites in Colombia", "outlet": "El Tiempo", "url": "[TO CONFIRM]" },
+    { "year": "2023", "type": "Case study", "title": "Training and deploying AI models with UbiOps", "outlet": "ESA BIC Noordwijk", "url": "https://www.sbicnoordwijk.nl/ubiops-ai-models-case-study-reef-support-esabic/" },
+    { "year": "2022", "type": "Interview", "title": "Solving problems under water that affect billions", "outlet": "ESA BIC Noordwijk", "url": "https://www.sbicnoordwijk.nl/reef-support-coral-reef-marine-ecology-esa-bic/" },
+    { "year": "2022", "type": "Podcast", "title": "TU Delft 180 series", "outlet": "TU Delft", "url": "https://twitter.com/tudelft/status/1493252762708201476" },
+    { "year": "2022", "type": "Partner blog", "title": "Building a coral segmentation model using sparse data", "outlet": "ML6", "url": "https://www.ml6.eu/blogpost/building-a-coral-segmentation-model-using-sparse-data" },
+    { "year": "2021", "type": "Press", "title": "AI and satellite imagery speed up coral reef protection", "outlet": "TU Delft", "url": "https://www.tudelft.nl/en/2021/valorisatie/ai-and-satellite-imagery-speed-up-coral-reef-protection" },
+    { "year": "2021", "type": "Talk", "title": "Climate Cleanup Festive Masterclass", "outlet": "Climate Cleanup", "url": null },
+    { "year": "2021", "type": "Talk", "title": "Space Opportunities for Climate Challenges", "outlet": "Groundstation Space and Eurisy", "url": null },
+    { "year": "2021", "type": "Podcast", "title": "ProfCast with Yohan Runhaar (Dutch)", "outlet": "ProfCast", "url": "[TO CONFIRM]" },
+    { "year": "2021", "type": "Ranking", "title": "25 under 25", "outlet": "MT/Sprout", "url": "https://mtsprout.nl/ranglijst/25-onder-de-25-van-2021/reef-support" },
+    { "year": "2020", "type": "Press", "title": "Coral rescuers win space prize", "outlet": "Delta", "url": "https://delta.tudelft.nl/en/article/coral-rescuers-win-space-prize" },
+    { "year": "2020", "type": "Press", "title": "Satellite imagery and AI to protect the world's coral reefs", "outlet": "GIM International", "url": "https://www.gim-international.com/news/satellite-imagery-and-ai-to-protect-the-world-s-coral-reefs" },
+    { "year": "2020", "type": "Broadcast", "title": "Interview on the Copernicus Masters prize", "outlet": "NOS", "url": "[TO CONFIRM]" }
+  ]
+}

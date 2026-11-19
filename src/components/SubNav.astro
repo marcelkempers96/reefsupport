@@ -1,0 +1,24 @@
+---
+// Local section navigation (Research, About), rendered as a row of plain links.
+interface Props { label: string; links: { label: string; href: string }[] }
+const { label, links } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '');
+---
+<nav class="subnav" aria-label={label}>
+  <div class="container">
+    <ul>
+      {links.map((l) => (
+        <li><a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a></li>
+      ))}
+    </ul>
+  </div>
+</nav>
+<style>
+  .subnav { border-bottom: 1px solid var(--line); }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--s-3); overflow-x: auto; scrollbar-width: none; }
+  a {
+    display: block; padding: 14px 0 12px; white-space: nowrap; font: 500 15px/1 var(--sans);
+    text-decoration: none; border-bottom: 2px solid transparent;
+  }
+  a[aria-current='page'] { border-bottom-color: var(--ink); }
+</style>

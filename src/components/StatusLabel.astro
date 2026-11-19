@@ -1,0 +1,15 @@
+---
+interface Props { status: string }
+const { status } = Astro.props;
+const tone = status.startsWith('Ongoing') ? 'teal' : status === 'Completed' ? 'ink' : 'mute';
+---
+<span class:list={['status', `status--${tone}`]}>{status}</span>
+<style>
+  .status {
+    display: inline-block; padding: 3px 8px; border: 1px solid currentColor;
+    font: 600 11px/1.3 var(--sans); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+  }
+  .status--teal { color: var(--teal); }
+  .status--ink { color: var(--ink); }
+  .status--mute { color: var(--mute); }
+</style>

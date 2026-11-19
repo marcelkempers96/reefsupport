@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import SubNav from '../../components/SubNav.astro';
+import CoralAI from '../../components/CoralAI.astro';
+import subnav from '../../data/subnav.json';
+---
+<Base title="Open source" description="Coral AI: an open YOLOv8 segmentation model for reef survey photos, MIT licence, on Hugging Face.">
+  <section class="section">
+    <div class="container"><a class="back-link" href="/research"><span aria-hidden="true">←</span> Research</a><CoralAI headingLevel="h1" /></div>
+  </section>
+  <SubNav label="Research" links={subnav.research} />
+  <section class="section">
+    <div class="container prose">
+      <h2>Using the model</h2>
+      <p>The model is published on Hugging Face under an MIT licence, with a public browser demo, and the code is on GitHub.</p>
+      <p>Coral AI supports research and monitoring with human review. It is not validated for regulatory reporting on its own. If you want to use it in a monitoring programme, <a href="/contact">contact us</a>.</p>
+      <h2>How it was built</h2>
+      <p>The model grew from open challenges with FruitPunch AI (2021), Ocean Innovation Africa and Zindi (2021) and IndabaX South Africa (2023). ML6 contributed a segmentation approach built on the Seaview dataset, and Yohan Runhaar's research with University of Amsterdam support explored superpixel methods. See the <a href="/projects/coral-ai">Coral AI project page</a> for partners and outputs.</p>
+    </div>
+  </section>
+</Base>

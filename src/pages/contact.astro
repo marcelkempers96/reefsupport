@@ -1,0 +1,87 @@
+---
+// Contact form posts to PUBLIC_CONTACT_ENDPOINT (Formspree or a serverless function), with an
+// on-page confirmation via src/scripts/forms.ts.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ToConfirm from '../components/ToConfirm.astro';
+import Txt from '../components/Txt.astro';
+import company from '../data/company.json';
+import { showValue, hasConfirm } from '../lib/confirm';
+const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
+const lead = 'We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days.';
+const ecosystems = ['Coral reef', 'Mangrove', 'Seagrass', 'Coastal water', 'Other'];
+const tel = company.phone.replace(/\s/g, '');
+---
+<Base title="Contact" description={lead}>
+  <PageHeader kicker={['Contact']} title="Tell us about your sites" lead={lead} display />
+  <section class="section">
+    <div class="container split">
+      <div class="split__side details">
+        <dl>
+          {showValue(company.email) && (
+            <div><dt>Email</dt><dd>{hasConfirm(company.email) ? <Txt text={company.email} /> : <a href={`mailto:${company.email}`}>{company.email}</a>}</dd></div>
+          )}
+          <div><dt>Phone</dt><dd><a href={`tel:${tel}`}>{company.phone}</a></dd></div>
+          <div><dt>Registered address</dt><dd>{company.legalName}<br />Herengracht 551<br />1017 BW Amsterdam<br />Netherlands</dd></div>
+          <div><dt>Working base</dt><dd>{company.workingBase}</dd></div>
+        </dl>
+      </div>
+      <div class="split__main form-col">
+        <form method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. Your message has reached the team." class="form" novalidate={false}>
+          {!endpoint && <ToConfirm note="form endpoint (PUBLIC_CONTACT_ENDPOINT, Formspree or serverless)" />}
+          <div class="grid2">
+            <div class="field"><label for="c-name">Name <span aria-hidden="true">*</span></label><input id="c-name" name="name" required autocomplete="name" /></div>
+            <div class="field"><label for="c-org">Organisation <span aria-hidden="true">*</span></label><input id="c-org" name="organisation" required autocomplete="organization" /></div>
+            <div class="field"><label for="c-email">Email <span aria-hidden="true">*</span></label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>
+            <div class="field"><label for="c-country">Country</label><input id="c-country" name="country" autocomplete="country-name" /></div>
+          </div>
+          <div class="field">
+            <label for="c-eco">Ecosystem</label>
+            <select id="c-eco" name="ecosystem">
+              <option value="">Select</option>
+              {ecosystems.map((e) => <option>{e}</option>)}
+            </select>
+          </div>
+          <div class="field"><label for="c-msg">Message <span aria-hidden="true">*</span></label><textarea id="c-msg" name="message" rows="7" required></textarea></div>
+          <div class="check">
+            <input id="c-consent" name="consent" type="checkbox" required value="yes" />
+            <label for="c-consent">I agree that Reef Support stores this message to reply to me, as described in the <a href="/privacy">privacy policy</a>.</label>
+          </div>
+          <div class="visually-hidden" aria-hidden="true"><label for="c-gotcha">Leave this field empty</label><input id="c-gotcha" type="text" name="_gotcha" tabindex="-1" autocomplete="off" /></div>
+          <p class="req meta">* Required</p>
+          <button class="btn" type="submit">Send message</button>
+          <p class="status" role="status" aria-live="polite" data-form-status></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Base>
+<style>
+  .details { grid-column: 1 / span 4; grid-row: 1; }
+  .form-col { grid-column: 6 / span 7; }
+  @media (max-width: 960px) { .details, .form-col { grid-column: 1 / -1; grid-row: auto; } }
+  dl { margin: 0; display: grid; gap: var(--s-3); border-top: 2px solid var(--ink); padding-top: var(--s-3); }
+  dt { font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 4px; }
+  dd { margin: 0; font-weight: 500; user-select: text; }
+  dd a { text-decoration: underline; text-underline-offset: 3px; }
+  .form { display: grid; gap: var(--s-3); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-3) var(--gutter); }
+  @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+  .field { display: grid; gap: 6px; }
+  label { font-weight: 600; font-size: 15px; }
+  input:not([type='checkbox']), select, textarea {
+    width: 100%; padding: 12px 14px; font: 400 16px/1.4 var(--sans); color: var(--ink);
+    background: var(--white); border: 1px solid var(--mute); appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 40px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 0; border-color: var(--ink); }
+  .check { display: grid; grid-template-columns: 20px 1fr; gap: 12px; align-items: start; }
+  .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--ink); }
+  .check label { font-weight: 400; font-size: var(--fs-small); line-height: 1.5; }
+  .check a { text-decoration: underline; }
+  .req { color: var(--mute); margin: 0; }
+  .btn { justify-self: start; }
+  .status:empty { display: none; }
+  :global(.form-done) { border-top: 4px solid var(--ink); background: var(--mist); padding: var(--s-4); font: 600 20px/1.4 var(--sans); }
+</style>

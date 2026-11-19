@@ -1,0 +1,11 @@
+---
+interface Props { parts: string[]; colour?: string; class?: string }
+const { parts, colour, class: cls } = Astro.props;
+---
+<p class:list={['kicker', cls]}>
+  {colour && <span class="ksq" style={`background: var(--${colour})`} aria-hidden="true" />}
+  <span>{parts.join(' · ')}</span>
+</p>
+<style>
+  .ksq { width: 12px; height: 12px; flex: none; }
+</style>

@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SubNav from '../../components/SubNav.astro';
+import ListRows from '../../components/ListRows.astro';
+import subnav from '../../data/subnav.json';
+import research from '../../data/research.json';
+import { showValue } from '../../lib/confirm';
+const colour: Record<string, string> = { Model: 'royal', Paper: 'teal', 'MSc thesis': 'navy' };
+const rows = research.publications.map((p) => ({
+  type: p.type, colour: colour[p.type], title: p.title, url: p.url, year: p.year,
+  source: [p.authors, showValue(p.venue) ? p.venue : ''].filter(Boolean).join(' · '),
+}));
+---
+<Base title="Publications" description="Models, papers and theses from Reef Support and its students.">
+  <PageHeader kicker={['Research', 'Publications']} title="Publications" lead="Models, papers and theses from our work and from the students we host." />
+  <SubNav label="Research" links={subnav.research} />
+  <section class="section"><div class="container"><ListRows rows={rows} /></div></section>
+</Base>

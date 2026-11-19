@@ -1,0 +1,29 @@
+---
+interface Props { items: { date: string; text: string }[] }
+const { items } = Astro.props;
+---
+<ol class="timeline">
+  {items.map((i) => (
+    <li>
+      <span class="date">{i.date}</span>
+      <span class="marker" aria-hidden="true"></span>
+      <p>{i.text}</p>
+    </li>
+  ))}
+</ol>
+<style>
+  .timeline { list-style: none; margin: 0; padding: 0; position: relative; }
+  .timeline::before { content: ''; position: absolute; top: 8px; bottom: 8px; left: 140px; width: 1px; background: var(--ink); }
+  li { display: grid; grid-template-columns: 116px 9px minmax(0, 1fr); column-gap: 24px; align-items: start; padding-bottom: var(--s-3); }
+  li:last-child { padding-bottom: 0; }
+  .date { font: 500 13px/1.6 var(--mono); letter-spacing: .04em; color: var(--mute); text-align: right; }
+  .marker { width: 9px; height: 9px; margin-top: 7px; background: var(--ink); position: relative; left: 0; transform: translateX(-0px); }
+  p { margin: 0; max-width: 620px; }
+  @media (max-width: 600px) {
+    .timeline::before { left: 4px; }
+    li { grid-template-columns: 9px minmax(0, 1fr); column-gap: 16px; row-gap: 2px; }
+    .date { grid-column: 2; text-align: left; }
+    .marker { grid-column: 1; grid-row: 1; margin-top: 6px; }
+    p { grid-column: 2; }
+  }
+</style>

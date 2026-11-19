@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import CardGrid from '../../components/CardGrid.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import PartnerWall from '../../components/PartnerWall.astro';
+import TileGrid from '../../components/TileGrid.astro';
+import partnerData from '../../data/partners.json';
+import about from '../../data/about.json';
+import { getAreas, getProjects, type Area } from '../../lib/data';
+
+export async function getStaticPaths() {
+  const areas = await getAreas();
+  return areas.map((area) => ({ params: { area: area.id }, props: { area } }));
+}
+interface Props { area: Area }
+const { area } = Astro.props;
+const a = area.data;
+const areas = await getAreas();
+const areaById = Object.fromEntries(areas.map((x) => [x.id, x]));
+const all = await getProjects();
+const projects = a.projects.map((id) => all.find((p) => p.id === id)).filter((p) => p !== undefined);
+
+// Partner cells link out where the partners list has a URL.
+const known = partnerData.groups.flatMap((g) => g.items) as { name: string; url?: string; publish?: boolean }[];
+const partners = a.partners.map((name) => known.find((k) => k.name === name) ?? { name });
+
+// "In development with partners" items relevant to this area (plain text only).
+const devFilter: Record<string, RegExp> = {
+  'coral-reefs': /^$/,
+  'mangroves-blue-carbon': /mangrove/i,
+  'coastal-water': /coastal/i,
+  'field-programmes': /^$/,
+};
+const inDev = about.inDevelopment.filter((t) => devFilter[area.id].test(t));
+---
+<Base title={a.name} description={a.lead}>
+  <PageHeader kicker={[a.no, 'Practice area']} colour={a.colour} title={a.name} lead={a.lead} display>
+    <a slot="before" class="back-link" href="/work"><span aria-hidden="true">←</span> All practice areas</a>
+  </PageHeader>
+
+  <section class="section" aria-labelledby="what-h">
+    <div class="container">
+      <h2 id="what-h" class="mb">What we do</h2>
+      <ul class="what">
+        {a.whatWeDo.map((w) => (
+          <li style={`--c: var(--${a.colour})`}>
+            <h3>{w.title}</h3>
+            <p>{w.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {projects.length > 0 && (
+    <section class="section rule-top" aria-labelledby="proj-h">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="proj-h">Projects in this area</h2>
+          <a class="text-link" href={`/projects?area=${area.id}`}>All projects</a>
+        </div>
+        <CardGrid>{projects.map((p) => <ProjectCard project={p} area={areaById[p.data.area]} />)}</CardGrid>
+      </div>
+    </section>
+  )}
+
+  {inDev.length > 0 && (
+    <section class="section section--tight" aria-labelledby="dev-h">
+      <div class="container">
+        <div class="side-panel dev">
+          <h2 id="dev-h">In development with partners</h2>
+          <ul>{inDev.map((t) => <li>{t}</li>)}</ul>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section rule-top" aria-labelledby="partners-h">
+    <div class="container">
+      <h2 id="partners-h" class="mb">Partners in this area</h2>
+      <PartnerWall items={partners} />
+    </div>
+  </section>
+
+  <section class="section rule-top" aria-labelledby="other-h">
+    <div class="container">
+      <h2 id="other-h" class="mb">Other practice areas</h2>
+      <TileGrid areas={areas.filter((x) => x.id !== area.id)} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mb { margin-bottom: var(--s-4); }
+  .what { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gutter); }
+  .what li { border-top: 4px solid var(--c); padding-top: var(--s-3); }
+  .what h3 { margin-bottom: var(--s-1); }
+  .what p { color: var(--mute); margin: 0; }
+  @media (max-width: 860px) { .what { grid-template-columns: 1fr; gap: var(--s-4); } }
+  .dev ul { margin: 0; padding-left: 1.2em; color: var(--ink); }
+  .dev li + li { margin-top: var(--s-1); }
+</style>

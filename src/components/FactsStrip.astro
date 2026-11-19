@@ -1,0 +1,19 @@
+---
+import Txt from './Txt.astro';
+interface Props { items: { label: string; value: string; href?: string }[] }
+const { items } = Astro.props;
+---
+<dl class="facts">
+  {items.map((f) => (
+    <div class="fact">
+      <dt>{f.label}</dt>
+      <dd>{f.href ? <a href={f.href}><Txt text={f.value} /></a> : <Txt text={f.value} />}</dd>
+    </div>
+  ))}
+</dl>
+<style>
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--s-3) var(--gutter); margin: 0; }
+  .fact { border-left: 3px solid var(--ink); padding: 2px 0 2px var(--s-2); }
+  dt { font: 600 11px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); margin-bottom: 4px; }
+  dd { margin: 0; font: 600 17px/1.35 var(--sans); }
+</style>

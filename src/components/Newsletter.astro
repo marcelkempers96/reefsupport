@@ -1,0 +1,47 @@
+---
+// Newsletter block. The provider is chosen later (CLAUDE.md): set PUBLIC_NEWSLETTER_ENDPOINT
+// to a form endpoint that accepts POST with an "email" field. Without it the form is not shown
+// in production; LinkedIn is offered instead.
+import ToConfirm from './ToConfirm.astro';
+import company from '../data/company.json';
+const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT as string | undefined;
+const linkedin = company.social.find((s) => s.label === 'LinkedIn')!.url;
+const showForm = !!endpoint || import.meta.env.DEV;
+---
+<section class="news section" aria-labelledby="news-h">
+  <div class="container news__inner">
+    <div>
+      <h2 id="news-h">Field notes, about once a month</h2>
+      <p>Project updates, open models and opportunities to collaborate.</p>
+    </div>
+    {showForm ? (
+      <form class="news__form" method="post" action={endpoint ?? '#'} data-async-form data-success="Thanks. You are on the list for field notes.">
+        {!endpoint && <ToConfirm note="newsletter provider endpoint (PUBLIC_NEWSLETTER_ENDPOINT)" />}
+        <label for="news-email" class="visually-hidden">Email address</label>
+        <div class="news__row">
+          <input id="news-email" name="email" type="email" required autocomplete="email" placeholder="Email address" />
+          <button class="btn btn--on-dark" type="submit">Subscribe</button>
+        </div>
+        <p class="news__status" role="status" aria-live="polite" data-form-status></p>
+      </form>
+    ) : (
+      <p><a class="btn btn--on-dark-secondary" href={linkedin} rel="noopener">Follow on LinkedIn</a></p>
+    )}
+  </div>
+</section>
+<style>
+  .news { background: var(--ink); color: var(--on-dark); }
+  .news__inner { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-3) var(--gutter); align-items: center; }
+  .news__inner > div { grid-column: span 6; }
+  .news__inner > :last-child { grid-column: 8 / span 5; }
+  .news p { color: var(--on-dark-mute); margin: var(--s-1) 0 0; }
+  .news__row { display: flex; gap: 0; }
+  input {
+    flex: 1; min-width: 0; padding: 12px 14px; font: 400 16px/1.2 var(--sans);
+    border: 2px solid var(--white); background: transparent; color: var(--white);
+  }
+  input::placeholder { color: var(--on-dark-mute); }
+  .news :focus-visible { outline-color: var(--white); }
+  .news__status:empty { display: none; }
+  @media (max-width: 860px) { .news__inner > div, .news__inner > :last-child { grid-column: 1 / -1; } }
+</style>
