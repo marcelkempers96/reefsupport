@@ -6,10 +6,11 @@ Structure, spacing and restraint follow the RITA prototype (https://rita-woad.ve
 
 1. Pure white backgrounds and blue only. Colour signals a practice area or an action, never decoration.
 2. Square corners everywhere (`border-radius: 0`). No shadows, glows or blur.
-3. Type does the work: heavy, tight Poppins headlines, calm Poppins body.
+3. Type does the work: confident but light Poppins headlines (600), calm Poppins body.
 4. One practice colour per card, tile or section.
 5. Generous white space, strong left edge, left-aligned text.
 6. Evidence first: numbers, dates and named partners beat adjectives.
+7. Light, modern and scientific, never cartoony. The site should read like a research institute or a scientific journal: lighter headline weights, thin 1 px linework, generous white space, and visuals styled like scientific figures (fine strokes, axis labels, Plex Mono annotations, muted fills). No mascots, rounded blobs, thick outlines, bouncy motion or playful illustration. Large ink blocks are used sparingly (footer, one band at most per page).
 
 ## Colour
 
@@ -45,17 +46,17 @@ Poppins for display, headings, body, navigation, buttons and kickers. IBM Plex M
 
 | Role | Desktop / mobile | Font | Weight | Line height | Tracking |
 | --- | --- | --- | --- | --- | --- |
-| Hero display | 96 / 46 px | Poppins | 800 | 1.05 | -0.025em |
-| Display (other pages) | 76 / 42 px | Poppins | 800 | 1.05 | -0.025em |
-| H1 | 48 / 32 px | Poppins | 700 | 1.1 | -0.02em |
-| H2 | 32 / 24 px | Poppins | 700 | 1.15 | -0.02em |
+| Hero display | 96 / 46 px | Poppins | 600 | 1.05 | -0.015em |
+| Display (other pages) | 76 / 42 px | Poppins | 600 | 1.05 | -0.015em |
+| H1 | 48 / 32 px | Poppins | 600 | 1.1 | -0.015em |
+| H2 | 32 / 24 px | Poppins | 600 | 1.15 | -0.015em |
 | H3 card title | 21 / 18 px | Poppins | 600 | 1.3 | -0.01em |
 | Lead | 20 / 17 px | Poppins | 400 (500 on hero) | 1.5 | 0 |
 | Body | 16 px | Poppins | 400 | 1.6 | 0 |
 | Small, caption | 14 px | Poppins | 400 | 1.5 | 0 |
 | Kicker (uppercase) | 12 px | Poppins | 600 | 1.4 | +0.1em |
 | Metadata (dates, credits) | 12 to 13 px | Plex Mono | 400–500 | 1.4 | +0.04em |
-| Big number | 64 / 48 px | Poppins | 700 | 1.0 | -0.03em |
+| Big number | 64 / 48 px | Poppins | 500 | 1.0 | -0.02em |
 
 Use `clamp()` between mobile and desktop sizes. Headlines in sentence case with `text-wrap: balance`. Running text no wider than 680 px. Buttons, nav links and labels at Poppins 600.
 
@@ -70,7 +71,7 @@ Use `clamp()` between mobile and desktop sizes. Headlines in sentence case with 
 
 - Spans the full viewport width, edge to edge, directly under the sticky header. Height `clamp(520px, 82vh, 820px)`.
 - `<video autoplay muted loop playsinline preload="metadata" poster="/video/hero-poster.webp">` with WebM and MP4 sources, `object-fit: cover`, behind a flat `--hero-shade` overlay (no gradient on the overlay).
-- Content sits bottom-left inside the normal container: kicker, hero display headline in white (Poppins 800), lead in white at 500, then two buttons (primary white fill with ink text, secondary 2 px white outline).
+- Content sits bottom-left inside the normal container: kicker, hero display headline in white (Poppins 600), lead in white at 500, then two buttons (primary white fill with ink text, secondary 2 px white outline).
 - A bottom strip inside the hero, separated by a 1 px white rule at 22% opacity: left a credit for the footage in Plex Mono, right "Featured: Coral Lab, Lombok →" and a square Pause/Play button.
 - `prefers-reduced-motion: reduce` shows the poster only. The video starts after first paint and pauses when scrolled out of view.
 - Footage brief: underwater reef or Coral Lab tanks in Lombok, slow movement, natural light, no on-screen text, 1920×1080, 10–20 s seamless loop, under 5 MB.
@@ -103,7 +104,7 @@ Real field images only: Coral Lab tanks in Kecinan Bay, divers on transects, man
 
 ## Motion
 
-Hero video only, plus 150 ms colour and underline transitions on hover and a short fade between pages. Everything respects `prefers-reduced-motion`.
+Hero video and slow, precise data-style animations (scan lines, masks fading in, values counting up; linear or ease-out, no bounce), plus 150 ms colour and underline transitions on hover and a short fade between pages. Everything respects `prefers-reduced-motion`.
 
 ## Tokens
 
@@ -134,7 +135,7 @@ Hero video only, plus 150 ms colour and underline transitions on hover and a sho
 @media (min-width: 1024px) { :root { --margin: 64px; } }
 
 html, body { background: var(--white); color: var(--ink); font-family: var(--sans); font-size: var(--fs-body); line-height: 1.6; }
-h1, h2, h3 { font-weight: 700; text-wrap: balance; margin: 0; }
+h1, h2, h3 { font-weight: 600; text-wrap: balance; margin: 0; }
 .kicker { font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
 a:hover { color: var(--teal); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
