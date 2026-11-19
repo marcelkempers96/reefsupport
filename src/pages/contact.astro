@@ -8,6 +8,7 @@ import Txt from '../components/Txt.astro';
 import company from '../data/company.json';
 import { showValue, hasConfirm } from '../lib/confirm';
 const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT as string | undefined;
+if (import.meta.env.PROD && !endpoint) console.warn('[contact] PUBLIC_CONTACT_ENDPOINT is not set: the contact form cannot send messages.');
 const lead = 'We work with restoration organisations, research consortia and coastal authorities. Send a short note on where you work and what you need to measure, and we will reply within five working days.';
 const ecosystems = ['Coral reef', 'Mangrove', 'Seagrass', 'Coastal water', 'Other'];
 const tel = company.phone.replace(/\s/g, '');

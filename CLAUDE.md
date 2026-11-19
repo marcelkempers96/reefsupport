@@ -115,3 +115,8 @@ It must return nothing. Then build, and look at every changed page at 360 px and
 - [ ] Logo: keep current mark or adopt the three-bar mark in `DESIGN.md`
 - [ ] Clean or take offline: docs.reef.support, GitHub READMEs, Hugging Face Space text
 - [ ] Whether a Reef Support foundation or NGO branch exists before mentioning one
+- [ ] Contact form endpoint (Formspree or Vercel function) for `PUBLIC_CONTACT_ENDPOINT`
+- [ ] Newsletter provider and endpoint for `PUBLIC_NEWSLETTER_ENDPOINT` (until then production shows a LinkedIn link)
+- [ ] Migrate the old blog posts listed in `CONTENT.md` section 7 into `src/content/insights/` (the build session could not reach reef.support)
+- [ ] Privacy policy: form and newsletter processors, retention period, legal review and publication date
+- [ ] Policy pages: each policy text, date and Director signature
