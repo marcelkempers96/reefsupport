@@ -10,9 +10,9 @@ const code = 'https://github.com/reefsupport';
 ---
 <aside class:list={['coral-cta', `coral-cta--${variant}`]} aria-label="Try Coral AI">
   <p class="coral-cta__kicker"><i aria-hidden="true"></i>Open model · MIT licence</p>
-  <H class="coral-cta__h">{variant === 'full' ? 'Try Coral AI on your own reef photo' : 'Try Coral AI'}</H>
+  <H class="coral-cta__h">Try Coral AI</H>
   {variant === 'full' ? (
-    <p>The public demo runs in your browser on Hugging Face: upload a reef photo and see it segmented into coral types, algae, rubble and sand. The model is published under an MIT licence and the code is on GitHub.</p>
+    <p>The public browser demo on Hugging Face shows the segmentation model that labels reef photos by coral type, algae, rubble and sand. The model is published under an MIT licence and the code is on GitHub.</p>
   ) : (
     <p>Our open segmentation model labels reef photos by coral type, algae, rubble and sand, so cover estimates for transects come straight from survey images.</p>
   )}

@@ -26,7 +26,7 @@ const toc = [
 ];
 ---
 <Legal title="Privacy policy" description="How Reef Support B.V. handles personal data sent through reef.support: contact form messages, newsletter sign-ups and hosting logs, the legal bases, and your rights under the GDPR." toc={toc}>
-  <p>This notice explains which personal data reef.support collects, why, who receives it and what rights you have under the General Data Protection Regulation (GDPR). It covers this website only; data we handle in projects with partners is covered by our data protection policy, listed on the <a href="/about/policies">policies page</a>. <ToConfirm note="legal review of this whole notice" /></p>
+  <p>This notice explains which personal data reef.support collects, why, who receives it and what rights you have under the General Data Protection Regulation (GDPR). It covers this website only; data we handle in projects with partners will be covered by our data protection policy, which is in preparation and listed on the <a href="/about/policies">policies page</a>. <ToConfirm note="legal review of this whole notice" /></p>
 
   <h2 id="controller">Who is responsible</h2>
   <p>The controller for personal data collected through this website is {company.legalName}, registered with the Netherlands Chamber of Commerce (KvK) under number {company.kvk}, with its registered address at {company.registeredAddress}. Our working base is in {company.workingBase.replace(', Netherlands', '')}.</p>
@@ -36,7 +36,7 @@ const toc = [
   <ul>
     <li>We collect personal data only when you send it to us, through the contact form or the newsletter sign-up, and the technical data any web server receives when a page is requested.</li>
     <li>We use what you send only to reply to you or to send the newsletter you asked for, on the basis of your consent, which you can withdraw at any time.</li>
-    <li>The site sets no cookies, keeps nothing in your browser's storage, runs no analytics or advertising trackers, and serves its fonts from our own domain, so loading a page does not contact Google or any other third party.</li>
+    <li>The site sets no cookies, keeps nothing in your browser's storage, runs no analytics or advertising trackers, and serves its fonts from our own domain, so loading a page contacts no server other than our hosting provider's.</li>
   </ul>
 
   <h2 id="data">What we collect and why</h2>
@@ -51,7 +51,7 @@ const toc = [
   <h3>Newsletter sign-up</h3>
   <dl>
     <div><dt>Data</dt><dd>Your email address. Until the mailing list opens the sign-up form is not shown, and we point to LinkedIn instead.</dd></div>
-    <div><dt>Purpose</dt><dd>To send field notes, about once a month. Every message includes a link to unsubscribe.</dd></div>
+    <div><dt>Purpose</dt><dd>To send field notes, about once a month. Every message will include a link to unsubscribe.</dd></div>
     <div><dt>Legal basis</dt><dd>Your consent (GDPR Article 6(1)(a)), given when you subscribe. <ToConfirm note="newsletter provider, whether double opt-in is used, and whether opens or clicks are tracked" /></dd></div>
   </dl>
 
@@ -80,14 +80,14 @@ const toc = [
   </ul>
 
   <h2 id="recipients">Who receives your data</h2>
-  <p>Inside Reef Support, messages are read only by the people who need to answer them. Outside the company, the following service providers process personal data on our behalf as processors. GDPR Article 28 requires a data processing agreement with each of them.</p>
+  <p>The following service providers process personal data on our behalf as processors. GDPR Article 28 requires a data processing agreement with each of them.</p>
   <ul>
     <li><strong>Vercel</strong> hosts this website and processes the server log data described above. <ToConfirm note="Vercel entity, data processing agreement and data location" /></li>
     <li><strong>Form service</strong> delivers contact form messages to us. <ToConfirm note="name of the form provider (Formspree or a Vercel serverless function), its data processing agreement and data location" /></li>
     <li><strong>Newsletter service</strong> stores subscriber addresses and sends the newsletter, once the mailing list opens. <ToConfirm note="name of the newsletter provider, its data processing agreement and data location" /></li>
     <li><strong>Email provider</strong> holds the mailbox where messages arrive and our replies are kept. <ToConfirm note="name of the email provider and data location" /></li>
   </ul>
-  <p>Apart from these processors, we do not sell or pass on personal data unless the law requires us to.</p>
+  <p>Apart from these processors, we do not sell or pass on personal data unless the law requires us to. <ToConfirm note="legal review; who inside Reef Support has access to messages" /></p>
 
   <h2 id="transfers">Transfers outside the EEA</h2>
   <p>Under GDPR Chapter V, personal data may only be transferred outside the European Economic Area to a country with an adequacy decision from the European Commission, to a recipient certified under the EU-US Data Privacy Framework, or with appropriate safeguards such as the European Commission's standard contractual clauses. <ToConfirm note="for each provider above: whether data leaves the EEA and which safeguard applies; legal review" /></p>

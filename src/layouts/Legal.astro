@@ -52,7 +52,7 @@ const { title, description, updated, toc = [], kicker = ['Legal'], heading, lead
   .legal__toc a { display: flex; gap: 12px; padding: 8px 0; font-size: var(--fs-small, 14px); line-height: 1.4; text-decoration: none; color: var(--ink); }
   .legal__toc a::before { content: counter(toc, decimal-leading-zero); font: 400 12px/1.6 var(--mono); color: var(--mute); flex: none; }
   .legal__toc a:hover { color: var(--teal); }
-  .legal :global(.prose h2:first-child) { margin-top: 0; }
+  .legal :global(.prose > h2:first-child) { margin-top: 0; }
   .legal :global(.prose .data-table) { margin: 0 0 var(--s-3); font-size: var(--fs-small, 14px); }
   .legal :global(.prose .table-wrap) { max-width: 100%; overflow-x: auto; }
   .legal :global(.prose dl) { margin: 0 0 var(--s-3); border-top: 1px solid var(--line); }

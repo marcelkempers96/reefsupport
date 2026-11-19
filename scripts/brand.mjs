@@ -61,8 +61,8 @@ const bars = (s = 1, cx = 16, cy = 16) =>
 const markSvg = (square = C.ink, size = 32, scale = 1) =>
   `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 32 32"><rect width="32" height="32" fill="${square}"/>${bars(scale)}</svg>`;
 
-const poppins600 = readFileSync(new URL('node_modules/@fontsource/poppins/files/poppins-latin-600-normal.woff2', root)).toString('base64');
-const fontFace = `@font-face{font-family:'Poppins';font-weight:600;font-style:normal;src:url(data:font/woff2;base64,${poppins600}) format('woff2')}`;
+const poppinsWord = readFileSync(new URL('node_modules/@fontsource/poppins/files/poppins-latin-700-normal.woff2', root)).toString('base64');
+const fontFace = `@font-face{font-family:'Poppins';font-weight:700;font-style:normal;src:url(data:font/woff2;base64,${poppinsWord}) format('woff2')}`;
 
 const browser = await chromium.launch();
 const page = await browser.newPage();
@@ -71,7 +71,7 @@ const page = await browser.newPage();
 const H = 64; // mark height in the horizontal lockup (SVG units)
 const FS = 40; // wordmark font size
 const GAP = 20;
-await page.setContent(`<!doctype html><style>${fontFace}</style><span id="w" style="font:600 ${FS}px Poppins;letter-spacing:-0.01em;white-space:nowrap">Reef Support</span>`);
+await page.setContent(`<!doctype html><style>${fontFace}</style><span id="w" style="font:700 ${FS}px Poppins;letter-spacing:-0.01em;white-space:nowrap">Reef Support</span>`);
 await page.evaluate(() => document.fonts.ready);
 const textW = Math.ceil(await page.$eval('#w', (el) => el.getBoundingClientRect().width));
 const W = H + GAP + textW + 2;
@@ -83,7 +83,7 @@ const lockupSvg = ({ bg, square, text, embedFont }) =>
   (embedFont ? `<style>${fontFace}</style>` : '') +
   (bg ? `<rect width="${W}" height="${H}" fill="${bg}"/>` : '') +
   `<g transform="scale(${H / 32})"><rect width="32" height="32" fill="${square}"/>${bars()}</g>` +
-  `<text x="${H + GAP}" y="${baseline}" fill="${text}" font-family="Poppins, 'Helvetica Neue', Arial, sans-serif" font-weight="600" font-size="${FS}" letter-spacing="-0.4">Reef Support</text></svg>`;
+  `<text x="${H + GAP}" y="${baseline}" fill="${text}" font-family="Poppins, 'Helvetica Neue', Arial, sans-serif" font-weight="700" font-size="${FS}" letter-spacing="-0.4">Reef Support</text></svg>`;
 
 // White-on-ink lockup gets padding so the white square reads against the ink field.
 const PAD = 16;

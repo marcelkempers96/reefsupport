@@ -14,9 +14,9 @@ const projects = (await getProjects()).sort(
 );
 const countries = [...new Set(projects.flatMap((p) => p.data.country.split(', ')))].sort();
 const statuses = order.filter((s) => projects.some((p) => p.data.status === s));
-const lead = 'Case studies from our four practice areas, with the partners who led the field work and the funders who supported it.';
+const lead = 'Case studies from our four practice areas, with the partners we worked with and the funders who supported the work.';
 ---
-<Base title="Projects" description="Case studies in coral reef monitoring, mangrove restoration and coastal water quality, with the partners who led field work and the funders who supported it.">
+<Base title="Projects" description="Case studies in coral reef monitoring, mangrove restoration and coastal water quality, with the partners we worked with and the funders who supported the work.">
   <PageHeader kicker={['Projects']} title="Projects and case studies" lead={lead} display />
 
   <section class="section">
