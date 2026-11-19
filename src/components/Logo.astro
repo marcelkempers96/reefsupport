@@ -1,0 +1,28 @@
+---
+// Three-bar mark from DESIGN.md: ink square with rising royal, sky and teal bars.
+// variant "light" is the white-square version used on ink backgrounds.
+interface Props { variant?: 'dark' | 'light'; href?: string }
+const { variant = 'dark', href = '/' } = Astro.props;
+const square = variant === 'dark' ? 'var(--ink)' : 'var(--white)';
+---
+<a href={href} class:list={['logo', `logo--${variant}`]} aria-label="Reef Support, home">
+  <svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+    <rect width="32" height="32" fill={square} />
+    <rect x="7" y="18" width="4" height="8" fill="var(--royal)" />
+    <rect x="14" y="13" width="4" height="13" fill="var(--sky)" />
+    <rect x="21" y="7" width="4" height="19" fill="var(--teal)" />
+  </svg>
+  <span>Reef Support</span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 700 19px/1 var(--sans); letter-spacing: -0.01em; text-decoration: none; white-space: nowrap;
+  }
+  .logo--dark { color: var(--ink); }
+  .logo--light { color: var(--on-dark); }
+  .logo:hover { color: inherit; }
+  .logo--light:hover { color: var(--on-dark); }
+  .logo svg { flex: none; }
+</style>

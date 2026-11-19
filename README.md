@@ -1,20 +1,19 @@
-# ReefSupport website
+# reef.support
 
-A static one-page site (HTML, CSS and a little JavaScript). No build step.
+Website for Reef Support B.V. Built with Astro (static output), deployed on Vercel.
 
-## Files
-- `index.html`: all page content. Edit text here.
-- `assets/style.css`: colours and layout. The colour palette is at the top under `:root`.
-- `assets/main.js`: mobile menu and footer year.
-- `assets/favicon.svg`: logo / browser tab icon.
+Read `CLAUDE.md`, `DESIGN.md` and `CONTENT.md` before changing code or copy.
 
-## Preview locally
-Open `index.html` in a browser, or run `python3 -m http.server` and visit http://localhost:8000.
+```bash
+npm install
+npm run dev          # local dev server, shows [TO CONFIRM] markers
+npm run build        # type check + static build into dist/
+npm run check:names  # must pass before every commit (CLAUDE.md section 5)
+```
 
-## Publish
-`.github/workflows/pages.yml` deploys to GitHub Pages on every push to `main`.
-Enable it once in the repo: **Settings → Pages → Source: GitHub Actions**.
+## Structure
 
-## To do
-- Replace placeholder impact figures in the "Impact so far" section.
-- Change `hello@example.com` in the contact form to your real address (or use a form service like Formspree).
+- `src/styles/global.css`: design tokens and base styles
+- `src/data/*.json`: company facts and navigation, converted from `CONTENT.md`
+- `src/components/`: Header, Footer, Logo, SEO head, ToConfirm
+- `src/layouts/Base.astro`: page shell with skip link, header and footer

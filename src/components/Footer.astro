@@ -1,0 +1,74 @@
+---
+import Logo from './Logo.astro';
+import nav from '../data/nav.json';
+import company from '../data/company.json';
+
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="top">
+      <div class="brand">
+        <Logo variant="light" />
+        <p>{company.shortDescription}</p>
+      </div>
+      <div class="cols">
+        {nav.footer.map((col) => (
+          <nav aria-label={col.heading}>
+            <h2 class="col-h">{col.heading}</h2>
+            <ul>
+              {col.links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+            </ul>
+          </nav>
+        ))}
+        <nav aria-label="Connect">
+          <h2 class="col-h">Connect</h2>
+          <ul>
+            {company.social.map((s) => <li><a href={s.url} rel="me noopener">{s.label}</a></li>)}
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="legal meta">
+      <p>
+        {company.legalName} · KvK {company.kvk} · {company.registeredAddressShort}
+      </p>
+      <p>
+        © {year} {company.legalName}
+        {nav.legal.map((l) => <> · <a href={l.href}>{l.label}</a></>)}
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { background: var(--ink); color: var(--on-dark); padding: var(--s-6) 0 var(--s-4); margin-top: auto; }
+  .top { display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--s-5) var(--gutter); }
+  .brand { grid-column: span 5; }
+  .brand p { color: var(--on-dark-mute); font-size: var(--fs-small); line-height: 1.5; margin-top: var(--s-3); max-width: 440px; }
+  .cols { grid-column: 7 / span 6; display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: var(--gutter); }
+  .col-h {
+    font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase;
+    color: var(--sky); margin: 0 0 var(--s-2);
+  }
+  ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  a { color: var(--on-dark); text-decoration: none; font-size: var(--fs-small); line-height: 1.4; }
+  a:hover { color: var(--sky); text-decoration: underline; text-underline-offset: 3px; }
+  .legal {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-1) var(--s-3);
+    margin-top: var(--s-6); padding-top: var(--s-3); border-top: 1px solid rgba(255, 255, 255, .18);
+    color: var(--on-dark-mute);
+  }
+  .legal p { margin: 0; max-width: none; }
+  .legal a { font-size: inherit; color: var(--on-dark-mute); }
+  .legal a:hover { color: var(--on-dark); }
+
+  @media (max-width: 960px) {
+    .brand, .cols { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .cols { grid-template-columns: 1fr 1fr; }
+    .cols > :first-child { grid-column: 1 / -1; }
+  }
+</style>

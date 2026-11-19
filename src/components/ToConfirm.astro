@@ -1,0 +1,7 @@
+---
+// Renders a visible marker in dev builds and nothing in production (CLAUDE.md rule).
+interface Props { note?: string }
+const { note } = Astro.props;
+const show = import.meta.env.DEV;
+---
+{show && <span class="to-confirm">[TO CONFIRM{note ? `: ${note}` : ''}]</span>}

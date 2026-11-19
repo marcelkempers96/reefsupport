@@ -1,0 +1,86 @@
+/* Tokens from DESIGN.md. Fonts are loaded with <link> in SEO.astro (preconnect + display=swap). */
+:root {
+  --ink: #0A1F33; --white: #FFFFFF; --mist: #EAF2FA;
+  --line: #D3E0EC; --line-soft: #E6EEF6; --mute: #55697D; --mute-dark: #34495E;
+  --on-dark: #FFFFFF; --on-dark-mute: #BFD3E6; --placeholder: #DCE8F3;
+  --hero-bg: #05213D; --hero-shade: rgba(5, 24, 46, .42);
+  --royal: #1458B8; --navy: #0B3A6E; --teal: #0A7EA4; --sky: #9CCBF2;
+
+  --sans: "Poppins", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", "Courier New", ui-monospace, monospace;
+  --fs-hero: clamp(46px, 7.4vw, 96px);
+  --fs-display: clamp(42px, 6.2vw, 76px);
+  --fs-h1: clamp(32px, 4vw, 48px);
+  --fs-h2: clamp(24px, 2.8vw, 32px);
+  --fs-h3: clamp(18px, 1.7vw, 21px);
+  --fs-lead: clamp(17px, 1.6vw, 20px);
+  --fs-body: 16px; --fs-small: 14px; --fs-kicker: 12px;
+
+  --s-1: 8px; --s-2: 16px; --s-3: 24px; --s-4: 32px; --s-5: 48px; --s-6: 64px; --s-7: 96px; --s-8: 128px;
+  --max: 1200px; --measure: 680px; --gutter: 24px; --margin: 16px; --radius: 0; --bar: 6px;
+  --header-h: 68px;
+}
+@media (min-width: 640px) { :root { --margin: 32px; } }
+@media (min-width: 1024px) { :root { --margin: 64px; } }
+
+*, *::before, *::after { box-sizing: border-box; border-radius: var(--radius); box-shadow: none; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--header-h) + var(--s-2)); }
+html, body {
+  margin: 0; background: var(--white); color: var(--ink);
+  font-family: var(--sans); font-size: var(--fs-body); line-height: 1.6;
+}
+body { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+img, video, svg { display: block; max-width: 100%; height: auto; }
+h1, h2, h3 { font-weight: 700; text-wrap: balance; margin: 0; }
+h1 { font-size: var(--fs-h1); line-height: 1.1; letter-spacing: -0.02em; }
+h2 { font-size: var(--fs-h2); line-height: 1.15; letter-spacing: -0.02em; }
+h3 { font-size: var(--fs-h3); line-height: 1.3; letter-spacing: -0.01em; font-weight: 600; }
+p { margin: 0 0 var(--s-2); max-width: var(--measure); }
+a { color: inherit; transition: color 150ms; }
+a:hover { color: var(--teal); }
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+button { font: inherit; color: inherit; }
+
+.container {
+  width: 100%; max-width: calc(var(--max) + 2 * var(--margin)); margin-inline: auto;
+  padding-left: max(var(--margin), env(safe-area-inset-left));
+  padding-right: max(var(--margin), env(safe-area-inset-right));
+}
+.section { padding-block: 72px; }
+.section--tight { padding-block: var(--s-5); }
+
+.kicker {
+  display: flex; align-items: center; gap: var(--s-1);
+  font: 600 var(--fs-kicker)/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--mute);
+  margin: 0 0 var(--s-2);
+}
+.lead { font-size: var(--fs-lead); line-height: 1.5; }
+.meta { font: 400 12px/1.4 var(--mono); letter-spacing: .04em; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: var(--s-1);
+  padding: 12px 20px; font: 600 15px/1.2 var(--sans); text-decoration: none; cursor: pointer;
+  background: var(--ink); color: var(--white); border: 2px solid var(--ink);
+  transition: background-color 150ms, color 150ms, border-color 150ms;
+}
+.btn:hover { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.btn--secondary { background: transparent; color: var(--ink); }
+.btn--secondary:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+.skip-link {
+  position: absolute; left: var(--s-2); top: -100px; z-index: 100;
+  background: var(--ink); color: var(--white); padding: var(--s-1) var(--s-2); font-weight: 600;
+}
+.skip-link:focus { top: var(--s-2); color: var(--white); }
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.to-confirm { background: #FFF3B0; color: var(--ink); font: 500 12px/1.4 var(--mono); padding: 0 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
